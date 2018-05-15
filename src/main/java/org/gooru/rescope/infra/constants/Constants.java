@@ -9,7 +9,6 @@ public final class Constants {
 
         public static final String MBEP_AUTH = "org.gooru.rescope.eventbus.auth";
         public static final String MBEP_RESCOPE = "org.gooru.rescope.eventbus.navigate";
-        public static final String MBEP_POST_PROCESS = "org.gooru.rescope.eventbus.post.process";
 
         public static final String MBUS_TIMEOUT = "event.bus.send.timeout.seconds";
 
@@ -38,8 +37,6 @@ public final class Constants {
         public static final String MSG_OP_RESCOPE_SET = "context.get";
 
         public static final String MSG_MESSAGE = "message";
-        public static final String PROCESSING_AUTH_TIME = "auth.processing.time";
-        public static final String PROCESSING_HANDLER_START_TIME = "handler.start.time";
         public static final String ACCESS_TOKEN_VALIDITY = "access_token_validity";
 
         private Message() {
@@ -73,8 +70,8 @@ public final class Constants {
 
         public static final String API_AUTH_ROUTE = "/api/rescope/*";
         private static final String API_BASE_ROUTE = "/api/rescope/:version/";
-        public static final String API_RESCOPE_FETCH = "";
-        public static final String API_RESCOPE_CALCULATE = "";
+        public static final String API_RESCOPE_FETCH = API_BASE_ROUTE + "scope/skipped";
+        public static final String API_RESCOPE_CALCULATE = API_BASE_ROUTE + "scope/skipped";
         public static final String API_INTERNAL_BANNER = "/api/internal/banner";
         public static final String API_INTERNAL_METRICS = "/api/internal/metrics";
 
