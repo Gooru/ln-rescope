@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.gooru.rescope.infra.components.Finalizer;
+import org.gooru.rescope.infra.components.Finalizers;
 import org.gooru.rescope.infra.components.Initializers;
 import org.gooru.rescope.infra.components.Initializer;
 import org.slf4j.Logger;
@@ -38,9 +40,14 @@ public class AppRunner {
         }
 
         AppRunner runner = new AppRunner();
-        initializeConfig(args[0]);
+        runner.initializeConfig(args[0]);
+        runner.setupForShutdown();
 
         runner.run();
+    }
+
+    private void setupForShutdown() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> finalizeApplication()));
     }
 
     private void run() {
@@ -57,7 +64,7 @@ public class AppRunner {
         });
     }
 
-    private static void setupSystemProperties() {
+    private void setupSystemProperties() {
         JsonObject systemProperties = conf.getJsonObject("systemProperties");
         for (Map.Entry<String, Object> property : systemProperties) {
             String propValue = systemProperties.getString(property.getKey());
@@ -110,6 +117,13 @@ public class AppRunner {
         });
     }
 
+    private void finalizeApplication() {
+        Finalizers finalizers = new Finalizers();
+        for (Finalizer finalizer : finalizers) {
+            finalizer.finalizeComponent();
+        }
+    }
+
     private void initializeApplication(Future<Void> startFuture) {
         this.vertx.executeBlocking(future -> {
             Initializers initializers = new Initializers();
@@ -159,7 +173,7 @@ public class AppRunner {
         return new ArrayList<>(list);
     }
 
-    private static void initializeConfig(String configFile) {
+    private void initializeConfig(String configFile) {
         if (configFile != null) {
             try (Scanner scanner = new Scanner(new File(configFile)).useDelimiter("\\A")) {
                 String sconf = scanner.next();

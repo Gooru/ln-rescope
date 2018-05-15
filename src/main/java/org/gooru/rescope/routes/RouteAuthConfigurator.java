@@ -1,20 +1,22 @@
 package org.gooru.rescope.routes;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.gooru.rescope.infra.constants.Constants;
 import org.gooru.rescope.infra.constants.HttpConstants;
+import org.gooru.rescope.infra.utils.TokenValidationUtils;
 import org.gooru.rescope.responses.auth.AuthSessionResponseHolder;
 import org.gooru.rescope.responses.auth.AuthSessionResponseHolderBuilder;
+import org.gooru.rescope.routes.utils.DeliveryOptionsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.vertx.core.AsyncResult;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
 
 /**
  * @author ashish.
@@ -22,77 +24,72 @@ import io.vertx.ext.web.Router;
 class RouteAuthConfigurator implements RouteConfigurator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteAuthConfigurator.class);
-    private static final String HEADER_AUTH_PREFIX = "Token";
-    private static final Pattern AUTH_PATTERN = Pattern.compile(
-        '^' + HEADER_AUTH_PREFIX + "[\\s]+((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)\\s*$");
+    private EventBus eBus;
+    private long mbusTimeout;
 
     @Override
     public void configureRoutes(Vertx vertx, Router router, JsonObject config) {
+        this.eBus = vertx.eventBus();
+        this.mbusTimeout = config.getLong(Constants.EventBus.MBUS_TIMEOUT, 30L);
 
-        EventBus eBus = vertx.eventBus();
-        final long mbusTimeout = config.getLong(Constants.EventBus.MBUS_TIMEOUT, 30L);
-
-        router.route(Constants.Route.API_AUTH_ROUTE).handler(routingContext -> {
-            long authProcessingStart = System.currentTimeMillis();
-            String sessionToken = extractSessionToken(routingContext.request().getHeader(HttpConstants.HEADER_AUTH));
-            // If the session token is null or absent, we send an error to client
-            if (sessionToken == null || sessionToken.isEmpty()) {
-                routingContext.response().setStatusCode(HttpConstants.HttpStatus.UNAUTHORIZED.getCode())
-                    .setStatusMessage(HttpConstants.HttpStatus.UNAUTHORIZED.getMessage()).end();
-            } else {
-                // If the session token is present, we send it to Message Bus for validation. We stash it on to
-                // routing context for good measure. We could have done that later in success callback but we want to
-                // avoid closure from callback for success to this local context, hence it is here
-                routingContext.put(Constants.Message.MSG_SESSION_TOKEN, sessionToken);
-                DeliveryOptions options = new DeliveryOptions().setSendTimeout(mbusTimeout * 1000)
-                    .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_AUTH)
-                    .addHeader(Constants.Message.MSG_SESSION_TOKEN, sessionToken);
-                eBus.<JsonObject>send(Constants.EventBus.MBEP_AUTH, null, options, reply -> {
-                    if (reply.succeeded()) {
-                        AuthSessionResponseHolder responseHolder =
-                            AuthSessionResponseHolderBuilder.build(reply.result());
-                        // Message header would indicate whether the auth was successful or not. In addition,
-                        // successful auth may have been for anonymous user. We allow only GET request for anonymous
-                        // user (since we do not support head, trace, options etc so far)
-                        if (responseHolder.isAuthorized() && !responseHolder.isAnonymous()) {
-                            JsonObject session = responseHolder.getSession();
-                            routingContext.put(Constants.Message.MSG_KEY_SESSION, session);
-                            routingContext.put(Constants.Message.MSG_USER_ID, responseHolder.getUser());
-                            routingContext.put(Constants.Message.PROCESSING_AUTH_TIME,
-                                (System.currentTimeMillis() - authProcessingStart));
-                            routingContext
-                                .put(Constants.Message.PROCESSING_HANDLER_START_TIME, System.currentTimeMillis());
-                            routingContext.next();
-                        } else {
-                            if (responseHolder.isAuthorized()) {
-                                LOGGER.warn("Anonymous user is not allowed to have SP experience");
-                            } else {
-                                LOGGER.warn("Unauthorized user is not allowed to have SP experience");
-                            }
-                            routingContext.response().setStatusCode(HttpConstants.HttpStatus.UNAUTHORIZED.getCode())
-                                .setStatusMessage(HttpConstants.HttpStatus.UNAUTHORIZED.getMessage()).end();
-                        }
-                    } else {
-                        LOGGER.error("Not able to send message to Auth endpoint", reply.cause());
-                        routingContext.response().setStatusCode(HttpConstants.HttpStatus.ERROR.getCode()).end();
-                    }
-                });
-            }
-        });
-
+        router.route(Constants.Route.API_AUTH_ROUTE).handler(this::verifyToken);
     }
 
-    private static String extractSessionToken(String authHeader) {
-        if (authHeader == null || authHeader.isEmpty()) {
-            LOGGER.debug("Session token is null or empty");
-            return null;
+    private void verifyToken(RoutingContext routingContext) {
+        String sessionToken =
+            TokenValidationUtils.extractSessionToken(routingContext.request().getHeader(HttpConstants.HEADER_AUTH));
+
+        if (sessionToken == null || sessionToken.isEmpty()) {
+            this.sendUnAuthorizedResponse(routingContext);
+        } else {
+            routingContext.put(Constants.Message.MSG_SESSION_TOKEN, sessionToken);
+            this.eBus.<JsonObject>send(Constants.EventBus.MBEP_AUTH, null,
+                this.createDeliveryOptionsForTokenVerification(routingContext, sessionToken),
+                reply -> this.tokenVerificationCompletionHandler(routingContext, reply));
         }
-        Matcher authMatcher = AUTH_PATTERN.matcher(authHeader);
-        if (authMatcher.matches()) {
-            return authMatcher.group(1);
+    }
+
+    private void tokenVerificationCompletionHandler(RoutingContext routingContext,
+        AsyncResult<Message<JsonObject>> reply) {
+        if (reply.succeeded()) {
+            AuthSessionResponseHolder responseHolder = AuthSessionResponseHolderBuilder.build(reply.result());
+
+            if (responseHolder.isAuthorized() && !responseHolder.isAnonymous()) {
+                JsonObject session = responseHolder.getSession();
+                setupSessionInRoutingContext(routingContext, session, responseHolder.getUser());
+                routingContext.next();
+            } else {
+                this.logUnAuthorized(responseHolder);
+                this.sendUnAuthorizedResponse(routingContext);
+            }
+        } else {
+            LOGGER.error("Not able to send message to Token verification endpoint", reply.cause());
+            routingContext.response().setStatusCode(HttpConstants.HttpStatus.ERROR.getCode()).end();
         }
-        LOGGER.debug("Incorrect format of session token '{}'", authHeader);
-        return null;
+    }
+
+    private void setupSessionInRoutingContext(RoutingContext routingContext, JsonObject session, String user) {
+        routingContext.put(Constants.Message.MSG_KEY_SESSION, session).put(Constants.Message.MSG_USER_ID, user);
+    }
+
+    private void logUnAuthorized(AuthSessionResponseHolder responseHolder) {
+        if (responseHolder.isAuthorized()) {
+            LOGGER.warn("Anonymous access not allowed");
+        } else {
+            LOGGER.warn("Unauthorized access not allowed");
+        }
+    }
+
+    private DeliveryOptions createDeliveryOptionsForTokenVerification(RoutingContext routingContext,
+        String sessionToken) {
+        return DeliveryOptionsBuilder
+            .buildWithoutApiVersion(routingContext, this.mbusTimeout, Constants.Message.MSG_OP_AUTH)
+            .addHeader(Constants.Message.MSG_SESSION_TOKEN, sessionToken);
+    }
+
+    private void sendUnAuthorizedResponse(RoutingContext routingContext) {
+        routingContext.response().setStatusCode(HttpConstants.HttpStatus.UNAUTHORIZED.getCode())
+            .setStatusMessage(HttpConstants.HttpStatus.UNAUTHORIZED.getMessage()).end();
     }
 
 }
