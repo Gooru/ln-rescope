@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 import org.gooru.rescope.infra.components.Finalizer;
 import org.gooru.rescope.infra.components.Finalizers;
-import org.gooru.rescope.infra.components.Initializers;
 import org.gooru.rescope.infra.components.Initializer;
+import org.gooru.rescope.infra.components.Initializers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -142,8 +142,6 @@ public class AppRunner {
         });
     }
 
-
-
     private void deployVerticles(Future<Void> startFuture) {
         JsonObject verticles = conf.getJsonObject("verticles");
         List<Future<String>> futures = new ArrayList<>(verticles.size());
@@ -196,6 +194,5 @@ public class AppRunner {
             throw new IllegalArgumentException("Null configuration file");
         }
     }
-
 
 }

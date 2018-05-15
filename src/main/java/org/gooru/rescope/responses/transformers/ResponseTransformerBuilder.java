@@ -1,9 +1,9 @@
 package org.gooru.rescope.responses.transformers;
 
+import org.gooru.rescope.infra.exceptions.HttpResponseWrapperException;
 
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
-import org.gooru.rescope.infra.exceptions.*;
 
 /**
  * @author ashish.

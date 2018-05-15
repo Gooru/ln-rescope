@@ -1,6 +1,5 @@
 package org.gooru.rescope.infra.components;
 
-
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 

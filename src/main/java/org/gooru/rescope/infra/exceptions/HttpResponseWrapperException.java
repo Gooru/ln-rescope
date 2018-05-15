@@ -1,6 +1,5 @@
 package org.gooru.rescope.infra.exceptions;
 
-
 import org.gooru.rescope.infra.constants.Constants;
 import org.gooru.rescope.infra.constants.HttpConstants;
 
