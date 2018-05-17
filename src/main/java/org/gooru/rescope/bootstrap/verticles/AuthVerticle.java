@@ -14,7 +14,7 @@ import io.vertx.redis.RedisClient;
 import io.vertx.redis.RedisOptions;
 
 /**
- * @author ashish on 24/2/17.
+ * @author ashish.
  */
 public class AuthVerticle extends AbstractVerticle {
 

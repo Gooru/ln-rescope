@@ -17,7 +17,7 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 
 /**
- * @author ashish on 26/2/17.
+ * @author ashish.
  */
 public class RescopeVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(RescopeVerticle.class);

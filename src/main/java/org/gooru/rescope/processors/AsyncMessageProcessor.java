@@ -13,7 +13,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 /**
- * @author ashish on 17/11/17.
+ * @author ashish.
  */
 public interface AsyncMessageProcessor {
 
