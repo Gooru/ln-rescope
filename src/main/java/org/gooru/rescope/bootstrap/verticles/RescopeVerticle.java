@@ -59,7 +59,7 @@ public class RescopeVerticle extends AbstractVerticle {
             if (event.succeeded()) {
                 message.reply(event.result().reply(), event.result().deliveryOptions());
             } else {
-                LOGGER.warn("Failed to process next command", event.cause());
+                LOGGER.warn("Failed to process command", event.cause());
                 if (event.cause() instanceof HttpResponseWrapperException) {
                     HttpResponseWrapperException exception = (HttpResponseWrapperException) event.cause();
                     message.reply(new JsonObject().put(Constants.Message.MSG_HTTP_STATUS, exception.getStatus())

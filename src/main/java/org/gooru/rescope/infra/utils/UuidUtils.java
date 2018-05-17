@@ -3,7 +3,6 @@ package org.gooru.rescope.infra.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import io.vertx.core.json.JsonArray;
@@ -33,7 +32,7 @@ public final class UuidUtils {
             return Collections.emptyList();
         }
         List<UUID> result = new ArrayList<>(array.size());
-        for(Object o : array) {
+        for (Object o : array) {
             if (o.toString().length() != VALID_UUID_LEN) {
                 throw new IllegalArgumentException("Invalid UUID format");
             }
@@ -47,7 +46,7 @@ public final class UuidUtils {
             return Collections.emptyList();
         }
         List<UUID> result = new ArrayList<>(array.size());
-        for(Object o : array) {
+        for (Object o : array) {
             if (o.toString().length() == VALID_UUID_LEN) {
                 result.add(convertStringToUuid(o.toString()));
             }

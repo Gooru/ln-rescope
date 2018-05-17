@@ -37,7 +37,6 @@ public class FetchRescopedContentProcessor implements AsyncMessageProcessor {
         vertx.<MessageResponse>executeBlocking(future -> {
             try {
                 this.eventBusMessage = EventBusMessage.eventBusMessageBuilder(message);
-                System.out.println(message.body().toString());
 
                 FetchRescopedContentCommand command = FetchRescopedContentCommand.builder(eventBusMessage);
                 String rescopedContent = fetchRescopedContentService.fetchRescopedContent(command);
