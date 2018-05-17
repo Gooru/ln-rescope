@@ -1,5 +1,7 @@
 package org.gooru.rescope.bootstrap.verticles;
 
+import java.util.Random;
+
 import org.gooru.rescope.infra.constants.Constants;
 import org.gooru.rescope.infra.exceptions.HttpResponseWrapperException;
 import org.gooru.rescope.infra.exceptions.MessageResponseWrapperException;
@@ -41,7 +43,7 @@ public class RescopeVerticle extends AbstractVerticle {
         Future<MessageResponse> future;
         switch (op) {
         case Constants.Message.MSG_OP_RESCOPE_GET:
-            future = AsyncMessageProcessor.buildHttp404Processor(vertx, message).process();
+            future = getStubbedResponse(message);
             break;
         case Constants.Message.MSG_OP_RESCOPE_SET:
             future = AsyncMessageProcessor.buildPlaceHolderSuccessProcessor(vertx, message).process();
@@ -52,6 +54,16 @@ public class RescopeVerticle extends AbstractVerticle {
         }
 
         futureResultHandler(message, future);
+    }
+
+    private static final Random random = new Random();
+
+    private Future<MessageResponse> getStubbedResponse(Message<JsonObject> message) {
+        if (random.nextBoolean()) {
+            return AsyncMessageProcessor.buildDummyProcessor(vertx, message).process();
+        } else {
+            return AsyncMessageProcessor.buildHttp404Processor(vertx, message).process();
+        }
     }
 
     private static void futureResultHandler(Message<JsonObject> message, Future<MessageResponse> future) {
