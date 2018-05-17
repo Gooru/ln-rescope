@@ -1,11 +1,9 @@
 package org.gooru.rescope.bootstrap.verticles;
 
-import java.util.Random;
-
 import org.gooru.rescope.infra.constants.Constants;
 import org.gooru.rescope.infra.exceptions.HttpResponseWrapperException;
 import org.gooru.rescope.infra.exceptions.MessageResponseWrapperException;
-import org.gooru.rescope.processors.AsyncMessageProcessor;
+import org.gooru.rescope.processors.ProcessorBuilder;
 import org.gooru.rescope.responses.MessageResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,27 +41,17 @@ public class RescopeVerticle extends AbstractVerticle {
         Future<MessageResponse> future;
         switch (op) {
         case Constants.Message.MSG_OP_RESCOPE_GET:
-            future = getStubbedResponse(message);
+            future = ProcessorBuilder.buildFetchRescopedContentProcessor(vertx, message).process();
             break;
         case Constants.Message.MSG_OP_RESCOPE_SET:
-            future = AsyncMessageProcessor.buildPlaceHolderSuccessProcessor(vertx, message).process();
+            future = ProcessorBuilder.buildDoRescopeOfContentProcessor(vertx, message).process();
             break;
         default:
             LOGGER.warn("Invalid operation type");
-            future = AsyncMessageProcessor.buildPlaceHolderExceptionProcessor(vertx, message).process();
+            future = ProcessorBuilder.buildPlaceHolderExceptionProcessor(vertx, message).process();
         }
 
         futureResultHandler(message, future);
-    }
-
-    private static final Random random = new Random();
-
-    private Future<MessageResponse> getStubbedResponse(Message<JsonObject> message) {
-        if (random.nextBoolean()) {
-            return AsyncMessageProcessor.buildDummyProcessor(vertx, message).process();
-        } else {
-            return AsyncMessageProcessor.buildHttp404Processor(vertx, message).process();
-        }
     }
 
     private static void futureResultHandler(Message<JsonObject> message, Future<MessageResponse> future) {
