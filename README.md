@@ -32,3 +32,58 @@ To run the binary which would be fat jar:
 
     java -jar rescope.jar -Dconfig.file=src/main/resources/rescope.json
 
+### Fetch Rescope API
+- For rescope to be enabled, class setting should have rescope as true or in case of IL course version should be not null
+- If this API is called for class or course (IL) for which rescope is not enable, it will throw an error
+- if rescope is enabled, then look up in rescope store to see if there is rescoped data available
+    - If available, serve the data
+    - Else, send 404. But also send a message to event bus so that processing request can be queued
+- Note that currently there are no checks to verify if class and course specified (in class context) are having an association. TODO
+
+### Do Rescope API
+- This API will be called internally only
+- It will return 200 response directly and will delegate processing to worker threads on message bus
+- The API payload would contain source, class id and member ids array (optional, present only in case where source is class join)
+- First check to see if class is having rescope enabled. If not, then processing is done
+- Now generate the data for messages based on source
+    - class join, one event per member specified in payload will be created.
+    - course assign to class, class members will be looked up and one event per member of class will be created
+    - rescope setting change, class members will be looked up and one event per member of class will be created
+    - OOB, this won't be used by API per se, but by READ handler to post message along with member id in case of 404
+        - This may also be used as API to trigger rescope on adhoc basis
+- Note that here we won't validate if class member may have (with current UI flows may not be possible) rescoped content already. That will be done downstream
+
+### Design
+
+#### Problem
+- Have a batch processing kind of infra
+- Should be able to do it in parallel
+- Queueing should be backed by persistence
+- Queueing should be open so that others can also request for queueing their stuff
+- Avoid concurrent processing of same record
+
+#### Solution
+- Have a batch processing kind of infra using parallelization would be achieved using worker threads working over message bus
+- For persistence DB will be used
+- Event bus will provide a mechanism for open ended trigger end point
+- Do redundant checks and store state to avoid multiple processing of same record
+
+#### Facets of Design
+- Core processing
+    - Should be triggered with receiving some key to identify as to what needs processing
+- Controller processing
+    - Event bus to receive two kinds of messages
+        - Queue
+        - Process
+    - Both of these events will be fire and forget
+    - For Queue messages, entry will be made into DB table
+    - Now some mechanism needs to be in place to to read the DB table and generate Process messages
+    - Need a timer thread in place
+    - The queue in DB is going to have a status field with values - null, dispatched, processing
+    - Record will be inserted in queue with status as null
+    - When timer thread picks that up and sends to message bus, it will be marked as dispatched
+    - When worker threads pick up the record to process, they first check to see if the record is present in table with status as dispatched and record is not present in rescope table, then the record will be marked as processing and will be processed
+    - Once processing is done, this record will be deleted from queue
+    - For the first run of timer thread, it should clean up all statuses in DB queue so that they are picked up for processing downstream
+    - The number of records that are read from DB/queue and dumped on to message bus for processing, needs to be configurable
+
