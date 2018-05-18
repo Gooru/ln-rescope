@@ -3,6 +3,7 @@ package org.gooru.rescope.processors.dorescopeofcontent;
 import org.gooru.rescope.infra.data.EventBusMessage;
 import org.gooru.rescope.processors.AsyncMessageProcessor;
 import org.gooru.rescope.responses.MessageResponse;
+import org.gooru.rescope.responses.MessageResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +21,8 @@ public class DoRescopeOfContentProcessor implements AsyncMessageProcessor {
     private final Future<MessageResponse> result;
     private EventBusMessage eventBusMessage;
     private static final Logger LOGGER = LoggerFactory.getLogger(DoRescopeOfContentProcessor.class);
-/*
-    private final DoRescopeOfContentService doRescopeOfContentService =
-        new DoRescopeOfContentService(DBICreator.getDbiForDefaultDS());
-*/
+
+    private final DoRescopeOfContentService doRescopeOfContentService = new DoRescopeOfContentService();
 
     public DoRescopeOfContentProcessor(Vertx vertx, Message<JsonObject> message) {
         this.vertx = vertx;
@@ -33,19 +32,28 @@ public class DoRescopeOfContentProcessor implements AsyncMessageProcessor {
 
     @Override
     public Future<MessageResponse> process() {
-        try {
-            this.eventBusMessage = EventBusMessage.eventBusMessageBuilder(message);
-            throw new IllegalStateException("Not implemented");
-/*
-            DoRescopeOfContentCommand command =
-                DoRescopeOfContentCommand.builder(eventBusMessage.getRequestBody());
-            doRescopeOfContentService.doRescope(command);
-*/
-        } catch (Throwable throwable) {
-            LOGGER.warn("Encountered exception", throwable);
-            result.fail(throwable);
-        }
+        vertx.<MessageResponse>executeBlocking(future -> {
+            try {
+                this.eventBusMessage = EventBusMessage.eventBusMessageBuilder(message);
+                DoRescopeOfContentCommand command = DoRescopeOfContentCommand.builder(eventBusMessage.getRequestBody());
+                doRescopeOfContentService.doRescope(command);
+                future.complete(createResponse());
+            } catch (Throwable throwable) {
+                LOGGER.warn("Encountered exception", throwable);
+                future.fail(throwable);
+            }
+        }, asyncResult -> {
+            if (asyncResult.succeeded()) {
+                result.complete(asyncResult.result());
+            } else {
+                result.fail(asyncResult.cause());
+            }
+        });
         return result;
+    }
+
+    private MessageResponse createResponse() {
+        return MessageResponseFactory.createOkayResponse(new JsonObject());
     }
 
 }

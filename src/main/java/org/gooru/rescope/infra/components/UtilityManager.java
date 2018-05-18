@@ -1,5 +1,6 @@
 package org.gooru.rescope.infra.components;
 
+import io.vertx.core.Context;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
@@ -26,6 +27,41 @@ public final class UtilityManager implements Initializer, Finalizer {
 
     @Override
     public void initializeComponent(Vertx vertx, JsonObject config) {
-        // TODO: Initialize tenant machinery when the dependency is included
+        System.out.println("Context.isOnVertxThread : " + Context.isOnVertxThread());
+        System.out.println("Computing with : " + Thread.currentThread());
+
+        vertx.setTimer(1000, id -> {
+            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            System.out.println("Computing with : " + Thread.currentThread());
+            System.out.println("Context#isEventLoopContext : " + Vertx.currentContext().isEventLoopContext());
+            System.out.println("Context#isWorkerContext : " + Vertx.currentContext().isWorkerContext());
+            System.out.println(
+                "Context#isMultiThreadedWorkerContext : " + Vertx.currentContext().isMultiThreadedWorkerContext());
+            System.out.println("Context#isOnEventLoopThread : " + Context.isOnEventLoopThread());
+            System.out.println("Context.isOnWorkerThread : " + Context.isOnWorkerThread());
+            System.out.println("Context.isOnVertxThread : " + Context.isOnVertxThread());
+            vertx.executeBlocking(future -> {
+                System.out.println("============================");
+                System.out.println("Computing with : " + Thread.currentThread());
+                System.out.println("Context#isEventLoopContext : " + Vertx.currentContext().isEventLoopContext());
+                System.out.println("Context#isWorkerContext : " + Vertx.currentContext().isWorkerContext());
+                System.out.println(
+                    "Context#isMultiThreadedWorkerContext : " + Vertx.currentContext().isMultiThreadedWorkerContext());
+                System.out.println("Context#isOnEventLoopThread : " + Context.isOnEventLoopThread());
+                System.out.println("Context.isOnWorkerThread : " + Context.isOnWorkerThread());
+                System.out.println("Context.isOnVertxThread : " + Context.isOnVertxThread());
+                future.complete();
+            }, asyncResult -> {
+                System.out.println("============================");
+                System.out.println("Computing with : " + Thread.currentThread());
+                System.out.println("Context#isEventLoopContext : " + Vertx.currentContext().isEventLoopContext());
+                System.out.println("Context#isWorkerContext : " + Vertx.currentContext().isWorkerContext());
+                System.out.println(
+                    "Context#isMultiThreadedWorkerContext : " + Vertx.currentContext().isMultiThreadedWorkerContext());
+                System.out.println("Context#isOnEventLoopThread : " + Context.isOnEventLoopThread());
+                System.out.println("Context.isOnWorkerThread : " + Context.isOnWorkerThread());
+                System.out.println("Context.isOnVertxThread : " + Context.isOnVertxThread());
+            });
+        });
     }
 }

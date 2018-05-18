@@ -28,6 +28,7 @@ create table rescope_queue (
     user_id uuid NOT NULL,
     course_id uuid NOT NULL,
     class_id uuid,
+    priority int check (priority::int = ANY(ARRAY[1::int, 2::int, 3::int, 4::int])),
     status int NOT NULL DEFAULT 0 CHECK (status::int = ANY (ARRAY[0::int, 1::int, 2::int])),
     created_at timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL,
     updated_at timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL,
@@ -45,5 +46,8 @@ CREATE UNIQUE INDEX rq_ucc_unq_idx
     where class_id is null;
 
 COMMENT on TABLE rescope_queue IS 'Persistent queue for rescope tasks';
-COMMENT on COLUMN rescope_queue.status IS '0 means queued, 1 means dispatched for processing, 2 means in process'
+COMMENT on COLUMN rescope_queue.status IS '0 means queued, 1 means dispatched for processing, 2 means in process';
+COMMENT on COLUMN rescope_queue.priority IS '1 means rescope setting changed in class, 2 means course assigned to class, 3 means users joining class and 4 means OOB request for user accessing the rescoped content';
+
+
 

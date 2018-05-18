@@ -39,26 +39,29 @@ public class RescopeVerticle extends AbstractVerticle {
     private void processMessage(Message<JsonObject> message) {
         String op = message.headers().get(Constants.Message.MSG_OP);
         Future<MessageResponse> future;
+        boolean replyNeeded = true;
         switch (op) {
         case Constants.Message.MSG_OP_RESCOPE_GET:
             future = ProcessorBuilder.buildFetchRescopedContentProcessor(vertx, message).process();
             break;
         case Constants.Message.MSG_OP_RESCOPE_SET:
             future = ProcessorBuilder.buildDoRescopeOfContentProcessor(vertx, message).process();
+            replyNeeded = false;
             break;
         default:
             LOGGER.warn("Invalid operation type");
             future = ProcessorBuilder.buildPlaceHolderExceptionProcessor(vertx, message).process();
         }
 
-        futureResultHandler(message, future);
+        futureResultHandler(message, future, replyNeeded);
     }
 
-    private static void futureResultHandler(Message<JsonObject> message, Future<MessageResponse> future) {
+    private static void futureResultHandler(Message<JsonObject> message, Future<MessageResponse> future,
+        boolean replyNeeded) {
         future.setHandler(event -> {
-            if (event.succeeded()) {
+            if (event.succeeded() && replyNeeded) {
                 message.reply(event.result().reply(), event.result().deliveryOptions());
-            } else {
+            } else if (replyNeeded) {
                 LOGGER.warn("Failed to process command", event.cause());
                 if (event.cause() instanceof HttpResponseWrapperException) {
                     HttpResponseWrapperException exception = (HttpResponseWrapperException) event.cause();

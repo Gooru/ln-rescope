@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.gooru.rescope.infra.constants.HttpConstants;
 import org.gooru.rescope.infra.data.EventBusMessage;
+import org.gooru.rescope.infra.data.RescopeContext;
 import org.gooru.rescope.infra.exceptions.HttpResponseWrapperException;
 import org.gooru.rescope.infra.utils.UuidUtils;
 
@@ -73,6 +74,10 @@ class FetchRescopedContentCommand {
         bean.setCourseId(courseId);
         bean.setUserId(userId);
         return bean;
+    }
+
+    RescopeContext asRescopeContext() {
+        return RescopeContext.buildForOOB(classId, courseId, userId);
     }
 
     public static final class FetchRescopedContentCommandBean {

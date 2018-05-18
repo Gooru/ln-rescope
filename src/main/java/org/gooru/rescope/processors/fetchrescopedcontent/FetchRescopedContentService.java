@@ -3,6 +3,7 @@ package org.gooru.rescope.processors.fetchrescopedcontent;
 import org.gooru.rescope.infra.constants.HttpConstants;
 import org.gooru.rescope.infra.exceptions.HttpResponseWrapperException;
 import org.gooru.rescope.infra.services.RescopeApplicableService;
+import org.gooru.rescope.infra.services.RescopeRequestQueueService;
 import org.skife.jdbi.v2.DBI;
 
 /**
@@ -11,24 +12,52 @@ import org.skife.jdbi.v2.DBI;
 class FetchRescopedContentService {
 
     private final DBI dbi;
+    private FetchRescopedContentCommand command;
 
     FetchRescopedContentService(DBI dbi) {
         this.dbi = dbi;
     }
 
     String fetchRescopedContent(FetchRescopedContentCommand command) {
-        FetchRescopedContentDao dao = dbi.onDemand(FetchRescopedContentDao.class);
+        this.command = command;
+        String result;
 
         if (command.getClassId() != null) {
-            if (RescopeApplicableService.isRescopeApplicableToClass(command.getClassId())) {
-                return dao.fetchRescopedContentForUserInClass(command.asBean());
-            }
+            result = fetchRescopedContentForClass();
         } else {
-            if (RescopeApplicableService.isRescopeApplicableToCourseInIL(command.getCourseId())) {
-                return dao.fetchRescopedContentForUserInIL(command.asBean());
-            }
+            result = fetchRescopedContentForIL();
         }
-        throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST,
-            "Rescope not applicable to specified course/class");
+        queueRescopeContentRequestIfNeeded(result);
+        return result;
+    }
+
+    private void queueRescopeContentRequestIfNeeded(String result) {
+        if (result == null) {
+            RescopeRequestQueueService service = RescopeRequestQueueService.build();
+            service.enqueue(command.asRescopeContext());
+        }
+    }
+
+    private String fetchRescopedContentForIL() {
+        if (RescopeApplicableService.isRescopeApplicableToCourseInIL(command.getCourseId())) {
+            return getDao().fetchRescopedContentForUserInIL(command.asBean());
+        } else {
+            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST,
+                "Rescope not applicable to specified course/class");
+        }
+
+    }
+
+    private String fetchRescopedContentForClass() {
+        if (RescopeApplicableService.isRescopeApplicableToClass(command.getClassId())) {
+            return getDao().fetchRescopedContentForUserInClass(command.asBean());
+        } else {
+            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST,
+                "Rescope not applicable to specified course/class");
+        }
+    }
+
+    private FetchRescopedContentDao getDao() {
+        return dbi.onDemand(FetchRescopedContentDao.class);
     }
 }

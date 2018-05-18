@@ -31,6 +31,11 @@ public final class RouteResponseUtility {
         }
     }
 
+    public static void responseHandlerStatusOnlyNoBodyOrHeaders(final RoutingContext routingContext,
+        HttpConstants.HttpStatus status) {
+        routingContext.response().setStatusCode(status.getCode()).end();
+    }
+
     public static void responseHandler(final RoutingContext routingContext,
         final HttpResponseWrapperException exception) {
         String body = Objects.toString(exception.getBody(), null);
