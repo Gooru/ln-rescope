@@ -65,8 +65,8 @@ class DoRescopeOfContentCommand {
     }
 
     private void validate() {
-        if (classId == null) {
-            throw new IllegalArgumentException("Invalid class id");
+        if (classId == null && courseId == null) {
+            throw new IllegalArgumentException("Both class and course should not be absent");
         }
         if (source == null) {
             throw new IllegalArgumentException("Invalid source");

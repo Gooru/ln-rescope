@@ -37,11 +37,11 @@ create table rescope_queue (
 
 ALTER TABLE rescope_queue OWNER TO nucleus;
 
-CREATE UNIQUE INDEX rq_ucc_null_unq_idx
+CREATE UNIQUE INDEX rq_ucc_unq_idx
     ON rescope_queue (user_id, course_id, class_id)
     where class_id is not null;
 
-CREATE UNIQUE INDEX rq_ucc_unq_idx
+CREATE UNIQUE INDEX rq_ucc_null_unq_idx
     ON rescope_queue (user_id, course_id)
     where class_id is null;
 

@@ -15,7 +15,9 @@ public class UUIDMapper implements ResultSetMapper<UUID> {
     @Override
     public UUID map(final int index, final ResultSet resultSet, final StatementContext statementContext)
         throws SQLException {
-        return UUID.fromString(resultSet.getString(1));
+
+        final String uuid = resultSet.getString(1);
+        return uuid != null ? UUID.fromString(uuid) : null;
     }
 
 }

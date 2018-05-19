@@ -22,6 +22,22 @@ public class RescopeContext {
         this.courseId = courseId;
     }
 
+    public RescopeSourceType getSource() {
+        return source;
+    }
+
+    public UUID getClassId() {
+        return classId;
+    }
+
+    public List<UUID> getMemberIds() {
+        return memberIds;
+    }
+
+    public UUID getCourseId() {
+        return courseId;
+    }
+
     @Override
     public String toString() {
         String members = memberIds.stream().map(UUID::toString).collect(Collectors.joining(","));
@@ -58,5 +74,21 @@ public class RescopeContext {
 
     public RescopeContext createNewContext(List<UUID> members, UUID courseId) {
         return new RescopeContext(source, classId, members, courseId);
+    }
+
+    public boolean areUsersJoiningClass() {
+        return source == RescopeSourceType.ClassJoinByMembers;
+    }
+
+    public boolean hasClassSettingForRescopeBeenTurnedOn() {
+        return source == RescopeSourceType.RescopeSettingChanged;
+    }
+
+    public boolean hasCourseBeenAssignedToClass() {
+        return source == RescopeSourceType.CourseAssignmentToClass;
+    }
+
+    public boolean isOOBRequestForRescope() {
+        return source == RescopeSourceType.OOB;
     }
 }
