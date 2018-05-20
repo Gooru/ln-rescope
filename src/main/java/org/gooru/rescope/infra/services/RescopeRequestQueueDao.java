@@ -51,4 +51,18 @@ interface RescopeRequestQueueDao {
     @SqlUpdate("update rescope_queue set status = 1 where id = :modelId")
     void setQueuedRecordStatusAsDispatched(@Bind("modelId") Long id);
 
+    @SqlUpdate("delete from rescope_queue where id = :modelId")
+    void dequeueRecord(@Bind("modelId") Long id);
+
+    @SqlQuery("select exists (select 1 from rescope_queue where id = :id and status = 1)")
+    boolean isQueuedRecordStillDispatched(@Bind("id") Long modelId);
+
+    @SqlQuery("select exists (select 1 from user_rescoped_content where user_id = :userId and course_id = :courseId  "
+                  + "and class_id = :classId)")
+    boolean rescopeDoneForUserInClass(@BindBean RescopeQueueModel model);
+
+    @SqlQuery("select exists (select 1 from user_rescoped_content where user_id = :userId and course_id = :courseId  "
+                  + "and class_id is null)")
+    boolean rescopeDoneForUserInIL(@BindBean RescopeQueueModel model);
+
 }

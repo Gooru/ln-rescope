@@ -35,33 +35,12 @@ public class RescopeQueueModel {
     public static final int RQ_STATUS_INPROCESS = 2;
 
     public String toJson() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            LOGGER.warn("Failed to convert RescopeQueueModel to JSON string. Will try fallback. ", e);
-            return toJsonUsingFallback();
-        }
-    }
-
-    private String toJsonUsingFallback() {
         return new JsonObject().put("id", id).put("userId", UuidUtils.uuidToString(userId))
             .put("courseId", UuidUtils.uuidToString(courseId)).put("classId", UuidUtils.uuidToString(classId))
             .put("priority", priority).put("status", status).toString();
     }
 
     public static RescopeQueueModel fromJson(String input) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(input, RescopeQueueModel.class);
-        } catch (IOException e) {
-            LOGGER.warn("Failed to convert JSON string to RescopeQueueModel. Will try fallback. ", e);
-            return fromJsonUsingFallback(input);
-        }
-
-    }
-
-    private static RescopeQueueModel fromJsonUsingFallback(String input) {
         JsonObject json = new JsonObject(input);
         RescopeQueueModel model = new RescopeQueueModel();
         model.priority = json.getInteger("priority");

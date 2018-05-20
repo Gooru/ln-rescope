@@ -1,6 +1,8 @@
 package org.gooru.rescope.bootstrap.verticles;
 
 import org.gooru.rescope.infra.constants.Constants;
+import org.gooru.rescope.infra.data.RescopeQueueModel;
+import org.gooru.rescope.infra.services.RescopeProcessingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +16,9 @@ import io.vertx.core.eventbus.Message;
  */
 public class RescopeProcessingVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(RescopeProcessingVerticle.class);
+
+    private static final String SUCCESS = "SUCCESS";
+    private static final String FAIL = "FAIL";
 
     @Override
     public void start(Future<Void> startFuture) {
@@ -34,9 +39,22 @@ public class RescopeProcessingVerticle extends AbstractVerticle {
 
     private void processMessage(Message<String> message) {
         String payload = message.body();
-        LOGGER.debug("Payload received is: '{}'", payload);
-        LOGGER.debug("Will send empty reply");
-        message.reply("");
+        vertx.executeBlocking(future -> {
+            try {
+                RescopeProcessingService.build().doRescope(RescopeQueueModel.fromJson(message.body()));
+                future.complete();
+            } catch (Exception e) {
+                LOGGER.warn("Not able to rescope the model. '{}'", message.body());
+                future.fail(e);
+            }
+        }, asyncResult -> {
+            if (asyncResult.succeeded()) {
+                message.reply(SUCCESS);
+            } else {
+                LOGGER.warn("Rescoping not done for model: '{}'", message.body());
+                message.reply(FAIL);
+            }
+        });
     }
 
     @Override

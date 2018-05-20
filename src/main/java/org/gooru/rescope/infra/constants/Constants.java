@@ -47,12 +47,6 @@ public final class Constants {
     }
 
     public static final class Response {
-        public static final String RESP_UNITS = "units";
-        public static final String RESP_LESSONS = "lessons";
-        public static final String RESP_COLLECTIONS = "collections";
-        public static final String RESP_COLLECTIONS_EX = "collectionsExternal";
-        public static final String RESP_ASSESSMENT = "assessments";
-        public static final String RESP_ASSESSMENT_EX = "assessmentsExternal";
 
         private Response() {
             throw new AssertionError();
