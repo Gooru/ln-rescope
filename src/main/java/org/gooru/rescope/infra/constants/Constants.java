@@ -8,7 +8,9 @@ public final class Constants {
     public static final class EventBus {
 
         public static final String MBEP_AUTH = "org.gooru.rescope.eventbus.auth";
-        public static final String MBEP_RESCOPE = "org.gooru.rescope.eventbus.navigate";
+        public static final String MBEP_RESCOPE = "org.gooru.rescope.eventbus.rescope";
+
+        public static final String MBEP_RESCOPE_QUEUE_PROCESSOR = "org.gooru.rescope.eventbus.queueprocessor";
 
         public static final String MBUS_TIMEOUT = "event.bus.send.timeout.seconds";
 

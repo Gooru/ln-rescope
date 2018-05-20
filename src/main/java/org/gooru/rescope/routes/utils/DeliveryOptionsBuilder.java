@@ -22,4 +22,8 @@ public final class DeliveryOptionsBuilder {
     public static DeliveryOptions buildWithoutApiVersion(RoutingContext context, long timeout, String op) {
         return new DeliveryOptions().setSendTimeout(timeout * 1000).addHeader(Constants.Message.MSG_OP, op);
     }
+
+    public static DeliveryOptions buildWithoutApiVersion(long timeout) {
+        return new DeliveryOptions().setSendTimeout(timeout * 1000);
+    }
 }

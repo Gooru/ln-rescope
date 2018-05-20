@@ -27,6 +27,13 @@ public final class UuidUtils {
         return UUID.fromString(value);
     }
 
+    public static String uuidToString(UUID uuid) {
+        if (uuid == null) {
+            return null;
+        }
+        return uuid.toString();
+    }
+
     public static List<UUID> convertToUUIDList(JsonArray array) {
         if (array == null || array.isEmpty()) {
             return Collections.emptyList();

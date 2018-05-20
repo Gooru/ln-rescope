@@ -14,7 +14,7 @@ public class Initializers implements Iterable<Initializer> {
     public Initializers() {
         List<Initializer> initializers = new ArrayList<>();
         initializers.add(DataSourceRegistry.getInstance());
-        initializers.add(UtilityManager.getInstance());
+        initializers.add(RescopeQueueReaderAndDispatcher.getInstance());
         initializers.add(AppConfiguration.getInstance());
         internalIterator = initializers.iterator();
     }

@@ -26,10 +26,10 @@ public class RescopeVerticle extends AbstractVerticle {
         EventBus eb = vertx.eventBus();
         eb.localConsumer(Constants.EventBus.MBEP_RESCOPE, this::processMessage).completionHandler(result -> {
             if (result.succeeded()) {
-                LOGGER.info("Content end point ready to listen");
+                LOGGER.info("Rescope end point ready to listen");
                 startFuture.complete();
             } else {
-                LOGGER.error("Error registering the Content handler. Halting the machinery");
+                LOGGER.error("Error registering the Rescope handler. Halting the machinery");
                 startFuture.fail(result.cause());
                 Runtime.getRuntime().halt(1);
             }

@@ -32,6 +32,12 @@
       "config": {
       }
     },
+    "org.gooru.rescope.bootstrap.verticles.RescopeProcessingVerticle": {
+      "instances": 1,
+      "worker": false,
+      "config": {
+      }
+    },
     "org.gooru.rescope.bootstrap.verticles.HttpVerticle": {
       "instances": 1,
       "worker": false,
