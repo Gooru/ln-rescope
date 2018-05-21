@@ -65,4 +65,7 @@ interface RescopeRequestQueueDao {
                   + "and class_id is null)")
     boolean rescopeDoneForUserInIL(@BindBean RescopeQueueModel model);
 
+    @SqlUpdate("insert into user_rescoped_content(user_id, class_id, course_id, skipped_content) values (:userId, "
+                   + ":classId, :courseId, :skippedContent::jsonb)")
+    void persistRescopedContent(@BindBean RescopeQueueModel model, @Bind("skippedContent") String skippedContent);
 }

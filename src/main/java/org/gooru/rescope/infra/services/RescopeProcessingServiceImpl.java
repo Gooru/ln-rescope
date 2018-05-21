@@ -1,9 +1,14 @@
 package org.gooru.rescope.infra.services;
 
 import org.gooru.rescope.infra.data.RescopeQueueModel;
+import org.gooru.rescope.infra.services.itemfinder.SkippedItemsFinder;
+import org.gooru.rescope.infra.services.itemfinder.SkippedItemsResponse;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author ashish on 20/5/18.
@@ -32,7 +37,6 @@ class RescopeProcessingServiceImpl implements RescopeProcessingService {
             return;
         }
         processRecord();
-        dequeueRecord();
     }
 
     private void dequeueRecord() {
@@ -41,9 +45,21 @@ class RescopeProcessingServiceImpl implements RescopeProcessingService {
     }
 
     private void processRecord() {
-        // TODO : Provide implementation
         LOGGER.debug("Doing real processing");
-        //        throw new IllegalStateException("Not implemented");
+        try {
+            SkippedItemsResponse items = SkippedItemsFinder.buildSkippedItemsFinderForCourse()
+                .findItemsThatWillBeSkipped(model.getUserId(), model.getCourseId());
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                String skippedItemsString = mapper.writeValueAsString(items);
+                dao.persistRescopedContent(model, skippedItemsString);
+            } catch (JsonProcessingException e) {
+                LOGGER.warn("Not able to convert skipped items to JSON for model '{}'", model.toJson(), e);
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Not able to do rescope for model: '{}'. Will dequeue record.", e);
+        }
+        dequeueRecord();
     }
 
     private boolean rescopeWasAlreadyDone() {

@@ -1,9 +1,16 @@
 package org.gooru.rescope;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.gooru.rescope.infra.data.RescopeQueueModel;
 import org.gooru.rescope.infra.data.RescopeSourceType;
+import org.gooru.rescope.infra.services.itemfinder.SkippedItemsResponse;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.vertx.core.Context;
 import io.vertx.core.Vertx;
@@ -16,33 +23,29 @@ public class MiscTest {
 
     public static void main(String[] args) {
         MiscTest miscTest = new MiscTest();
-        miscTest.run();
+        miscTest.run1();
     }
 
     private void run1() {
-      /*  RescopeQueueModel model = createNewRescopeQueueModel();
-        String s1 = model.toJson();
-        String s2 = model.toJsonUsingFallback();
-        System.out.println(s1);
-        System.out.println(s2);
-        String m1, m2, m3, m4;
-        m1 = RescopeQueueModel.fromJson(s1).toJson();
-        m2 = RescopeQueueModel.fromJsonUsingFallback(s1).toJson();
-        m3 = RescopeQueueModel.fromJson(s2).toJson();
-        m4 = RescopeQueueModel.fromJsonUsingFallback(s2).toJson();
-        System.out.println(m1);
-        System.out.println(m2);
-        System.out.println(m3);
-        System.out.println(m4);
-        m1 = RescopeQueueModel.fromJson(s1).toJsonUsingFallback();
-        m2 = RescopeQueueModel.fromJsonUsingFallback(s1).toJsonUsingFallback();
-        m3 = RescopeQueueModel.fromJson(s2).toJsonUsingFallback();
-        m4 = RescopeQueueModel.fromJsonUsingFallback(s2).toJsonUsingFallback();
-        System.out.println(m1);
-        System.out.println(m2);
-        System.out.println(m3);
-        System.out.println(m4);
-*/
+        SkippedItemsResponse items = new SkippedItemsResponse();
+        items.setCollectionsExternal(new ArrayList<>());
+        items.setAssessmentsExternal(new ArrayList<>());
+        items.setAssessments(getDummies());
+        items.setCollections(getDummies());
+        items.setLessons(getDummies());
+        items.setUnits(getDummies());
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String value = mapper.writeValueAsString(items);
+            System.out.println(value);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> getDummies() {
+        return Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString());
     }
 
     private RescopeQueueModel createNewRescopeQueueModel() {
