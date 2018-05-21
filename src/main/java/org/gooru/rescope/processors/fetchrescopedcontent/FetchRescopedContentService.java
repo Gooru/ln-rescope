@@ -23,12 +23,22 @@ class FetchRescopedContentService {
         String result;
 
         if (command.getClassId() != null) {
+            if (command.isTeacherContext()) {
+                validateUserIsReallyTeacher();
+            }
             result = fetchRescopedContentForClass();
         } else {
             result = fetchRescopedContentForIL();
         }
         queueRescopeContentRequestIfNeeded(result);
         return result;
+    }
+
+    private void validateUserIsReallyTeacher() {
+        if (!getDao().isUserTeacherOrCollaboratorForClass(command.asBean())) {
+            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.FORBIDDEN,
+                "You need to be teacher or co-teacher for this class");
+        }
     }
 
     private void queueRescopeContentRequestIfNeeded(String result) {

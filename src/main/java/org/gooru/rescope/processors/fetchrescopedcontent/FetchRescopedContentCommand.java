@@ -18,6 +18,7 @@ class FetchRescopedContentCommand {
     private UUID classId;
     private UUID courseId;
     private UUID userId;
+    private UUID teacherId;
 
     UUID getClassId() {
         return classId;
@@ -25,6 +26,14 @@ class FetchRescopedContentCommand {
 
     UUID getCourseId() {
         return courseId;
+    }
+
+    UUID getUserId() {
+        return userId;
+    }
+
+    boolean isTeacherContext() {
+        return teacherId != null;
     }
 
     static FetchRescopedContentCommand builder(EventBusMessage input) {
@@ -49,7 +58,15 @@ class FetchRescopedContentCommand {
                 UuidUtils.convertToUUIDListIgnoreInvalidItems(request.getJsonArray(CommandAttributes.CLASS_ID)));
             command.courseId = validateSingleValuedListAndGetFirstItem(
                 UuidUtils.convertToUUIDList(request.getJsonArray(CommandAttributes.COURSE_ID)));
-            command.userId = userId;
+            UUID userInRequestBody = validateSingleValuedListAndGetFirstItem(
+                UuidUtils.convertToUUIDList(request.getJsonArray(CommandAttributes.USER_ID)));
+            if (userInRequestBody != null) {
+                command.userId = userInRequestBody;
+                command.teacherId = userId;
+            } else {
+                command.userId = userId;
+                command.teacherId = null;
+            }
             return command;
         } catch (IllegalArgumentException e) {
             throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST, e.getMessage());
@@ -73,6 +90,7 @@ class FetchRescopedContentCommand {
         bean.setClassId(classId);
         bean.setCourseId(courseId);
         bean.setUserId(userId);
+        bean.setTeacherId(teacherId);
         return bean;
     }
 
@@ -84,6 +102,7 @@ class FetchRescopedContentCommand {
         private UUID classId;
         private UUID courseId;
         private UUID userId;
+        private UUID teacherId;
 
         public UUID getUserId() {
             return userId;
@@ -108,12 +127,21 @@ class FetchRescopedContentCommand {
         public void setCourseId(UUID courseId) {
             this.courseId = courseId;
         }
+
+        public UUID getTeacherId() {
+            return teacherId;
+        }
+
+        public void setTeacherId(UUID teacherId) {
+            this.teacherId = teacherId;
+        }
     }
 
     public static final class CommandAttributes {
 
         static final String CLASS_ID = "classId";
         static final String COURSE_ID = "courseId";
+        static final String USER_ID = "userId";
 
         private CommandAttributes() {
             throw new AssertionError();

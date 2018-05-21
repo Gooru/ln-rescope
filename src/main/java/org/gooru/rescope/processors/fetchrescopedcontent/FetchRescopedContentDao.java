@@ -17,4 +17,9 @@ interface FetchRescopedContentDao {
                   + " and class_id is null")
     String fetchRescopedContentForUserInIL(@BindBean FetchRescopedContentCommand.FetchRescopedContentCommandBean bean);
 
+    @SqlQuery("select exists (select 1 from class where id = :classId and (creator_id = :teacherId or collaborator ?? "
+                  + ":teacherId::text) and is_deleted = false )")
+    boolean isUserTeacherOrCollaboratorForClass(
+        @BindBean FetchRescopedContentCommand.FetchRescopedContentCommandBean bean);
+
 }

@@ -48,7 +48,7 @@ public class MiscTest {
     private RescopeQueueModel createNewRescopeQueueModel() {
         RescopeQueueModel model;
         model = new RescopeQueueModel();
-        model.setId(100);
+        model.setId(100L);
         model.setClassId(null);
         model.setCourseId(UUID.randomUUID());
         model.setUserId(UUID.randomUUID());
