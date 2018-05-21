@@ -43,7 +43,7 @@ class RescopeProcessingServiceImpl implements RescopeProcessingService {
     private void processRecord() {
         // TODO : Provide implementation
         LOGGER.debug("Doing real processing");
-//        throw new IllegalStateException("Not implemented");
+        //        throw new IllegalStateException("Not implemented");
     }
 
     private boolean rescopeWasAlreadyDone() {
