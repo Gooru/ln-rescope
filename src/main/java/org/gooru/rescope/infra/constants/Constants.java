@@ -35,8 +35,8 @@ public final class Constants {
         public static final String MSG_HTTP_BODY = "http.body";
         public static final String MSG_HTTP_HEADERS = "http.headers";
 
-        public static final String MSG_OP_RESCOPE_GET = "navigate.next";
-        public static final String MSG_OP_RESCOPE_SET = "context.get";
+        public static final String MSG_OP_RESCOPE_GET = "rescope.get";
+        public static final String MSG_OP_RESCOPE_SET = "rescope.set";
 
         public static final String MSG_MESSAGE = "message";
         public static final String ACCESS_TOKEN_VALIDITY = "access_token_validity";
