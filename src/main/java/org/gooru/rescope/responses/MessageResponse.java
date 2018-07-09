@@ -55,7 +55,7 @@ public final class MessageResponse {
             return this;
         }
 
-        public Builder setStatusNoOutput() {
+        public Builder setStatusNoContent() {
             this.httpStatus = HttpConstants.HttpStatus.NO_CONTENT;
             return this;
         }

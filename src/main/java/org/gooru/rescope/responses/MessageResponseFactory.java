@@ -46,6 +46,11 @@ public final class MessageResponseFactory {
             .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
     }
 
+    public static MessageResponse createNoContentResponse() {
+        return new MessageResponse.Builder().setStatusNoContent()
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "No Content")).build();
+    }
+
     public static MessageResponse createNotFoundResponse(String message) {
         return new MessageResponse.Builder().setStatusNotFound()
             .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
