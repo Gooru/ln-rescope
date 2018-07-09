@@ -32,6 +32,15 @@
       "config": {
       }
     },
+    "org.gooru.rescope.bootstrap.verticles.PostProcessingVerticle": {
+      "instances": 1,
+      "worker": false,
+      "config": {
+        "lpbaseline.uri": "",
+        "http.timeout": 60000,
+        "http.poolSize": 20
+      }
+    },
     "org.gooru.rescope.bootstrap.verticles.RescopeProcessingVerticle": {
       "instances": 1,
       "worker": false,
