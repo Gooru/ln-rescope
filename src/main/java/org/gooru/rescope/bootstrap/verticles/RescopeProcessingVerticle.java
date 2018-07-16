@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
@@ -61,11 +62,12 @@ public class RescopeProcessingVerticle extends AbstractVerticle {
     }
 
     private void sendMessageToPostProcessor(RescopeQueueModel model) {
-        JsonObject request = new JsonObject().put(LearnerProfileBaselinePayloadConstants.USER_ID, model.getUserId())
-            .put(LearnerProfileBaselinePayloadConstants.COURSE_ID, model.getCourseId())
-            .put(LearnerProfileBaselinePayloadConstants.CLASS_ID, model.getClassId());
+        JsonObject request = new JsonObject().put(LearnerProfileBaselinePayloadConstants.USER_ID, model.getUserId().toString())
+            .put(LearnerProfileBaselinePayloadConstants.COURSE_ID, model.getCourseId().toString())
+            .put(LearnerProfileBaselinePayloadConstants.CLASS_ID, model.getClassId().toString());
 
-        vertx.eventBus().send(Constants.EventBus.MBEP_RESCOPE_POST_PROCESSOR, request);
+        vertx.eventBus().send(Constants.EventBus.MBEP_RESCOPE_POST_PROCESSOR, request, new DeliveryOptions()
+            .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_LP_BASELINE));
     }
 
     @Override
