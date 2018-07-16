@@ -58,8 +58,10 @@ class RescopeProcessingServiceImpl implements RescopeProcessingService {
             }
         } catch (Exception e) {
             LOGGER.warn("Not able to do rescope for model: '{}'. Will dequeue record.", e);
+            throw e;
+        } finally {
+            dequeueRecord();
         }
-        dequeueRecord();
     }
 
     private boolean rescopeWasAlreadyDone() {
