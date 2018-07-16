@@ -48,14 +48,14 @@ public class RescopeProcessingVerticle extends AbstractVerticle {
                 sendMessageToPostProcessor(model);
                 future.complete();
             } catch (Exception e) {
-                LOGGER.warn("Not able to rescope the model. '{}'", message.body());
+                LOGGER.warn("Not able to rescope the model. '{}'", message.body(), e);
                 future.fail(e);
             }
         }, asyncResult -> {
             if (asyncResult.succeeded()) {
                 message.reply(SUCCESS);
             } else {
-                LOGGER.warn("Rescoping not done for model: '{}'", message.body());
+                LOGGER.warn("Rescoping not done for model: '{}'", message.body(), asyncResult.cause());
                 message.reply(FAIL);
             }
         });
