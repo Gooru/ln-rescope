@@ -40,6 +40,10 @@ public final class AppConfiguration implements Initializer {
         }
     }
 
+    public String getRescopeApplicableCourseVersion() {
+        return configuration.getString("rescope.applicable.course.version");
+    }
+
     public int getConfigAsInt(String key) {
         return configuration.getInteger(key);
     }
@@ -54,23 +58,6 @@ public final class AppConfiguration implements Initializer {
 
     public Object getConfigAsRawObject(String key) {
         return configuration.getValue(key);
-    }
-
-    public boolean suggestionsTurnedOn() {
-        return configuration.getBoolean("suggestions.advise");
-    }
-
-    public Integer suggestionsLimit() {
-        return configuration.getInteger("suggestions.limit");
-    }
-
-    public boolean serveContentDetails() {
-        return configuration.getBoolean("serve.content.details");
-    }
-
-    public boolean applyContentVisibilityToNonGlobalStrategy() {
-        Boolean result = configuration.getBoolean("non.global.strategy.apply.visibility");
-        return result != null && result;
     }
 
     private static final class Holder {

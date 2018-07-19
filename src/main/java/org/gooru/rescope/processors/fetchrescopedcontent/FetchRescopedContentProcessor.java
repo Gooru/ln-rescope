@@ -57,7 +57,6 @@ public class FetchRescopedContentProcessor implements AsyncMessageProcessor {
 
     private MessageResponse createResponse(String rescopedContent) {
         if (rescopedContent == null) {
-            // TODO: Need to relay the event so that processing is queued
             return MessageResponseFactory.createNotFoundResponse("Rescoped content not found");
         }
         return MessageResponseFactory.createOkayResponse(new JsonObject(rescopedContent));
