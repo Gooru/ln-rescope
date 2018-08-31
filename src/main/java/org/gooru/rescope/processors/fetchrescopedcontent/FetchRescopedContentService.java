@@ -30,7 +30,6 @@ class FetchRescopedContentService {
         } else {
             result = fetchRescopedContentForIL();
         }
-        queueRescopeContentRequestIfNeeded(result);
         return result;
     }
 
@@ -38,13 +37,6 @@ class FetchRescopedContentService {
         if (!getDao().isUserTeacherOrCollaboratorForClass(command.asBean())) {
             throw new HttpResponseWrapperException(HttpConstants.HttpStatus.FORBIDDEN,
                     "You need to be teacher or co-teacher for this class");
-        }
-    }
-
-    private void queueRescopeContentRequestIfNeeded(String result) {
-        if (result == null) {
-            RescopeRequestQueueService service = RescopeRequestQueueService.build();
-            service.enqueue(command.asRescopeContext());
         }
     }
 

@@ -92,7 +92,7 @@ To run the binary which would be fat jar from the project base directory:
 ### Task list V2
 For the Rescope V2, the tasks that are identified are :
 
-- Disable Queue of Rescope on call of fetch API
+- Remove the code to call the internal baseline API
 - Update module to check the rescope being applicable
 - Remove the support for rescope setting change event for doing rescope
 - Create a module to fetch Course's Competency Route
@@ -104,4 +104,3 @@ For the Rescope V2, the tasks that are identified are :
 - Define entry point which should be able to take context and calculate rescope
 - Define how and where do we store rescoped content? Same DB same format or we change the format?
 - Navigate map should honor the Rescope definition
-- Remove the code to call the internal baseline API

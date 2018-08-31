@@ -7,8 +7,6 @@ import java.util.UUID;
 import org.gooru.rescope.infra.utils.UuidUtils;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.vertx.core.json.JsonObject;
 
