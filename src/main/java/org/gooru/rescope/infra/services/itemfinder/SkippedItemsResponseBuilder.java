@@ -15,7 +15,7 @@ class SkippedItemsResponseBuilder {
     private List<String> collectionsExternal;
 
     SkippedItemsResponseBuilder(List<String> units, List<String> lessons, List<String> assessments,
-        List<String> collections, List<String> assessmentsExternal, List<String> collectionsExternal) {
+            List<String> collections, List<String> assessmentsExternal, List<String> collectionsExternal) {
         this.units = initializeWithEmptyListIfNull(units);
         this.lessons = initializeWithEmptyListIfNull(lessons);
         this.assessments = initializeWithEmptyListIfNull(assessments);

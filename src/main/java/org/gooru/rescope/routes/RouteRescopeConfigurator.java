@@ -34,16 +34,16 @@ public class RouteRescopeConfigurator implements RouteConfigurator {
 
     private void fetchRescopedContent(RoutingContext routingContext) {
         DeliveryOptions options = DeliveryOptionsBuilder.buildWithApiVersion(routingContext).setSendTimeout(mbusTimeout)
-            .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_GET);
+                .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_GET);
         eb.<JsonObject>send(Constants.EventBus.MBEP_RESCOPE, RouteRequestUtility.getBodyForMessage(routingContext),
-            options, reply -> RouteResponseUtility.responseHandler(routingContext, reply, LOGGER));
+                options, reply -> RouteResponseUtility.responseHandler(routingContext, reply, LOGGER));
     }
 
     private void doRescopeOfContent(RoutingContext routingContext) {
         DeliveryOptions options = DeliveryOptionsBuilder.buildWithApiVersion(routingContext).setSendTimeout(mbusTimeout)
-            .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_SET);
+                .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_SET);
         eb.<JsonObject>send(Constants.EventBus.MBEP_RESCOPE, RouteRequestUtility.getBodyForMessage(routingContext),
-            options);
+                options);
         RouteResponseUtility.responseHandlerStatusOnlyNoBodyOrHeaders(routingContext, HttpConstants.HttpStatus.SUCCESS);
     }
 }

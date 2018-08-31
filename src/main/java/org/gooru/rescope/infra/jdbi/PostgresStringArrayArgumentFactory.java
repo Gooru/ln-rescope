@@ -24,4 +24,3 @@ public class PostgresStringArrayArgumentFactory implements ArgumentFactory<PGArr
         };
     }
 }
-

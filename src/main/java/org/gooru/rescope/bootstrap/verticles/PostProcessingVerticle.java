@@ -29,16 +29,16 @@ public class PostProcessingVerticle extends AbstractVerticle {
 
         EventBus eb = vertx.eventBus();
         eb.localConsumer(Constants.EventBus.MBEP_RESCOPE_POST_PROCESSOR, this::processMessage)
-            .completionHandler(result -> {
-                if (result.succeeded()) {
-                    LOGGER.info("Rescope post processor point ready to listen");
-                    startFuture.complete();
-                } else {
-                    LOGGER.error("Error registering the Rescope post processor handler. Halting the machinery");
-                    startFuture.fail(result.cause());
-                    Runtime.getRuntime().halt(1);
-                }
-            });
+                .completionHandler(result -> {
+                    if (result.succeeded()) {
+                        LOGGER.info("Rescope post processor point ready to listen");
+                        startFuture.complete();
+                    } else {
+                        LOGGER.error("Error registering the Rescope post processor handler. Halting the machinery");
+                        startFuture.fail(result.cause());
+                        Runtime.getRuntime().halt(1);
+                    }
+                });
         initializeHttpClient();
     }
 

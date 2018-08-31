@@ -34,9 +34,10 @@ class RouteFailureConfigurator implements RouteConfigurator {
             frc.response().setStatusCode(HttpConstants.HttpStatus.BAD_REQUEST.getCode()).end("Invalid Json payload");
         } else if (currentThrowable instanceof HttpResponseWrapperException) {
             LOGGER.error("Caught HttpResponseWrapperException", currentThrowable);
-            ResponseWriterBuilder.build(frc, ResponseTransformerBuilder
-                .buildHttpResponseWrapperExceptionBuild((HttpResponseWrapperException) currentThrowable))
-                .writeResponse();
+            ResponseWriterBuilder
+                    .build(frc, ResponseTransformerBuilder
+                            .buildHttpResponseWrapperExceptionBuild((HttpResponseWrapperException) currentThrowable))
+                    .writeResponse();
         } else {
             LOGGER.error("Caught unregistered exception, will send HTTP.500", currentThrowable);
             frc.response().setStatusCode(HttpConstants.HttpStatus.ERROR.getCode()).end("Internal error");

@@ -48,7 +48,7 @@ class SkippedItemsFinderInCourseImpl implements SkippedItemsFinder {
             return new SkippedItemsResponseBuilder().build();
         }
         return new SkippedItemsCalculator(allNonDeletedItemsInCourse, allNonSkippedItems, allSkippedItems).calculate()
-            .getSkippedItemsResponse();
+                .getSkippedItemsResponse();
     }
 
 }

@@ -113,14 +113,14 @@ public final class MessageResponse {
         public MessageResponse build() {
             JsonObject result = new JsonObject();
             result.put(Constants.Message.MSG_HTTP_STATUS, this.httpStatus.getCode())
-                .put(Constants.Message.MSG_HTTP_HEADERS, this.headers)
-                .put(Constants.Message.MSG_HTTP_BODY, this.responseBody == null ? new JsonObject() : this.responseBody);
+                    .put(Constants.Message.MSG_HTTP_HEADERS, this.headers).put(Constants.Message.MSG_HTTP_BODY,
+                            this.responseBody == null ? new JsonObject() : this.responseBody);
             return new MessageResponse(result);
         }
 
         public static MessageResponse buildPlaceHolderResponse() {
-            JsonObject result =
-                new JsonObject().put(Constants.Message.MSG_HTTP_STATUS, HttpConstants.HttpStatus.SUCCESS.getCode())
+            JsonObject result = new JsonObject()
+                    .put(Constants.Message.MSG_HTTP_STATUS, HttpConstants.HttpStatus.SUCCESS.getCode())
                     .put(Constants.Message.MSG_HTTP_HEADERS, new JsonObject())
                     .put(Constants.Message.MSG_HTTP_BODY, new JsonObject());
             return new MessageResponse(result);

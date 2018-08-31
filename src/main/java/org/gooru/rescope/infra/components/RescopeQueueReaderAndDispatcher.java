@@ -14,12 +14,14 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
 /**
- * This is the timer based runner class which is responsible to read the Persisted queued requests and send them to
- * Event bus so that they can be processed by listeners.
- * It does wait for reply, so that we do increase the backpressure on TCP bus too much, however what is replied is does
- * not matter as we do schedule another one shot timer to do the similar stuff.
- * For the first run, it re-initializes the status in the DB so that any tasks that were under processing when the
- * application shut down happened would be picked up again.
+ * This is the timer based runner class which is responsible to read the
+ * Persisted queued requests and send them to Event bus so that they can be
+ * processed by listeners. It does wait for reply, so that we do increase the
+ * backpressure on TCP bus too much, however what is replied is does not matter
+ * as we do schedule another one shot timer to do the similar stuff. For the
+ * first run, it re-initializes the status in the DB so that any tasks that were
+ * under processing when the application shut down happened would be picked up
+ * again.
  *
  * @author ashish.
  */
@@ -74,10 +76,10 @@ public final class RescopeQueueReaderAndDispatcher implements Initializer, Final
                 if (asyncResult.succeeded()) {
                     if (asyncResult.result().isModelPersisted()) {
                         vertx.eventBus().send(MBEP_RESCOPE_QUEUE_PROCESSOR, asyncResult.result().toJson(),
-                            DeliveryOptionsBuilder.buildWithoutApiVersion(RESCOPE_PROCESS_TIMEOUT),
-                            eventBusResponse -> {
-                                timerId = vertx.setTimer(delay, new TimerHandler(vertx, firstTrigger));
-                            });
+                                DeliveryOptionsBuilder.buildWithoutApiVersion(RESCOPE_PROCESS_TIMEOUT),
+                                eventBusResponse -> {
+                                    timerId = vertx.setTimer(delay, new TimerHandler(vertx, firstTrigger));
+                                });
                     } else {
                         timerId = vertx.setTimer(delay, new TimerHandler(vertx, firstTrigger));
                     }

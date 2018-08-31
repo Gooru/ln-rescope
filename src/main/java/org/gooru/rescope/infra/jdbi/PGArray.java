@@ -30,4 +30,3 @@ public class PGArray<T> {
         return type;
     }
 }
-

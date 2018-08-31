@@ -36,21 +36,21 @@ class RouteAuthConfigurator implements RouteConfigurator {
     }
 
     private void verifyToken(RoutingContext routingContext) {
-        String sessionToken =
-            TokenValidationUtils.extractSessionToken(routingContext.request().getHeader(HttpConstants.HEADER_AUTH));
+        String sessionToken = TokenValidationUtils
+                .extractSessionToken(routingContext.request().getHeader(HttpConstants.HEADER_AUTH));
 
         if (sessionToken == null || sessionToken.isEmpty()) {
             this.sendUnAuthorizedResponse(routingContext);
         } else {
             routingContext.put(Constants.Message.MSG_SESSION_TOKEN, sessionToken);
             this.eBus.<JsonObject>send(Constants.EventBus.MBEP_AUTH, null,
-                this.createDeliveryOptionsForTokenVerification(routingContext, sessionToken),
-                reply -> this.tokenVerificationCompletionHandler(routingContext, reply));
+                    this.createDeliveryOptionsForTokenVerification(routingContext, sessionToken),
+                    reply -> this.tokenVerificationCompletionHandler(routingContext, reply));
         }
     }
 
     private void tokenVerificationCompletionHandler(RoutingContext routingContext,
-        AsyncResult<Message<JsonObject>> reply) {
+            AsyncResult<Message<JsonObject>> reply) {
         if (reply.succeeded()) {
             AuthSessionResponseHolder responseHolder = AuthSessionResponseHolderBuilder.build(reply.result());
 
@@ -81,15 +81,15 @@ class RouteAuthConfigurator implements RouteConfigurator {
     }
 
     private DeliveryOptions createDeliveryOptionsForTokenVerification(RoutingContext routingContext,
-        String sessionToken) {
+            String sessionToken) {
         return DeliveryOptionsBuilder
-            .buildWithoutApiVersion(routingContext, this.mbusTimeout, Constants.Message.MSG_OP_AUTH)
-            .addHeader(Constants.Message.MSG_SESSION_TOKEN, sessionToken);
+                .buildWithoutApiVersion(routingContext, this.mbusTimeout, Constants.Message.MSG_OP_AUTH)
+                .addHeader(Constants.Message.MSG_SESSION_TOKEN, sessionToken);
     }
 
     private void sendUnAuthorizedResponse(RoutingContext routingContext) {
         routingContext.response().setStatusCode(HttpConstants.HttpStatus.UNAUTHORIZED.getCode())
-            .setStatusMessage(HttpConstants.HttpStatus.UNAUTHORIZED.getMessage()).end();
+                .setStatusMessage(HttpConstants.HttpStatus.UNAUTHORIZED.getMessage()).end();
     }
 
 }

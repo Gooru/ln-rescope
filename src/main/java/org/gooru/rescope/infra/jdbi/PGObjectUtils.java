@@ -17,7 +17,8 @@ public final class PGObjectUtils {
     }
 
     /*
-     * Create a PGobject encapsulating UUID and setting value of null if UUID is null
+     * Create a PGobject encapsulating UUID and setting value of null if UUID is
+     * null
      */
     public static PGobject getNullSafeUUID(UUID uuid) {
         try {

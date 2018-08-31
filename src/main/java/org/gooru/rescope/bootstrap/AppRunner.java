@@ -150,9 +150,8 @@ public class AppRunner {
             Future<String> future = Future.future();
             futures.add(future);
 
-            this.vertx
-                .deployVerticle(verticle.getKey(), new DeploymentOptions(verticles.getJsonObject(verticle.getKey())),
-                    future.completer());
+            this.vertx.deployVerticle(verticle.getKey(),
+                    new DeploymentOptions(verticles.getJsonObject(verticle.getKey())), future.completer());
         }
 
         CompositeFuture.all(eraseTypeList(futures)).setHandler(result -> {

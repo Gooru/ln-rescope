@@ -38,8 +38,6 @@ public class ExecutionResult<T> {
     }
 
     public enum ExecutionStatus {
-        SUCCESSFUL,
-        FAILED,
-        CONTINUE_PROCESSING
+        SUCCESSFUL, FAILED, CONTINUE_PROCESSING
     }
 }

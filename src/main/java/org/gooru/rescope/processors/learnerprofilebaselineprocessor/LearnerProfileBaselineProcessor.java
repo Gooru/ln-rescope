@@ -26,7 +26,7 @@ public class LearnerProfileBaselineProcessor implements AsyncMessageProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(LearnerProfileBaselineProcessor.class);
 
     public LearnerProfileBaselineProcessor(Vertx vertx, Message<JsonObject> message, HttpClient client,
-        String lpbaselineUri) {
+            String lpbaselineUri) {
 
         this.vertx = vertx;
         this.message = message;

@@ -28,16 +28,16 @@ public class RescopeProcessingVerticle extends AbstractVerticle {
 
         EventBus eb = vertx.eventBus();
         eb.localConsumer(Constants.EventBus.MBEP_RESCOPE_QUEUE_PROCESSOR, this::processMessage)
-            .completionHandler(result -> {
-                if (result.succeeded()) {
-                    LOGGER.info("Rescope processor point ready to listen");
-                    startFuture.complete();
-                } else {
-                    LOGGER.error("Error registering the Rescope processor handler. Halting the machinery");
-                    startFuture.fail(result.cause());
-                    Runtime.getRuntime().halt(1);
-                }
-            });
+                .completionHandler(result -> {
+                    if (result.succeeded()) {
+                        LOGGER.info("Rescope processor point ready to listen");
+                        startFuture.complete();
+                    } else {
+                        LOGGER.error("Error registering the Rescope processor handler. Halting the machinery");
+                        startFuture.fail(result.cause());
+                        Runtime.getRuntime().halt(1);
+                    }
+                });
     }
 
     private void processMessage(Message<String> message) {
@@ -62,12 +62,13 @@ public class RescopeProcessingVerticle extends AbstractVerticle {
     }
 
     private void sendMessageToPostProcessor(RescopeQueueModel model) {
-        JsonObject request = new JsonObject().put(LearnerProfileBaselinePayloadConstants.USER_ID, model.getUserId().toString())
-            .put(LearnerProfileBaselinePayloadConstants.COURSE_ID, model.getCourseId().toString())
-            .put(LearnerProfileBaselinePayloadConstants.CLASS_ID, model.getClassId().toString());
+        JsonObject request = new JsonObject()
+                .put(LearnerProfileBaselinePayloadConstants.USER_ID, model.getUserId().toString())
+                .put(LearnerProfileBaselinePayloadConstants.COURSE_ID, model.getCourseId().toString())
+                .put(LearnerProfileBaselinePayloadConstants.CLASS_ID, model.getClassId().toString());
 
         vertx.eventBus().send(Constants.EventBus.MBEP_RESCOPE_POST_PROCESSOR, request, new DeliveryOptions()
-            .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_LP_BASELINE));
+                .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_LP_BASELINE));
     }
 
     @Override

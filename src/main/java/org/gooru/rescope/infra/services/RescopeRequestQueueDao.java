@@ -37,7 +37,7 @@ interface RescopeRequestQueueDao {
     boolean isCourseNotDeleted(@Bind("courseId") UUID courseId);
 
     @SqlBatch("insert into rescope_queue(user_id, course_id, class_id, priority, status) values (:members, :courseId,"
-                  + " :classId, :priority, :status) ON CONFLICT DO NOTHING")
+            + " :classId, :priority, :status) ON CONFLICT DO NOTHING")
     void queueRequests(@Bind("members") List<UUID> userId, @BindBean RescopeQueueModel rescopeQueueModel);
 
     @SqlUpdate("update rescope_queue set status = 0 where status != 0")
@@ -45,7 +45,7 @@ interface RescopeRequestQueueDao {
 
     @Mapper(RescopeQueueModel.RescopeQueueModelMapper.class)
     @SqlQuery("select id, user_id, course_id, class_id, priority, status from rescope_queue where status = 0 order by"
-                  + " priority desc limit 1")
+            + " priority desc limit 1")
     RescopeQueueModel getNextDispatchableModel();
 
     @SqlUpdate("update rescope_queue set status = 1 where id = :modelId")
@@ -58,14 +58,14 @@ interface RescopeRequestQueueDao {
     boolean isQueuedRecordStillDispatched(@Bind("id") Long modelId);
 
     @SqlQuery("select exists (select 1 from user_rescoped_content where user_id = :userId and course_id = :courseId  "
-                  + "and class_id = :classId)")
+            + "and class_id = :classId)")
     boolean rescopeDoneForUserInClass(@BindBean RescopeQueueModel model);
 
     @SqlQuery("select exists (select 1 from user_rescoped_content where user_id = :userId and course_id = :courseId  "
-                  + "and class_id is null)")
+            + "and class_id is null)")
     boolean rescopeDoneForUserInIL(@BindBean RescopeQueueModel model);
 
     @SqlUpdate("insert into user_rescoped_content(user_id, class_id, course_id, skipped_content) values (:userId, "
-                   + ":classId, :courseId, :skippedContent::jsonb)")
+            + ":classId, :courseId, :skippedContent::jsonb)")
     void persistRescopedContent(@BindBean RescopeQueueModel model, @Bind("skippedContent") String skippedContent);
 }

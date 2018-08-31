@@ -14,7 +14,7 @@ public final class TokenValidationUtils {
 
     private static final String HEADER_AUTH_PREFIX = "Token";
     private static final Pattern AUTH_PATTERN = Pattern.compile(
-        '^' + HEADER_AUTH_PREFIX + "[\\s]+((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)\\s*$");
+            '^' + HEADER_AUTH_PREFIX + "[\\s]+((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)\\s*$");
 
     public static String extractSessionToken(String authHeader) {
         if (authHeader == null || authHeader.isEmpty()) {

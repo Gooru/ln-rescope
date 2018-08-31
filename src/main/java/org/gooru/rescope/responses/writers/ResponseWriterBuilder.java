@@ -19,7 +19,7 @@ public final class ResponseWriterBuilder {
     public static ResponseWriter build(RoutingContext routingContext, AsyncResult<Message<JsonObject>> message) {
         if (routingContext == null || message == null) {
             throw new IllegalArgumentException(
-                "Invalid or null routing context or message for Response Writer creation");
+                    "Invalid or null routing context or message for Response Writer creation");
         }
         return new HttpServerResponseWriter(routingContext, message);
     }
@@ -27,7 +27,7 @@ public final class ResponseWriterBuilder {
     public static ResponseWriter build(RoutingContext routingContext, ResponseTransformer transformer) {
         if (routingContext == null || transformer == null) {
             throw new IllegalArgumentException(
-                "Invalid or null routing context or transformer for Response Writer creation");
+                    "Invalid or null routing context or transformer for Response Writer creation");
         }
         return new HttpServerResponseWriter(routingContext, transformer);
     }

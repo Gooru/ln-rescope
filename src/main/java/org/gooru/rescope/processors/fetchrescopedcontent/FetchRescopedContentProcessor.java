@@ -23,8 +23,8 @@ public class FetchRescopedContentProcessor implements AsyncMessageProcessor {
     private final Future<MessageResponse> result;
     private EventBusMessage eventBusMessage;
     private static final Logger LOGGER = LoggerFactory.getLogger(FetchRescopedContentProcessor.class);
-    private final FetchRescopedContentService fetchRescopedContentService =
-        new FetchRescopedContentService(DBICreator.getDbiForDefaultDS());
+    private final FetchRescopedContentService fetchRescopedContentService = new FetchRescopedContentService(
+            DBICreator.getDbiForDefaultDS());
 
     public FetchRescopedContentProcessor(Vertx vertx, Message<JsonObject> message) {
         this.message = message;
