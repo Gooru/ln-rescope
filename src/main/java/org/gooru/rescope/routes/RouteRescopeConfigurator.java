@@ -42,7 +42,7 @@ public class RouteRescopeConfigurator implements RouteConfigurator {
     private void doRescopeOfContent(RoutingContext routingContext) {
         DeliveryOptions options = DeliveryOptionsBuilder.buildWithApiVersion(routingContext).setSendTimeout(mbusTimeout)
                 .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_SET);
-        eb.<JsonObject>send(Constants.EventBus.MBEP_RESCOPE, RouteRequestUtility.getBodyForMessage(routingContext),
+        eb.send(Constants.EventBus.MBEP_RESCOPE, RouteRequestUtility.getBodyForMessage(routingContext),
                 options);
         RouteResponseUtility.responseHandlerStatusOnlyNoBodyOrHeaders(routingContext, HttpConstants.HttpStatus.SUCCESS);
     }

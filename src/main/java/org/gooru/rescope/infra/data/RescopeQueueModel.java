@@ -24,8 +24,6 @@ public class RescopeQueueModel {
     private int priority;
     private int status;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RescopeQueueModel.class);
-
     public static final int RQ_STATUS_QUEUED = 0;
     public static final int RQ_STATUS_DISPATCHED = 1;
     public static final int RQ_STATUS_INPROCESS = 2;

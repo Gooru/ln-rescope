@@ -18,6 +18,7 @@ import io.vertx.core.json.JsonObject;
  * @author ashish.
  */
 public class LearnerProfileBaselineProcessor implements AsyncMessageProcessor {
+    @SuppressWarnings("unused")
     private final Vertx vertx;
     private final Message<JsonObject> message;
     private final HttpClient client;
