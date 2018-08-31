@@ -44,6 +44,11 @@ public final class AppConfiguration implements Initializer {
         return configuration.getString("rescope.applicable.course.version");
     }
 
+    public boolean isPostProcessingEnabled() {
+        Boolean result = configuration.getBoolean("postprocessing.enabled");
+        return Boolean.TRUE.equals(result);
+    }
+
     public int getConfigAsInt(String key) {
         return configuration.getInteger(key);
     }

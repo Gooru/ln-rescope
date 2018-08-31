@@ -60,7 +60,8 @@
   },
   "app.configuration": {
     "context.mbus.timeout.seconds": 60,
-    "rescope.applicable.course.version": "premium"
+    "rescope.applicable.course.version": "premium",
+    "postprocessing.enabled": false
   },
   "vertxOptions": {
     "workerPoolSize": 40,

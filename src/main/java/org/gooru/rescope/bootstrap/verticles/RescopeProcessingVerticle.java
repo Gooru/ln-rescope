@@ -1,5 +1,6 @@
 package org.gooru.rescope.bootstrap.verticles;
 
+import org.gooru.rescope.infra.components.AppConfiguration;
 import org.gooru.rescope.infra.constants.Constants;
 import org.gooru.rescope.infra.data.RescopeQueueModel;
 import org.gooru.rescope.infra.services.RescopeProcessingService;
@@ -62,6 +63,10 @@ public class RescopeProcessingVerticle extends AbstractVerticle {
     }
 
     private void sendMessageToPostProcessor(RescopeQueueModel model) {
+        // Only if post processing is enabled, then send message to post processor
+        if (!AppConfiguration.getInstance().isPostProcessingEnabled()) {
+            return;
+        }
         JsonObject request = new JsonObject()
                 .put(LearnerProfileBaselinePayloadConstants.USER_ID, model.getUserId().toString())
                 .put(LearnerProfileBaselinePayloadConstants.COURSE_ID, model.getCourseId().toString())

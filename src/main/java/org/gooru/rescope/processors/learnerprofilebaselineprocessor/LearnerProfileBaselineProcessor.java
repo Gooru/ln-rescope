@@ -68,7 +68,6 @@ public class LearnerProfileBaselineProcessor implements AsyncMessageProcessor {
         if (classId != null) {
             uri += "&classId=" + classId;
         }
-        // TODO: Verify if we need URL encoding here
         return uri;
     }
 

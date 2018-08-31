@@ -92,9 +92,7 @@ To run the binary which would be fat jar from the project base directory:
 ### Task list V2
 For the Rescope V2, the tasks that are identified are :
 
-- Remove the code to call the internal baseline API
 - Update module to check the rescope being applicable
-- Remove the support for rescope setting change event for doing rescope
 - Create a module to fetch Course's Competency Route
 - Create a module which can look up class and provide Floor and Ceil for that class
 - Create a module to fetch the base line user profile for that class/course
