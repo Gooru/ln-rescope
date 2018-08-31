@@ -2,13 +2,16 @@
 
 In a course which is catering to many competencies, users may not have to study all the items specified in that course. During study play experience, this is taken care by skip logic coded with navigate-map content. Similar kind of experience is needed on course map to display the content which should be focus for the user. 
 
+### Rescope Specifications
+The specification document resides [here](https://docs.google.com/document/d/1ED2MHbTLtEDym4KM163VbYgLPR_wwtCXe8q8xQNDHpU/edit?ts=5b84f144#heading=h.16lv0v7a06wr)
+
+
 ### Rescope datastore
 
-Since there is a need to keep skip logic of navigate map same as rescope logic, rescope logic would use the same data store to ascertain the completion/mastery of competency as is used by navigate map. 
+Rescope will be aware of the progression of competencies in the domain. Hence it will access the store where baseline for users are stored, domain competency matrix is available along with progression info. In addition, it needs to read course/class/collection information. Once done it will need to store the output somewhere.
 
-### Pilot scope
+### Technical Scope
 
-For pilot, here are salient points of implementation:
 
 - There will be two APIs exposed, one which will fetch the rescope course content and another which can trigger the rescoping of specified content for specified user
 - The fetch API will return the rescoped course if, 
@@ -16,8 +19,8 @@ For pilot, here are salient points of implementation:
     - or if user is in class, then
         - session token should be of either be teacher/co-teacher of class and user for which rescoped course is fetched should be student of same class
         - or the user for which rescoped course is being fetched, should be the same user for which session token is being used
-- If the rescoped course for user does not exists, then Http status of 404 will be sent. In addition, a request is going to be queued to create the rescoped version of course for specified user. The downstream services will take care of not doing same job multiple times
-- Once the rescope is done for a user, class and course combination, it will be persisted. Next time onwards when rescope APIs are called, they will either fetch persisted data (in case of fetch API) or the downstream queue processor will make sure to check if rescoping is not done so far before doing actual work
+- If the rescoped course for user does not exists, then Http status of 404 will be sent. Note that there won't be any queue-ing done for the request. The downstream services will take care of not doing same job multiple times
+- Once the rescope is done for a user, class and course combination, it will be persisted. Next time onwards when rescope APIs are called, they will directly fetch the persisted data. If the do rescope API is called again, the processors will check to validate if rescoping is not done so far before doing actual work
 
 
 Since, there is a need to persist this queue of requests, we should be using DB to maintain the list and update the status there. This in turn will give rise to batch job kind of model, where in Http API will keep on updating the queue, and batch model will pick up and do rescoping of content
@@ -28,17 +31,17 @@ To create the shadow (fat) jar:
 
     ./gradlew
 
-To run the binary which would be fat jar:
+To run the binary which would be fat jar from the project base directory:
 
-    java -jar rescope.jar -Dconfig.file=src/main/resources/rescope.json
+    java -jar rescope.jar $(project_loc)/src/main/resources/rescope.json
 
 ### Fetch Rescope API
-- For rescope to be enabled, class setting should have rescope as true or in case of IL course version should be not null
-- If this API is called for class or course (IL) for which rescope is not enable, it will throw an error
+- For rescope to be enabled, the course associated with class should be a premium course
+- If this API is called for class or course (IL) for which rescope is not enabled, it will throw an error
 - if rescope is enabled, then look up in rescope store to see if there is rescoped data available
     - If available, serve the data
     - Else, send 404. But also send a message to event bus so that processing request can be queued
-- Note that currently there are no checks to verify if class and course specified (in class context) are having an association. TODO
+- Note that currently there are no checks to verify if class and course specified (in class context) are having an association
 
 ### Do Rescope API
 - This API will be called internally only
@@ -48,7 +51,6 @@ To run the binary which would be fat jar:
 - Now generate the data for messages based on source
     - class join, one event per member specified in payload will be created.
     - course assign to class, class members will be looked up and one event per member of class will be created
-    - rescope setting change, class members will be looked up and one event per member of class will be created
     - OOB, this won't be used by API per se, but by READ handler to post message along with member id in case of 404
         - This may also be used as API to trigger rescope on adhoc basis
 - Note that here we won't validate if class member may have (with current UI flows may not be possible) rescoped content already. That will be done downstream
@@ -87,3 +89,19 @@ To run the binary which would be fat jar:
     - For the first run of timer thread, it should clean up all statuses in DB queue so that they are picked up for processing downstream
     - The number of records that are read from DB/queue and dumped on to message bus for processing, needs to be configurable
 
+### Task list V2
+For the Rescope V2, the tasks that are identified are :
+
+- Disable Queue of Rescope on call of fetch API
+- Update module to check the rescope being applicable
+- Remove the support for rescope setting change event for doing rescope
+- Create a module to fetch Course's Competency Route
+- Create a module which can look up class and provide Floor and Ceil for that class
+- Create a module to fetch the base line user profile for that class/course
+- Create a module which can take floor, ceil, LP, Course CR and then create context object with all these params.
+    Note that it needs to handle the default values in case one or more of them are null or not present
+- Integrate the competency algebra related pieces
+- Define entry point which should be able to take context and calculate rescope
+- Define how and where do we store rescoped content? Same DB same format or we change the format?
+- Navigate map should honor the Rescope definition
+- Remove the code to call the internal baseline API
