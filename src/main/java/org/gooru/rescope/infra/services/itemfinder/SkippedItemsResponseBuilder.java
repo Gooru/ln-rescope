@@ -8,12 +8,28 @@ import java.util.List;
  */
 class SkippedItemsResponseBuilder {
 
-    private List<String> units;
-    private List<String> lessons;
-    private List<String> assessments;
-    private List<String> collections;
-    private List<String> assessmentsExternal;
-    private List<String> collectionsExternal;
+    private static List<String> initializeWithEmptyListIfNull(List<String> input) {
+        if (input == null) {
+            return new ArrayList<>();
+        }
+        return input;
+    }
+
+    private final List<String> units;
+    private final List<String> lessons;
+    private final List<String> assessments;
+    private final List<String> collections;
+    private final List<String> assessmentsExternal;
+    private final List<String> collectionsExternal;
+
+    SkippedItemsResponseBuilder() {
+        this.units = new ArrayList<>();
+        this.lessons = new ArrayList<>();
+        this.assessments = new ArrayList<>();
+        this.collections = new ArrayList<>();
+        this.assessmentsExternal = new ArrayList<>();
+        this.collectionsExternal = new ArrayList<>();
+    }
 
     SkippedItemsResponseBuilder(List<String> units, List<String> lessons, List<String> assessments,
         List<String> collections, List<String> assessmentsExternal, List<String> collectionsExternal) {
@@ -34,15 +50,6 @@ class SkippedItemsResponseBuilder {
         result.setAssessmentsExternal(assessmentsExternal);
         result.setCollectionsExternal(collectionsExternal);
         return result;
-    }
-
-    public SkippedItemsResponseBuilder() {
-        this.units = new ArrayList<>();
-        this.lessons = new ArrayList<>();
-        this.assessments = new ArrayList<>();
-        this.collections = new ArrayList<>();
-        this.assessmentsExternal = new ArrayList<>();
-        this.collectionsExternal = new ArrayList<>();
     }
 
     public void addUnit(String unitId) {
@@ -67,13 +74,6 @@ class SkippedItemsResponseBuilder {
 
     public void addCollectionExternal(String collectionExternalId) {
         this.collectionsExternal.add(collectionExternalId);
-    }
-
-    private static List<String> initializeWithEmptyListIfNull(List<String> input) {
-        if (input == null) {
-            return new ArrayList<>();
-        }
-        return input;
     }
 
 }

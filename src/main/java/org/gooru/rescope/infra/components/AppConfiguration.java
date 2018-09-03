@@ -12,12 +12,12 @@ import io.vertx.core.json.JsonObject;
 public final class AppConfiguration implements Initializer {
 
     private static final String APP_CONFIG_KEY = "app.configuration";
-    private JsonObject configuration;
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConfiguration.class);
 
     public static AppConfiguration getInstance() {
         return Holder.INSTANCE;
     }
+    private JsonObject configuration;
 
     private volatile boolean initialized = false;
 
@@ -69,6 +69,10 @@ public final class AppConfiguration implements Initializer {
     private static final class Holder {
 
         private static final AppConfiguration INSTANCE = new AppConfiguration();
+
+        private Holder() {
+            throw new AssertionError();
+        }
     }
 
 }

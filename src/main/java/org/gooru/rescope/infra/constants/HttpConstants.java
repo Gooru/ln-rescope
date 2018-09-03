@@ -16,6 +16,10 @@ public final class HttpConstants {
 
     public static final String CONTENT_TYPE_JSON = "application/json";
 
+    private HttpConstants() {
+        throw new AssertionError();
+    }
+
     public enum HttpStatus {
 
         SUCCESS(200, "Successful"),
@@ -52,10 +56,6 @@ public final class HttpConstants {
         public String getMessage() {
             return this.message;
         }
-    }
-
-    private HttpConstants() {
-        throw new AssertionError();
     }
 
 }

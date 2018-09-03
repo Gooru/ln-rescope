@@ -34,19 +34,9 @@ class CompetencyMapImpl implements CompetencyMap {
         processDomainCompetencyMap();
     }
 
-    private void processDomainCompetencyMap() {
-        for (DomainCode domainCode : domains) {
-            List<Competency> competencies = domainCodeCompetencyListMap.get(domainCode);
-            Set<Competency> competencySet = new HashSet<>(competencies);
-            competencies = new ArrayList<>(competencySet);
-            competencies.sort(new CompetencySorterByProgression());
-            domainCodeCompetencyListMap.put(domainCode, competencies);
-        }
-    }
-
     @Override
     public List<DomainCode> getDomains() {
-        return domains;
+        return Collections.unmodifiableList(domains);
     }
 
     @Override
@@ -74,5 +64,15 @@ class CompetencyMapImpl implements CompetencyMap {
     public String toString() {
         return "CompetencyMap{" + "domains=" + domains + ", domainCodeCompetencyListMap=" + domainCodeCompetencyListMap
             + ", ceilingLine=" + ceilingLine + ", floorLine=" + floorLine + '}';
+    }
+
+    private void processDomainCompetencyMap() {
+        for (DomainCode domainCode : domains) {
+            List<Competency> competencies = domainCodeCompetencyListMap.get(domainCode);
+            Set<Competency> competencySet = new HashSet<>(competencies);
+            competencies = new ArrayList<>(competencySet);
+            competencies.sort(new CompetencySorterByProgression());
+            domainCodeCompetencyListMap.put(domainCode, competencies);
+        }
     }
 }

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zaxxer.hikari.HikariDataSource;
-
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
@@ -24,6 +23,10 @@ public final class DataSourceRegistry implements Initializer, Finalizer {
     private static final String DEFAULT_DATA_SOURCE = "defaultDataSource";
     private static final String DSDB_DATA_SOURCE = "dsdbDataSource";
     private static final Logger LOGGER = LoggerFactory.getLogger(DataSourceRegistry.class);
+
+    public static DataSourceRegistry getInstance() {
+        return Holder.INSTANCE;
+    }
     // All the elements in this array are supposed to be present in config file
     // as keys as we are going to initialize them with the value associated with
     // that key
@@ -33,10 +36,6 @@ public final class DataSourceRegistry implements Initializer, Finalizer {
 
     private DataSourceRegistry() {
         // TODO Auto-generated constructor stub
-    }
-
-    public static DataSourceRegistry getInstance() {
-        return Holder.INSTANCE;
     }
 
     @Override
@@ -99,6 +98,9 @@ public final class DataSourceRegistry implements Initializer, Finalizer {
     private static final class Holder {
 
         private static final DataSourceRegistry INSTANCE = new DataSourceRegistry();
+
+        private Holder() {
+        }
     }
 
 }

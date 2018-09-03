@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
  */
 class RescopeQueueRecordDispatcherServiceImpl implements RescopeQueueRecordDispatcherService {
 
-    private final DBI dbi;
     private static final Logger LOGGER = LoggerFactory.getLogger(RescopeQueueRecordDispatcherService.class);
+    private final DBI dbi;
 
     RescopeQueueRecordDispatcherServiceImpl(DBI dbi) {
         this.dbi = dbi;

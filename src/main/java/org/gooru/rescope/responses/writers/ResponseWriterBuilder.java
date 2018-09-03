@@ -12,10 +12,6 @@ import io.vertx.ext.web.RoutingContext;
  */
 public final class ResponseWriterBuilder {
 
-    private ResponseWriterBuilder() {
-        throw new AssertionError();
-    }
-
     public static ResponseWriter build(RoutingContext routingContext, AsyncResult<Message<JsonObject>> message) {
         if (routingContext == null || message == null) {
             throw new IllegalArgumentException(
@@ -30,5 +26,9 @@ public final class ResponseWriterBuilder {
                 "Invalid or null routing context or transformer for Response Writer creation");
         }
         return new HttpServerResponseWriter(routingContext, transformer);
+    }
+
+    private ResponseWriterBuilder() {
+        throw new AssertionError();
     }
 }

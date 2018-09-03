@@ -14,10 +14,24 @@ import io.vertx.core.json.JsonObject;
  */
 class DoRescopeOfContentCommand {
 
+    static DoRescopeOfContentCommand builder(JsonObject requestBody) {
+        DoRescopeOfContentCommand result = new DoRescopeOfContentCommand();
+        result.classId = UuidUtils.convertStringToUuid(requestBody.getString(CommandAttributes.CLASS_ID));
+        result.source = RescopeSourceType.builder(requestBody.getString(CommandAttributes.SOURCE));
+        result.memberIds = UuidUtils.convertToUUIDList(requestBody.getJsonArray(CommandAttributes.MEMBER_IDS));
+        result.courseId = UuidUtils.convertStringToUuid(requestBody.getString(CommandAttributes.COURSE_ID));
+        result.validate();
+        return result;
+    }
+
     private RescopeSourceType source;
     private UUID classId;
     private List<UUID> memberIds;
     private UUID courseId;
+
+    private DoRescopeOfContentCommand() {
+
+    }
 
     public UUID getCourseId() {
         return courseId;
@@ -35,10 +49,6 @@ class DoRescopeOfContentCommand {
         return memberIds;
     }
 
-    private DoRescopeOfContentCommand() {
-
-    }
-
     public RescopeContext asRescopeContext() {
         switch (source) {
         case ClassJoinByMembers:
@@ -52,16 +62,6 @@ class DoRescopeOfContentCommand {
         default:
             throw new IllegalStateException("Invalid rescope source type");
         }
-    }
-
-    static DoRescopeOfContentCommand builder(JsonObject requestBody) {
-        DoRescopeOfContentCommand result = new DoRescopeOfContentCommand();
-        result.classId = UuidUtils.convertStringToUuid(requestBody.getString(CommandAttributes.CLASS_ID));
-        result.source = RescopeSourceType.builder(requestBody.getString(CommandAttributes.SOURCE));
-        result.memberIds = UuidUtils.convertToUUIDList(requestBody.getJsonArray(CommandAttributes.MEMBER_IDS));
-        result.courseId = UuidUtils.convertStringToUuid(requestBody.getString(CommandAttributes.COURSE_ID));
-        result.validate();
-        return result;
     }
 
     private void validate() {

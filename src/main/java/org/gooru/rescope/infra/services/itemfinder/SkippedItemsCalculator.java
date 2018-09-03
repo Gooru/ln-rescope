@@ -15,10 +15,10 @@ class SkippedItemsCalculator {
     private final List<ItemModel> allSkippedItems;
     private List<String> skippedUnits = new ArrayList<>();
     private List<String> skippedLessons = new ArrayList<>();
-    private List<String> skippedCollections = new ArrayList<>();
-    private List<String> skippedAssessments = new ArrayList<>();
-    private List<String> skippedAssessmentsExternal = new ArrayList<>();
-    private List<String> skippedCollectionsExternal = new ArrayList<>();
+    private final List<String> skippedCollections = new ArrayList<>();
+    private final List<String> skippedAssessments = new ArrayList<>();
+    private final List<String> skippedAssessmentsExternal = new ArrayList<>();
+    private final List<String> skippedCollectionsExternal = new ArrayList<>();
     private boolean calculated = false;
 
     SkippedItemsCalculator(List<ItemModel> allNonDeletedItemsInCourse, List<ItemModel> allNonSkippedItems,
@@ -28,11 +28,28 @@ class SkippedItemsCalculator {
         this.allSkippedItems = allSkippedItems;
     }
 
-    SkippedItemsCalculator calculate() {
-        calculateCollectionLevelSkippedItems();
-        calculateULLevelSkippedItems();
-        calculated = true;
-        return this;
+    public List<String> getSkippedUnits() {
+        return skippedUnits;
+    }
+
+    public List<String> getSkippedLessons() {
+        return skippedLessons;
+    }
+
+    public List<String> getSkippedCollections() {
+        return skippedCollections;
+    }
+
+    public List<String> getSkippedAssessments() {
+        return skippedAssessments;
+    }
+
+    public List<String> getSkippedAssessmentsExternal() {
+        return skippedAssessmentsExternal;
+    }
+
+    public List<String> getSkippedCollectionsExternal() {
+        return skippedCollectionsExternal;
     }
 
     private void calculateULLevelSkippedItems() {
@@ -73,6 +90,13 @@ class SkippedItemsCalculator {
         }
     }
 
+    SkippedItemsCalculator calculate() {
+        calculateCollectionLevelSkippedItems();
+        calculateULLevelSkippedItems();
+        calculated = true;
+        return this;
+    }
+
     SkippedItemsResponse getSkippedItemsResponse() {
         if (!calculated) {
             throw new IllegalStateException(
@@ -81,30 +105,6 @@ class SkippedItemsCalculator {
         SkippedItemsResponseBuilder builder = new SkippedItemsResponseBuilder(skippedUnits, skippedLessons,
             skippedAssessments, skippedCollections, skippedAssessmentsExternal, skippedCollectionsExternal);
         return builder.build();
-    }
-
-    public List<String> getSkippedUnits() {
-        return skippedUnits;
-    }
-
-    public List<String> getSkippedLessons() {
-        return skippedLessons;
-    }
-
-    public List<String> getSkippedCollections() {
-        return skippedCollections;
-    }
-
-    public List<String> getSkippedAssessments() {
-        return skippedAssessments;
-    }
-
-    public List<String> getSkippedAssessmentsExternal() {
-        return skippedAssessmentsExternal;
-    }
-
-    public List<String> getSkippedCollectionsExternal() {
-        return skippedCollectionsExternal;
     }
 
 }

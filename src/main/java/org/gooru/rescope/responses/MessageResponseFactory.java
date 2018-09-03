@@ -12,10 +12,6 @@ public final class MessageResponseFactory {
 
     private static final String API_VERSION_DEPRECATED = "API version is deprecated";
 
-    private MessageResponseFactory() {
-        throw new AssertionError();
-    }
-
     public static MessageResponse createInvalidRequestResponse() {
         return new MessageResponse.Builder().setStatusBadRequest()
             .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "Invalid request")).build();
@@ -67,6 +63,10 @@ public final class MessageResponseFactory {
 
     public static MessageResponse createCreatedResponse(String location) {
         return new MessageResponse.Builder().setHeader("Location", location).setStatusCreated().build();
+    }
+
+    private MessageResponseFactory() {
+        throw new AssertionError();
     }
 
 }

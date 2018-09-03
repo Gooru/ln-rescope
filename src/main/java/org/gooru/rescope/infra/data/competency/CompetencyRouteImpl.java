@@ -26,24 +26,9 @@ class CompetencyRouteImpl implements CompetencyRoute {
         domainCodeCompetencyPathMap = calculateCompetencyPathsForDestinationDomains();
     }
 
-    private Map<DomainCode, CompetencyPath> calculateCompetencyPathsForDestinationDomains() {
-        Map<DomainCode, CompetencyPath> result = new HashMap<>();
-        for (DomainCode domainCode : domains) {
-            Competency destinationCompetency = destinationLine.getCompetencyForDomain(domainCode);
-            Competency sourceCompetency = sourceLine.getCompetencyForDomain(domainCode);
-            if (sourceCompetency == null) {
-                sourceCompetency = Competency
-                    .buildInitialCompetency(destinationCompetency.getSubject(), destinationCompetency.getDomain());
-            }
-            CompetencyPath path = CompetencyPath.build(sourceCompetency, destinationCompetency);
-            result.put(domainCode, path);
-        }
-        return result;
-    }
-
     @Override
     public List<DomainCode> getDomains() {
-        return domains;
+        return Collections.unmodifiableList(domains);
     }
 
     @Override
@@ -59,5 +44,20 @@ class CompetencyRouteImpl implements CompetencyRoute {
         return "CompetencyRoute{" + "sourceLine=" + sourceLine + ", domains=" + domains
             + ", domainCodeCompetencyPathMap=" + domainCodeCompetencyPathMap + ", destinationLine=" + destinationLine
             + '}';
+    }
+
+    private Map<DomainCode, CompetencyPath> calculateCompetencyPathsForDestinationDomains() {
+        Map<DomainCode, CompetencyPath> result = new HashMap<>();
+        for (DomainCode domainCode : domains) {
+            Competency destinationCompetency = destinationLine.getCompetencyForDomain(domainCode);
+            Competency sourceCompetency = sourceLine.getCompetencyForDomain(domainCode);
+            if (sourceCompetency == null) {
+                sourceCompetency = Competency
+                    .buildInitialCompetency(destinationCompetency.getSubject(), destinationCompetency.getDomain());
+            }
+            CompetencyPath path = CompetencyPath.build(sourceCompetency, destinationCompetency);
+            result.put(domainCode, path);
+        }
+        return result;
     }
 }

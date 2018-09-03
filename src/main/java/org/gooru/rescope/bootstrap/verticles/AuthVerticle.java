@@ -50,6 +50,11 @@ public class AuthVerticle extends AbstractVerticle {
         });
     }
 
+    @Override
+    public void stop(Future<Void> stopFuture) throws Exception {
+        finalizeVerticle(stopFuture);
+    }
+
     private Future<JsonObject> fetchSessionFromRedis(String sessionToken) {
         Future<JsonObject> future = Future.future();
 
@@ -89,11 +94,6 @@ public class AuthVerticle extends AbstractVerticle {
             future.complete();
         });
         return future;
-    }
-
-    @Override
-    public void stop(Future<Void> stopFuture) throws Exception {
-        finalizeVerticle(stopFuture);
     }
 
     private void initializeVerticle(Future<Void> startFuture) {

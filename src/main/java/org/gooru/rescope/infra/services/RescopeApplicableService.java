@@ -34,4 +34,8 @@ public final class RescopeApplicableService {
     private static RescopeApplicableDao getRescopeApplicableDao() {
         return DBICreator.getDbiForDefaultDS().onDemand(RescopeApplicableDao.class);
     }
+
+    private RescopeApplicableService() {
+        throw new AssertionError();
+    }
 }

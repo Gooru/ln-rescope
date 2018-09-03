@@ -16,42 +16,6 @@ import io.vertx.core.json.JsonObject;
  */
 class FetchRescopedContentCommand {
 
-    private UUID classId;
-    private UUID courseId;
-    private UUID userId;
-    private UUID teacherId;
-
-    UUID getClassId() {
-        return classId;
-    }
-
-    UUID getCourseId() {
-        return courseId;
-    }
-
-    UUID getUserId() {
-        return userId;
-    }
-
-    boolean isTeacherContext() {
-        return teacherId != null;
-    }
-
-    static FetchRescopedContentCommand builder(EventBusMessage input) {
-        FetchRescopedContentCommand command = buildFromJsonObject(input.getUserId(), input.getRequestBody());
-        command.validate();
-        return command;
-    }
-
-    private void validate() {
-        if (userId == null) {
-            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST, "Invalid user id");
-        }
-        if (courseId == null) {
-            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST, "Invalid course id");
-        }
-    }
-
     private static FetchRescopedContentCommand buildFromJsonObject(UUID userId, JsonObject request) {
         FetchRescopedContentCommand command = new FetchRescopedContentCommand();
         try {
@@ -84,6 +48,42 @@ class FetchRescopedContentCommand {
         }
 
         return inputList.get(0);
+    }
+
+    static FetchRescopedContentCommand builder(EventBusMessage input) {
+        FetchRescopedContentCommand command = buildFromJsonObject(input.getUserId(), input.getRequestBody());
+        command.validate();
+        return command;
+    }
+
+    private UUID classId;
+    private UUID courseId;
+    private UUID userId;
+    private UUID teacherId;
+
+    private void validate() {
+        if (userId == null) {
+            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST, "Invalid user id");
+        }
+        if (courseId == null) {
+            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST, "Invalid course id");
+        }
+    }
+
+    UUID getClassId() {
+        return classId;
+    }
+
+    UUID getCourseId() {
+        return courseId;
+    }
+
+    UUID getUserId() {
+        return userId;
+    }
+
+    boolean isTeacherContext() {
+        return teacherId != null;
     }
 
     FetchRescopedContentCommandBean asBean() {

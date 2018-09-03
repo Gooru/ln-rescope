@@ -17,11 +17,12 @@ import io.vertx.core.json.JsonObject;
  */
 public class DoRescopeOfContentProcessor implements AsyncMessageProcessor {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DoRescopeOfContentProcessor.class);
+
     private final Message<JsonObject> message;
     private final Vertx vertx;
     private final Future<MessageResponse> result;
     private EventBusMessage eventBusMessage;
-    private static final Logger LOGGER = LoggerFactory.getLogger(DoRescopeOfContentProcessor.class);
 
     private final DoRescopeOfContentService doRescopeOfContentService = new DoRescopeOfContentService();
 

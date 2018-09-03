@@ -16,14 +16,14 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
  */
 class ItemModel {
 
-    private String courseId;
-    private String unitId;
-    private String lessonId;
-    private String collectionId;
-    private String format;
-    private List<String> gutCodes;
+    private final String courseId;
+    private final String unitId;
+    private final String lessonId;
+    private final String collectionId;
+    private final String format;
+    private final List<String> gutCodes;
 
-    public ItemModel(String courseId, String unitId, String lessonId, String collectionId, String format,
+    ItemModel(String courseId, String unitId, String lessonId, String collectionId, String format,
         List<String> gutCodes) {
         this.courseId = courseId;
         this.unitId = unitId;
@@ -70,7 +70,7 @@ class ItemModel {
     }
 
     public List<String> getGutCodes() {
-        return gutCodes;
+        return Collections.unmodifiableList(gutCodes);
     }
 
     public static class ItemModelMapper implements ResultSetMapper<ItemModel> {

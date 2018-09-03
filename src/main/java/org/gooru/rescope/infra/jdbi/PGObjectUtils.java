@@ -12,9 +12,6 @@ import org.postgresql.util.PGobject;
  */
 public final class PGObjectUtils {
 
-    private PGObjectUtils() {
-        throw new AssertionError();
-    }
 
     /*
      * Create a PGobject encapsulating UUID and setting value of null if UUID is null
@@ -28,5 +25,9 @@ public final class PGObjectUtils {
         } catch (SQLException e) {
             throw new IllegalStateException("Not able to get null safe UUID PGObject.", e);
         }
+    }
+
+    private PGObjectUtils() {
+        throw new AssertionError();
     }
 }

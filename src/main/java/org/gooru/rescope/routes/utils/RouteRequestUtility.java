@@ -16,9 +16,6 @@ import io.vertx.ext.web.RoutingContext;
  */
 public final class RouteRequestUtility {
 
-    private RouteRequestUtility() {
-        throw new AssertionError();
-    }
 
     /*
      * If the incoming request is POST or PUT, it is expected to have a payload of JSON which is returned. In case of
@@ -52,5 +49,9 @@ public final class RouteRequestUtility {
         result.put(Constants.Message.MSG_SESSION_TOKEN,
             (String) routingContext.get(Constants.Message.MSG_SESSION_TOKEN));
         return result;
+    }
+
+    private RouteRequestUtility() {
+        throw new AssertionError();
     }
 }

@@ -17,21 +17,6 @@ class FetchRescopedContentService {
         this.dbi = dbi;
     }
 
-    String fetchRescopedContent(FetchRescopedContentCommand command) {
-        this.command = command;
-        String result;
-
-        if (command.getClassId() != null) {
-            if (command.isTeacherContext()) {
-                validateUserIsReallyTeacher();
-            }
-            result = fetchRescopedContentForClass();
-        } else {
-            result = fetchRescopedContentForIL();
-        }
-        return result;
-    }
-
     private void validateUserIsReallyTeacher() {
         if (!getDao().isUserTeacherOrCollaboratorForClass(command.asBean())) {
             throw new HttpResponseWrapperException(HttpConstants.HttpStatus.FORBIDDEN,
@@ -60,5 +45,20 @@ class FetchRescopedContentService {
 
     private FetchRescopedContentDao getDao() {
         return dbi.onDemand(FetchRescopedContentDao.class);
+    }
+
+    String fetchRescopedContent(FetchRescopedContentCommand command) {
+        this.command = command;
+        String result;
+
+        if (command.getClassId() != null) {
+            if (command.isTeacherContext()) {
+                validateUserIsReallyTeacher();
+            }
+            result = fetchRescopedContentForClass();
+        } else {
+            result = fetchRescopedContentForIL();
+        }
+        return result;
     }
 }

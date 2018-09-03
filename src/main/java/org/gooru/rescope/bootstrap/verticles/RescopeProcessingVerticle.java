@@ -42,6 +42,10 @@ public class RescopeProcessingVerticle extends AbstractVerticle {
             });
     }
 
+    @Override
+    public void stop(Future<Void> stopFuture) {
+    }
+
     private void processMessage(Message<String> message) {
         vertx.executeBlocking(future -> {
             try {
@@ -77,7 +81,4 @@ public class RescopeProcessingVerticle extends AbstractVerticle {
             .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_LP_BASELINE));
     }
 
-    @Override
-    public void stop(Future<Void> stopFuture) {
-    }
 }

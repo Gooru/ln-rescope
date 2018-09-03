@@ -20,10 +20,6 @@ final class VersionValidatorUtility {
     private static final List<String> supportedVersions = Arrays.asList("v1", "v2");
     private static final List<String> deprecatedVersions = new ArrayList<>();
 
-    private VersionValidatorUtility() {
-        throw new AssertionError();
-    }
-
     static void validateVersion(String version) {
         LOGGER.info("Version in API call is : {}", version);
         if (deprecatedVersions.contains(version)) {
@@ -31,5 +27,9 @@ final class VersionValidatorUtility {
         } else if (!supportedVersions.contains(version)) {
             throw new HttpResponseWrapperException(HttpConstants.HttpStatus.NOT_IMPLEMENTED, API_VERSION_NOT_SUPPORTED);
         }
+    }
+
+    private VersionValidatorUtility() {
+        throw new AssertionError();
     }
 }

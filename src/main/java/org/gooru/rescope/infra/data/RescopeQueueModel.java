@@ -15,22 +15,9 @@ import io.vertx.core.json.JsonObject;
  */
 public class RescopeQueueModel {
 
-    private Long id;
-    private UUID userId;
-    private UUID courseId;
-    private UUID classId;
-    private int priority;
-    private int status;
-
     public static final int RQ_STATUS_QUEUED = 0;
     public static final int RQ_STATUS_DISPATCHED = 1;
     public static final int RQ_STATUS_INPROCESS = 2;
-
-    public String toJson() {
-        return new JsonObject().put("id", id).put("userId", UuidUtils.uuidToString(userId))
-            .put("courseId", UuidUtils.uuidToString(courseId)).put("classId", UuidUtils.uuidToString(classId))
-            .put("priority", priority).put("status", status).toString();
-    }
 
     public static RescopeQueueModel fromJson(String input) {
         JsonObject json = new JsonObject(input);
@@ -55,6 +42,19 @@ public class RescopeQueueModel {
 
     public static RescopeQueueModel createNonPersistedEmptyModel() {
         return new RescopeQueueModel();
+    }
+
+    private Long id;
+    private UUID userId;
+    private UUID courseId;
+    private UUID classId;
+    private int priority;
+    private int status;
+
+    public String toJson() {
+        return new JsonObject().put("id", id).put("userId", UuidUtils.uuidToString(userId))
+            .put("courseId", UuidUtils.uuidToString(courseId)).put("classId", UuidUtils.uuidToString(classId))
+            .put("priority", priority).put("status", status).toString();
     }
 
     public Long getId() {

@@ -10,10 +10,6 @@ import io.vertx.ext.web.RoutingContext;
  */
 public final class DeliveryOptionsBuilder {
 
-    private DeliveryOptionsBuilder() {
-        throw new AssertionError();
-    }
-
     public static DeliveryOptions buildWithApiVersion(RoutingContext context) {
         final String apiVersion = context.request().getParam("version");
         VersionValidatorUtility.validateVersion(apiVersion);
@@ -21,10 +17,14 @@ public final class DeliveryOptionsBuilder {
     }
 
     public static DeliveryOptions buildWithoutApiVersion(RoutingContext context, long timeout, String op) {
-        return new DeliveryOptions().setSendTimeout(timeout * 1000).addHeader(Constants.Message.MSG_OP, op);
+        return new DeliveryOptions().setSendTimeout(timeout * 1_000).addHeader(Constants.Message.MSG_OP, op);
     }
 
     public static DeliveryOptions buildWithoutApiVersion(long timeout) {
-        return new DeliveryOptions().setSendTimeout(timeout * 1000);
+        return new DeliveryOptions().setSendTimeout(timeout * 1_000);
+    }
+
+    private DeliveryOptionsBuilder() {
+        throw new AssertionError();
     }
 }

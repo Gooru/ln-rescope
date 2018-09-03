@@ -21,42 +21,6 @@ public class RescopeVerticle extends AbstractVerticle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RescopeVerticle.class);
 
-    @Override
-    public void start(Future<Void> startFuture) {
-
-        EventBus eb = vertx.eventBus();
-        eb.localConsumer(Constants.EventBus.MBEP_RESCOPE, this::processMessage).completionHandler(result -> {
-            if (result.succeeded()) {
-                LOGGER.info("Rescope end point ready to listen");
-                startFuture.complete();
-            } else {
-                LOGGER.error("Error registering the Rescope handler. Halting the machinery");
-                startFuture.fail(result.cause());
-                Runtime.getRuntime().halt(1);
-            }
-        });
-    }
-
-    private void processMessage(Message<JsonObject> message) {
-        String op = message.headers().get(Constants.Message.MSG_OP);
-        Future<MessageResponse> future;
-        boolean replyNeeded = true;
-        switch (op) {
-        case Constants.Message.MSG_OP_RESCOPE_GET:
-            future = ProcessorBuilder.buildFetchRescopedContentProcessor(vertx, message).process();
-            break;
-        case Constants.Message.MSG_OP_RESCOPE_SET:
-            future = ProcessorBuilder.buildDoRescopeOfContentProcessor(vertx, message).process();
-            replyNeeded = false;
-            break;
-        default:
-            LOGGER.warn("Invalid operation type");
-            future = ProcessorBuilder.buildPlaceHolderExceptionProcessor(vertx, message).process();
-        }
-
-        futureResultHandler(message, future, replyNeeded);
-    }
-
     private static void futureResultHandler(Message<JsonObject> message, Future<MessageResponse> future,
         boolean replyNeeded) {
         future.setHandler(event -> {
@@ -83,6 +47,42 @@ public class RescopeVerticle extends AbstractVerticle {
     }
 
     @Override
+    public void start(Future<Void> startFuture) {
+
+        EventBus eb = vertx.eventBus();
+        eb.localConsumer(Constants.EventBus.MBEP_RESCOPE, this::processMessage).completionHandler(result -> {
+            if (result.succeeded()) {
+                LOGGER.info("Rescope end point ready to listen");
+                startFuture.complete();
+            } else {
+                LOGGER.error("Error registering the Rescope handler. Halting the machinery");
+                startFuture.fail(result.cause());
+                Runtime.getRuntime().halt(1);
+            }
+        });
+    }
+
+    @Override
     public void stop(Future<Void> stopFuture) {
+    }
+
+    private void processMessage(Message<JsonObject> message) {
+        String op = message.headers().get(Constants.Message.MSG_OP);
+        Future<MessageResponse> future;
+        boolean replyNeeded = true;
+        switch (op) {
+        case Constants.Message.MSG_OP_RESCOPE_GET:
+            future = ProcessorBuilder.buildFetchRescopedContentProcessor(vertx, message).process();
+            break;
+        case Constants.Message.MSG_OP_RESCOPE_SET:
+            future = ProcessorBuilder.buildDoRescopeOfContentProcessor(vertx, message).process();
+            replyNeeded = false;
+            break;
+        default:
+            LOGGER.warn("Invalid operation type");
+            future = ProcessorBuilder.buildPlaceHolderExceptionProcessor(vertx, message).process();
+        }
+
+        futureResultHandler(message, future, replyNeeded);
     }
 }

@@ -15,7 +15,7 @@ class RouteGlobalConfigurator implements RouteConfigurator {
 
         final long maxSizeInMb = config.getLong("request.body.size.max.mb", 5L);
 
-        BodyHandler bodyHandler = BodyHandler.create().setBodyLimit(maxSizeInMb * 1024 * 1024);
+        BodyHandler bodyHandler = BodyHandler.create().setBodyLimit(maxSizeInMb * 1_024 * 1_024);
 
         router.route().handler(bodyHandler);
 

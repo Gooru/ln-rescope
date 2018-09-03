@@ -10,8 +10,12 @@ import org.skife.jdbi.v2.DBI;
  */
 public final class DBICreator {
 
-    private DBICreator() {
-        throw new AssertionError();
+    public static DBI getDbiForDefaultDS() {
+        return createDBI(DataSourceRegistry.getInstance().getDefaultDataSource());
+    }
+
+    public static DBI getDbiForDsdbDS() {
+        return createDBI(DataSourceRegistry.getInstance().getDsdbDataSource());
     }
 
     private static DBI createDBI(DataSource dataSource) {
@@ -22,11 +26,7 @@ public final class DBICreator {
         return dbi;
     }
 
-    public static DBI getDbiForDefaultDS() {
-        return createDBI(DataSourceRegistry.getInstance().getDefaultDataSource());
-    }
-
-    public static DBI getDbiForDsdbDS() {
-        return createDBI(DataSourceRegistry.getInstance().getDsdbDataSource());
+    private DBICreator() {
+        throw new AssertionError();
     }
 }

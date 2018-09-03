@@ -12,8 +12,8 @@ import org.skife.jdbi.v2.DBI;
 class SkippedItemsFinderInCourseImpl implements SkippedItemsFinder {
 
     private final DBI dbi;
-    private List<ItemModel> allSkippedItems = new ArrayList<>();
-    private List<ItemModel> allNonSkippedItems = new ArrayList<>();
+    private final List<ItemModel> allSkippedItems = new ArrayList<>();
+    private final List<ItemModel> allNonSkippedItems = new ArrayList<>();
     private ItemSkipVerifier skipVerifier;
     private List<ItemModel> allNonDeletedItemsInCourse;
 

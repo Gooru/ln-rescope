@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
  */
 class RescopeRequestQueueServiceImpl implements RescopeRequestQueueService {
 
-    private final DBI dbi;
     private static final Logger LOGGER = LoggerFactory.getLogger(RescopeRequestQueueService.class);
+    private final DBI dbi;
     private RescopeContext context;
     private RescopeRequestQueueDao queueDao;
 
@@ -27,8 +27,6 @@ class RescopeRequestQueueServiceImpl implements RescopeRequestQueueService {
     @Override
     public void enqueue(RescopeContext context) {
         this.context = context;
-        System.out.println("Received request for queueing");
-        System.out.println(context.toString());
         queueDao = dbi.onDemand(RescopeRequestQueueDao.class);
         if (context.getClassId() != null) {
             doQueueingForClass();

@@ -36,4 +36,7 @@ public final class ProcessorBuilder {
         HttpClient client, String lpbaselineUri) {
         return new LearnerProfileBaselineProcessor(vertx, message, client, lpbaselineUri);
     }
+
+    private ProcessorBuilder() {
+    }
 }

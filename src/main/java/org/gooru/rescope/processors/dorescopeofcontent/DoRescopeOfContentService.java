@@ -13,15 +13,6 @@ class DoRescopeOfContentService {
     DoRescopeOfContentService() {
     }
 
-    void doRescope(DoRescopeOfContentCommand command) {
-        this.command = command;
-        if (command.getClassId() != null) {
-            doRescopeInClass();
-        } else {
-            doRescopeForIL();
-        }
-    }
-
     private void doRescopeForIL() {
         if (RescopeApplicableService.isRescopeApplicableToCourseInIL(command.getCourseId())) {
             RescopeRequestQueueService service = RescopeRequestQueueService.build();
@@ -33,6 +24,15 @@ class DoRescopeOfContentService {
         if (RescopeApplicableService.isRescopeApplicableToClass(command.getClassId())) {
             RescopeRequestQueueService service = RescopeRequestQueueService.build();
             service.enqueue(command.asRescopeContext());
+        }
+    }
+
+    void doRescope(DoRescopeOfContentCommand command) {
+        this.command = command;
+        if (command.getClassId() != null) {
+            doRescopeInClass();
+        } else {
+            doRescopeForIL();
         }
     }
 }

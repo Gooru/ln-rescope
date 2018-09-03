@@ -33,26 +33,6 @@ class CompetencyPathImpl implements CompetencyPath {
         this.path = calculatePath();
     }
 
-    private List<ProgressionLevel> calculatePath() {
-        int beginningProgression = startPoint.getProgressionLevel().getProgressionLevel();
-        int endProgression = endPoint.getProgressionLevel().getProgressionLevel();
-        List<ProgressionLevel> result = new ArrayList<>();
-        if ((beginningProgression == endProgression) || (beginningProgression == endProgression - 1)) {
-            return Collections.emptyList();
-        } else if (beginningProgression < endProgression) {
-            isProgressionOrder = true;
-            for (int i = beginningProgression + 1; i < endProgression; i++) {
-                result.add(new ProgressionLevel(i));
-            }
-        } else {
-            isProgressionOrder = false;
-            for (int i = endProgression + 1; i < beginningProgression; i++) {
-                result.add(new ProgressionLevel(i));
-            }
-        }
-        return result;
-    }
-
     @Override
     public SubjectCode getSubject() {
         return subjectCode;
@@ -127,5 +107,25 @@ class CompetencyPathImpl implements CompetencyPath {
         return "CompetencyPath{" + "subjectCode=" + subjectCode + ", domainCode=" + domainCode + ", startPoint="
             + startPoint + ", endPoint=" + endPoint + ", path=" + path + ", isProgressionOrder=" + isProgressionOrder
             + '}';
+    }
+
+    private List<ProgressionLevel> calculatePath() {
+        int beginningProgression = startPoint.getProgressionLevel().getProgressionLevel();
+        int endProgression = endPoint.getProgressionLevel().getProgressionLevel();
+        List<ProgressionLevel> result = new ArrayList<>();
+        if ((beginningProgression == endProgression) || (beginningProgression == endProgression - 1)) {
+            return Collections.emptyList();
+        } else if (beginningProgression < endProgression) {
+            isProgressionOrder = true;
+            for (int i = beginningProgression + 1; i < endProgression; i++) {
+                result.add(new ProgressionLevel(i));
+            }
+        } else {
+            isProgressionOrder = false;
+            for (int i = endProgression + 1; i < beginningProgression; i++) {
+                result.add(new ProgressionLevel(i));
+            }
+        }
+        return result;
     }
 }

@@ -19,15 +19,6 @@ class RouteFailureConfigurator implements RouteConfigurator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteFailureConfigurator.class);
 
-    @Override
-    public void configureRoutes(Vertx vertx, Router router, JsonObject config) {
-
-        router.put().failureHandler(RouteFailureConfigurator::handleFailures);
-        router.post().failureHandler(RouteFailureConfigurator::handleFailures);
-        router.get().failureHandler(RouteFailureConfigurator::handleFailures);
-        router.delete().failureHandler(RouteFailureConfigurator::handleFailures);
-    }
-
     private static void handleFailures(RoutingContext frc) {
         Throwable currentThrowable = frc.failure();
         if (currentThrowable instanceof io.vertx.core.json.DecodeException) {
@@ -43,6 +34,15 @@ class RouteFailureConfigurator implements RouteConfigurator {
             LOGGER.error("Caught unregistered exception, will send HTTP.500", currentThrowable);
             frc.response().setStatusCode(HttpConstants.HttpStatus.ERROR.getCode()).end("Internal error");
         }
+    }
+
+    @Override
+    public void configureRoutes(Vertx vertx, Router router, JsonObject config) {
+
+        router.put().failureHandler(RouteFailureConfigurator::handleFailures);
+        router.post().failureHandler(RouteFailureConfigurator::handleFailures);
+        router.get().failureHandler(RouteFailureConfigurator::handleFailures);
+        router.delete().failureHandler(RouteFailureConfigurator::handleFailures);
     }
 
 }

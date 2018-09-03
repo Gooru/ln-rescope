@@ -7,6 +7,10 @@ import java.util.UUID;
  */
 public final class Constants {
 
+    private Constants() {
+        throw new AssertionError();
+    }
+
     public static final class EventBus {
 
         public static final String MBEP_AUTH = "org.gooru.rescope.eventbus.auth";
@@ -68,11 +72,11 @@ public final class Constants {
     public static final class Route {
 
         public static final String API_AUTH_ROUTE = "/api/rescope/*";
+        public static final String API_INTERNAL_BANNER = "/api/internal/banner";
+        public static final String API_INTERNAL_METRICS = "/api/internal/metrics";
         private static final String API_BASE_ROUTE = "/api/rescope/:version/";
         public static final String API_RESCOPE_FETCH = API_BASE_ROUTE + "scope/skipped";
         public static final String API_RESCOPE_CALCULATE = API_BASE_ROUTE + "scope/skipped";
-        public static final String API_INTERNAL_BANNER = "/api/internal/banner";
-        public static final String API_INTERNAL_METRICS = "/api/internal/metrics";
 
         private Route() {
             throw new AssertionError();
@@ -89,7 +93,4 @@ public final class Constants {
         }
     }
 
-    private Constants() {
-        throw new AssertionError();
-    }
 }

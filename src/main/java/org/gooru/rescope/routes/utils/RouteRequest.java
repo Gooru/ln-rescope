@@ -13,6 +13,14 @@ import io.vertx.ext.web.RoutingContext;
  */
 public final class RouteRequest {
 
+    private static JsonObject copyJsonObject(JsonObject input) {
+        if (input == null || input.isEmpty()) {
+            return new JsonObject();
+        } else {
+            return input.copy();
+        }
+    }
+
     private final JsonObject routeRequestBody;
     private final JsonObject httpBody;
 
@@ -54,14 +62,6 @@ public final class RouteRequest {
     public Object getRequestParamValue(String param) {
         Objects.requireNonNull(param);
         return httpBody.getValue(param);
-    }
-
-    private static JsonObject copyJsonObject(JsonObject input) {
-        if (input == null || input.isEmpty()) {
-            return new JsonObject();
-        } else {
-            return input.copy();
-        }
     }
 
 }

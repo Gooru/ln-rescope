@@ -7,17 +7,12 @@ import javax.sql.DataSource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-
 import io.vertx.core.json.JsonObject;
 
 /**
  * @author ashish.
  */
 public final class DatasourceHelper {
-
-    private DatasourceHelper() {
-        throw new AssertionError();
-    }
 
     private static final String DEFAULT_DATA_SOURCE_TYPE = "nucleus.ds.type";
     private static final String DS_HIKARI = "hikari";
@@ -118,6 +113,10 @@ public final class DatasourceHelper {
 
         return new HikariDataSource(config);
 
+    }
+
+    private DatasourceHelper() {
+        throw new AssertionError();
     }
 
 }

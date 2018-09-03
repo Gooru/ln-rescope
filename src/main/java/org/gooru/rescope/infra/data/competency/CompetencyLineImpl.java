@@ -34,7 +34,7 @@ class CompetencyLineImpl implements CompetencyLine {
 
     @Override
     public List<DomainCode> getDomains() {
-        return domains;
+        return Collections.unmodifiableList(domains);
     }
 
     @Override

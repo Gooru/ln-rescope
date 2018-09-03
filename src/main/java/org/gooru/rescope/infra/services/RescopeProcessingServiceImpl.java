@@ -15,10 +15,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 class RescopeProcessingServiceImpl implements RescopeProcessingService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RescopeProcessingService.class);
+
     private final DBI dbi;
     private RescopeQueueModel model;
     private RescopeRequestQueueDao dao;
-    private static final Logger LOGGER = LoggerFactory.getLogger(RescopeProcessingService.class);
 
     RescopeProcessingServiceImpl(DBI dbi) {
         this.dbi = dbi;

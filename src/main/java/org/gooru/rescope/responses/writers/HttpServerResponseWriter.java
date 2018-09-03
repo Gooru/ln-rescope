@@ -21,12 +21,12 @@ class HttpServerResponseWriter implements ResponseWriter {
     private final RoutingContext routingContext;
     private final ResponseTransformer transformer;
 
-    public HttpServerResponseWriter(RoutingContext routingContext, AsyncResult<Message<JsonObject>> message) {
+    HttpServerResponseWriter(RoutingContext routingContext, AsyncResult<Message<JsonObject>> message) {
         this.routingContext = routingContext;
         transformer = ResponseTransformerBuilder.build(message.result());
     }
 
-    public HttpServerResponseWriter(RoutingContext routingContext, ResponseTransformer transformer) {
+    HttpServerResponseWriter(RoutingContext routingContext, ResponseTransformer transformer) {
         this.routingContext = routingContext;
         this.transformer = transformer;
     }

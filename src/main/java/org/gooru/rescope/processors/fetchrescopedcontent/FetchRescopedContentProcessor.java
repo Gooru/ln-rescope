@@ -18,11 +18,12 @@ import io.vertx.core.json.JsonObject;
  */
 public class FetchRescopedContentProcessor implements AsyncMessageProcessor {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FetchRescopedContentProcessor.class);
+
     private final Message<JsonObject> message;
     private final Vertx vertx;
     private final Future<MessageResponse> result;
     private EventBusMessage eventBusMessage;
-    private static final Logger LOGGER = LoggerFactory.getLogger(FetchRescopedContentProcessor.class);
     private final FetchRescopedContentService fetchRescopedContentService = new FetchRescopedContentService(
         DBICreator.getDbiForDefaultDS());
 

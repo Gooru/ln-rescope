@@ -25,16 +25,16 @@ import io.vertx.core.json.JsonObject;
 public final class RescopeQueueReaderAndDispatcher implements Initializer, Finalizer {
 
     private static final RescopeQueueReaderAndDispatcher ourInstance = new RescopeQueueReaderAndDispatcher();
-    private static final int delay = 1000;
+    private static final int delay = 1_000;
     private static long timerId;
     private static boolean firstTrigger = false;
     private static final Logger LOGGER = LoggerFactory.getLogger(RescopeQueueReaderAndDispatcher.class);
-    private Vertx vertx;
     private static final int RESCOPE_PROCESS_TIMEOUT = 300;
 
     public static RescopeQueueReaderAndDispatcher getInstance() {
         return ourInstance;
     }
+    private Vertx vertx;
 
     private RescopeQueueReaderAndDispatcher() {
     }

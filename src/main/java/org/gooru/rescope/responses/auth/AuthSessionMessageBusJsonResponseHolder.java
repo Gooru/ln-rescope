@@ -16,7 +16,7 @@ class AuthSessionMessageBusJsonResponseHolder implements AuthSessionResponseHold
     private final Message<JsonObject> message;
     private boolean isAuthorized = false;
 
-    public AuthSessionMessageBusJsonResponseHolder(Message<JsonObject> message) {
+    AuthSessionMessageBusJsonResponseHolder(Message<JsonObject> message) {
         this.message = message;
         if (message != null) {
             LOG.debug("Received response from Auth End point : {}", message.body().toString());

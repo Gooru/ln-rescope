@@ -17,10 +17,6 @@ import io.vertx.ext.web.RoutingContext;
  */
 public final class RouteResponseUtility {
 
-    private RouteResponseUtility() {
-        throw new AssertionError();
-    }
-
     public static void responseHandler(final RoutingContext routingContext,
         final AsyncResult<Message<JsonObject>> reply, final Logger LOG) {
         if (reply.succeeded()) {
@@ -65,5 +61,9 @@ public final class RouteResponseUtility {
             logger.error("Not able to send message", reply.cause());
             routingContext.response().setStatusCode(HttpConstants.HttpStatus.ERROR.getCode()).end();
         }
+    }
+
+    private RouteResponseUtility() {
+        throw new AssertionError();
     }
 }

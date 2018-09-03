@@ -18,10 +18,6 @@ import org.gooru.rescope.infra.jdbi.PGArray;
  */
 public class CollectionUtils {
 
-    private CollectionUtils() {
-        throw new AssertionError();
-    }
-
     public static <T> List<T> intersect(List<T> input, List<T> intersector) {
         if (input == null || input.isEmpty()) {
             return input;
@@ -71,6 +67,10 @@ public class CollectionUtils {
 
     public static PGArray<UUID> convertFromListUUIDToSqlArrayOfUUID(List<UUID> input) {
         return PGArray.arrayOf(UUID.class, input);
+    }
+
+    private CollectionUtils() {
+        throw new AssertionError();
     }
 
 }

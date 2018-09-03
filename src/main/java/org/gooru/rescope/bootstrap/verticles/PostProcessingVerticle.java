@@ -43,6 +43,10 @@ public class PostProcessingVerticle extends AbstractVerticle {
         initializeHttpClient();
     }
 
+    @Override
+    public void stop(Future<Void> stopFuture) {
+    }
+
     private void processMessage(Message<JsonObject> message) {
         String op = message.headers().get(Constants.Message.MSG_OP);
         Future<MessageResponse> future;
@@ -62,10 +66,6 @@ public class PostProcessingVerticle extends AbstractVerticle {
                 LOGGER.warn("Post processing op failed", event.cause());
             }
         });
-    }
-
-    @Override
-    public void stop(Future<Void> stopFuture) {
     }
 
     private void initializeHttpClient() {

@@ -27,7 +27,7 @@ public class RouteRescopeConfigurator implements RouteConfigurator {
     @Override
     public void configureRoutes(Vertx vertx, Router router, JsonObject config) {
         eb = vertx.eventBus();
-        mbusTimeout = config.getLong(Constants.EventBus.MBUS_TIMEOUT, 30L) * 1000;
+        mbusTimeout = config.getLong(Constants.EventBus.MBUS_TIMEOUT, 30L) * 1_000;
         router.get(Constants.Route.API_RESCOPE_FETCH).handler(this::fetchRescopedContent);
         router.post(Constants.Route.API_RESCOPE_CALCULATE).handler(this::doRescopeOfContent);
     }

@@ -33,7 +33,6 @@ public class AppRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppRunner.class);
     private static JsonObject conf;
-    private Vertx vertx;
 
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -46,6 +45,27 @@ public class AppRunner {
 
         runner.run();
     }
+
+    private static void setupLoggerMachinery(String logbackFile) {
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+        try {
+            JoranConfigurator configurator = new JoranConfigurator();
+            configurator.setContext(context);
+            context.reset();
+            configurator.doConfigure(logbackFile);
+        } catch (JoranException je) {
+            // StatusPrinter will handle this
+        }
+
+        StatusPrinter.printInCaseOfErrorsOrWarnings(context);
+
+    }
+
+    private static List<Future> eraseTypeList(List<Future<String>> list) {
+        return new ArrayList<>(list);
+    }
+    private Vertx vertx;
 
     private void setupForShutdown() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> finalizeApplication()));
@@ -75,22 +95,6 @@ public class AppRunner {
         if (logbackFile != null && !logbackFile.isEmpty()) {
             setupLoggerMachinery(logbackFile);
         }
-    }
-
-    private static void setupLoggerMachinery(String logbackFile) {
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-
-        try {
-            JoranConfigurator configurator = new JoranConfigurator();
-            configurator.setContext(context);
-            context.reset();
-            configurator.doConfigure(logbackFile);
-        } catch (JoranException je) {
-            // StatusPrinter will handle this
-        }
-
-        StatusPrinter.printInCaseOfErrorsOrWarnings(context);
-
     }
 
     private void initialize(Future<Void> startFuture) {
@@ -165,10 +169,6 @@ public class AppRunner {
             }
         });
 
-    }
-
-    private static List<Future> eraseTypeList(List<Future<String>> list) {
-        return new ArrayList<>(list);
     }
 
     private void initializeConfig(String configFile) {

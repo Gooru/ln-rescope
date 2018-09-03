@@ -22,7 +22,7 @@ class HttpResponseTransformer implements ResponseTransformer {
     private int httpStatus;
     private JsonObject httpBody;
 
-    public HttpResponseTransformer(Message<JsonObject> message) {
+    HttpResponseTransformer(Message<JsonObject> message) {
         this.message = message;
         if (message == null) {
             LOGGER.error("Invalid or null Message<JsonObject> for initialization");
