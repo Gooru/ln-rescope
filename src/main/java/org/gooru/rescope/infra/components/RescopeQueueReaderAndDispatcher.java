@@ -67,7 +67,6 @@ public final class RescopeQueueReaderAndDispatcher implements Initializer, Final
                     RescopeQueueInitializerService.build().initializeQueue();
                     firstTrigger = false;
                 }
-                LOGGER.debug("Timer handling to dispatch next record");
                 RescopeQueueModel model = RescopeQueueRecordDispatcherService.build().getNextRecordToDispatch();
                 future.complete(model);
             }, asyncResult -> {

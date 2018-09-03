@@ -22,7 +22,6 @@ class RescopeQueueRecordDispatcherServiceImpl implements RescopeQueueRecordDispa
         RescopeRequestQueueDao dao = dbi.onDemand(RescopeRequestQueueDao.class);
         RescopeQueueModel model = dao.getNextDispatchableModel();
         if (model == null) {
-            LOGGER.debug("No records present for processing");
             model = RescopeQueueModel.createNonPersistedEmptyModel();
         } else {
             dao.setQueuedRecordStatusAsDispatched(model.getId());
