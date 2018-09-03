@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author ashish on 20/5/18.
  */
 class RescopeProcessingServiceImpl implements RescopeProcessingService {
+
     private final DBI dbi;
     private RescopeQueueModel model;
     private RescopeRequestQueueDao dao;
@@ -48,7 +49,7 @@ class RescopeProcessingServiceImpl implements RescopeProcessingService {
         LOGGER.debug("Doing real processing");
         try {
             SkippedItemsResponse items = SkippedItemsFinder.buildSkippedItemsFinderForCourse()
-                    .findItemsThatWillBeSkipped(model.getUserId(), model.getCourseId());
+                .findItemsThatWillBeSkipped(model.getUserId(), model.getCourseId());
             ObjectMapper mapper = new ObjectMapper();
             try {
                 String skippedItemsString = mapper.writeValueAsString(items);

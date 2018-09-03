@@ -16,6 +16,7 @@ import io.vertx.core.json.JsonObject;
  * @author ashish on 17/5/18.
  */
 public class DoRescopeOfContentProcessor implements AsyncMessageProcessor {
+
     private final Message<JsonObject> message;
     private final Vertx vertx;
     private final Future<MessageResponse> result;

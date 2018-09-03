@@ -14,6 +14,7 @@ import io.vertx.ext.web.Router;
  * @author ashish.
  */
 public class HttpVerticle extends AbstractVerticle {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpVerticle.class);
 
     @Override

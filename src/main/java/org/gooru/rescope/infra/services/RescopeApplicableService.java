@@ -22,13 +22,13 @@ public final class RescopeApplicableService {
             return false;
         }
         return AppConfiguration.getInstance().getRescopeApplicableCourseVersion()
-                .equals(dao.fetchCourseVersion(courseId));
+            .equals(dao.fetchCourseVersion(courseId));
     }
 
     public static boolean isRescopeApplicableToCourseInIL(UUID courseId) {
         RescopeApplicableDao dao = getRescopeApplicableDao();
         return AppConfiguration.getInstance().getRescopeApplicableCourseVersion()
-                .equals(dao.fetchCourseVersion(courseId));
+            .equals(dao.fetchCourseVersion(courseId));
     }
 
     private static RescopeApplicableDao getRescopeApplicableDao() {

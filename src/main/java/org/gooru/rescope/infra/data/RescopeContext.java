@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
  * @author ashish on 18/5/18.
  */
 public class RescopeContext {
+
     private RescopeSourceType source;
     private UUID classId;
     private List<UUID> memberIds;
@@ -42,7 +43,7 @@ public class RescopeContext {
     public String toString() {
         String members = memberIds.stream().map(UUID::toString).collect(Collectors.joining(","));
         return "RescopeContext{" + "source=" + source.getName() + ", classId=" + classId + ", memberIds=" + members
-                + ", courseId=" + courseId + '}';
+            + ", courseId=" + courseId + '}';
     }
 
     public static RescopeContext buildForClassJoin(UUID classId, List<UUID> members) {
@@ -65,7 +66,7 @@ public class RescopeContext {
 
     public static RescopeContext buildForCourseAssignedToClass(UUID classId, UUID courseId) {
         return new RescopeContext(RescopeSourceType.CourseAssignmentToClass, classId, Collections.emptyList(),
-                courseId);
+            courseId);
     }
 
     public RescopeContext createNewContext(List<UUID> members) {

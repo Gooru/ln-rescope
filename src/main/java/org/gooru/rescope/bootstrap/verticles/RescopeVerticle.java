@@ -18,6 +18,7 @@ import io.vertx.core.json.JsonObject;
  * @author ashish.
  */
 public class RescopeVerticle extends AbstractVerticle {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RescopeVerticle.class);
 
     @Override
@@ -57,7 +58,7 @@ public class RescopeVerticle extends AbstractVerticle {
     }
 
     private static void futureResultHandler(Message<JsonObject> message, Future<MessageResponse> future,
-            boolean replyNeeded) {
+        boolean replyNeeded) {
         future.setHandler(event -> {
             if (event.succeeded() && replyNeeded) {
                 message.reply(event.result().reply(), event.result().deliveryOptions());
@@ -66,16 +67,16 @@ public class RescopeVerticle extends AbstractVerticle {
                 if (event.cause() instanceof HttpResponseWrapperException) {
                     HttpResponseWrapperException exception = (HttpResponseWrapperException) event.cause();
                     message.reply(new JsonObject().put(Constants.Message.MSG_HTTP_STATUS, exception.getStatus())
-                            .put(Constants.Message.MSG_HTTP_BODY, exception.getBody())
-                            .put(Constants.Message.MSG_HTTP_HEADERS, new JsonObject()));
+                        .put(Constants.Message.MSG_HTTP_BODY, exception.getBody())
+                        .put(Constants.Message.MSG_HTTP_HEADERS, new JsonObject()));
                 } else if (event.cause() instanceof MessageResponseWrapperException) {
                     MessageResponseWrapperException exception = (MessageResponseWrapperException) event.cause();
                     message.reply(exception.getMessageResponse().reply(),
-                            exception.getMessageResponse().deliveryOptions());
+                        exception.getMessageResponse().deliveryOptions());
                 } else {
                     message.reply(new JsonObject().put(Constants.Message.MSG_HTTP_STATUS, 500)
-                            .put(Constants.Message.MSG_HTTP_BODY, new JsonObject())
-                            .put(Constants.Message.MSG_HTTP_HEADERS, new JsonObject()));
+                        .put(Constants.Message.MSG_HTTP_BODY, new JsonObject())
+                        .put(Constants.Message.MSG_HTTP_HEADERS, new JsonObject()));
                 }
             }
         });

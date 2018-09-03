@@ -72,9 +72,9 @@ class DoRescopeOfContentCommand {
             throw new IllegalArgumentException("Invalid source");
         }
         if (((memberIds == null || memberIds.isEmpty())
-                && (source == RescopeSourceType.OOB || source == RescopeSourceType.ClassJoinByMembers))
-                || (memberIds != null && !memberIds.isEmpty() && source != RescopeSourceType.OOB
-                        && source != RescopeSourceType.ClassJoinByMembers)) {
+            && (source == RescopeSourceType.OOB || source == RescopeSourceType.ClassJoinByMembers))
+            || (memberIds != null && !memberIds.isEmpty() && source != RescopeSourceType.OOB
+            && source != RescopeSourceType.ClassJoinByMembers)) {
             throw new IllegalArgumentException("Members should be provided only for OOB/class join type rescope");
         }
     }

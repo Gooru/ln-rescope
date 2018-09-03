@@ -11,6 +11,7 @@ import org.skife.jdbi.v2.tweak.ArgumentFactory;
  * @author ashish.
  */
 public class PostgresUUIDArrayArgumentFactory implements ArgumentFactory<PGArray<UUID>> {
+
     @SuppressWarnings("unchecked")
     public boolean accepts(Class<?> expectedType, Object value, StatementContext ctx) {
         return value instanceof PGArray && ((PGArray) value).getType().isAssignableFrom(UUID.class);

@@ -15,6 +15,7 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
  * @author ashish on 21/5/18.
  */
 class ItemModel {
+
     private String courseId;
     private String unitId;
     private String lessonId;
@@ -23,7 +24,7 @@ class ItemModel {
     private List<String> gutCodes;
 
     public ItemModel(String courseId, String unitId, String lessonId, String collectionId, String format,
-            List<String> gutCodes) {
+        List<String> gutCodes) {
         this.courseId = courseId;
         this.unitId = unitId;
         this.lessonId = lessonId;
@@ -76,7 +77,7 @@ class ItemModel {
 
         @Override
         public ItemModel map(final int index, final ResultSet resultSet, final StatementContext statementContext)
-                throws SQLException {
+            throws SQLException {
             String courseId = resultSet.getString("course_id");
             String unitId = resultSet.getString("unit_id");
             String lessonId = resultSet.getString("lesson_id");

@@ -6,6 +6,7 @@ import java.util.List;
  * @author ashish on 21/5/18.
  */
 public class SkippedItemsResponse {
+
     private List<String> units;
     private List<String> lessons;
     private List<String> assessments;

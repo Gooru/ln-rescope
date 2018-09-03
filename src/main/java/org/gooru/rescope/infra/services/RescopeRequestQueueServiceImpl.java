@@ -63,7 +63,7 @@ class RescopeRequestQueueServiceImpl implements RescopeRequestQueueService {
 
         if (context.getCourseId() != null && !context.getCourseId().equals(courseId)) {
             LOGGER.warn("Course specified in request '{}' does not match course associated with class '{}'. Will use "
-                    + "the one associated with class", context.getCourseId(), courseId);
+                + "the one associated with class", context.getCourseId(), courseId);
         }
 
         populateMemberships(courseId);
@@ -74,7 +74,7 @@ class RescopeRequestQueueServiceImpl implements RescopeRequestQueueService {
         if (context.isOOBRequestForRescope() || context.areUsersJoiningClass()) {
             // Validate membership of provided users
             List<UUID> existingMembersOfClassFromSpecifiedList = queueDao.fetchSpecifiedMembersOfClass(
-                    context.getClassId(), CollectionUtils.convertFromListUUIDToSqlArrayOfUUID(context.getMemberIds()));
+                context.getClassId(), CollectionUtils.convertFromListUUIDToSqlArrayOfUUID(context.getMemberIds()));
 
             if (existingMembersOfClassFromSpecifiedList.size() < context.getMemberIds().size()) {
                 LOGGER.warn("Not all specified users are members of class. Will process only members");

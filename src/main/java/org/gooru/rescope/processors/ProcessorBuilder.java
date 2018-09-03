@@ -33,7 +33,7 @@ public final class ProcessorBuilder {
     }
 
     public static AsyncMessageProcessor buildLPBaselineProcessor(Vertx vertx, Message<JsonObject> message,
-            HttpClient client, String lpbaselineUri) {
+        HttpClient client, String lpbaselineUri) {
         return new LearnerProfileBaselineProcessor(vertx, message, client, lpbaselineUri);
     }
 }

@@ -9,6 +9,7 @@ import io.vertx.ext.web.RoutingContext;
  * @author ashish
  */
 public final class DeliveryOptionsBuilder {
+
     private DeliveryOptionsBuilder() {
         throw new AssertionError();
     }

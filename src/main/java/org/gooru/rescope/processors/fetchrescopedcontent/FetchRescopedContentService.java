@@ -3,7 +3,6 @@ package org.gooru.rescope.processors.fetchrescopedcontent;
 import org.gooru.rescope.infra.constants.HttpConstants;
 import org.gooru.rescope.infra.exceptions.HttpResponseWrapperException;
 import org.gooru.rescope.infra.services.RescopeApplicableService;
-import org.gooru.rescope.infra.services.RescopeRequestQueueService;
 import org.skife.jdbi.v2.DBI;
 
 /**
@@ -36,7 +35,7 @@ class FetchRescopedContentService {
     private void validateUserIsReallyTeacher() {
         if (!getDao().isUserTeacherOrCollaboratorForClass(command.asBean())) {
             throw new HttpResponseWrapperException(HttpConstants.HttpStatus.FORBIDDEN,
-                    "You need to be teacher or co-teacher for this class");
+                "You need to be teacher or co-teacher for this class");
         }
     }
 
@@ -45,7 +44,7 @@ class FetchRescopedContentService {
             return getDao().fetchRescopedContentForUserInIL(command.asBean());
         } else {
             throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST,
-                    "Rescope not applicable to specified course/class");
+                "Rescope not applicable to specified course/class");
         }
 
     }
@@ -55,7 +54,7 @@ class FetchRescopedContentService {
             return getDao().fetchRescopedContentForUserInClass(command.asBean());
         } else {
             throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST,
-                    "Rescope not applicable to specified course/class");
+                "Rescope not applicable to specified course/class");
         }
     }
 

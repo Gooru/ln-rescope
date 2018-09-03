@@ -14,6 +14,7 @@ import io.vertx.core.json.JsonObject;
  * @author ashish.
  */
 public final class DatasourceHelper {
+
     private DatasourceHelper() {
         throw new AssertionError();
     }

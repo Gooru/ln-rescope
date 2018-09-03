@@ -18,42 +18,42 @@ public final class MessageResponseFactory {
 
     public static MessageResponse createInvalidRequestResponse() {
         return new MessageResponse.Builder().setStatusBadRequest()
-                .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "Invalid request")).build();
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "Invalid request")).build();
     }
 
     public static MessageResponse createForbiddenResponse() {
         return new MessageResponse.Builder().setStatusForbidden()
-                .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "Forbidden")).build();
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "Forbidden")).build();
     }
 
     public static MessageResponse createInternalErrorResponse() {
         return new MessageResponse.Builder().setStatusInternalError()
-                .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "Internal error")).build();
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "Internal error")).build();
     }
 
     public static MessageResponse createInvalidRequestResponse(String message) {
         return new MessageResponse.Builder().setStatusBadRequest()
-                .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
     }
 
     public static MessageResponse createForbiddenResponse(String message) {
         return new MessageResponse.Builder().setStatusForbidden()
-                .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
     }
 
     public static MessageResponse createInternalErrorResponse(String message) {
         return new MessageResponse.Builder().setStatusInternalError()
-                .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
     }
 
     public static MessageResponse createNoContentResponse() {
         return new MessageResponse.Builder().setStatusNoContent()
-                .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "No Content")).build();
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, "No Content")).build();
     }
 
     public static MessageResponse createNotFoundResponse(String message) {
         return new MessageResponse.Builder().setStatusNotFound()
-                .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, message)).build();
     }
 
     public static MessageResponse createOkayResponse(JsonObject body) {
@@ -62,7 +62,7 @@ public final class MessageResponseFactory {
 
     public static MessageResponse createVersionDeprecatedResponse() {
         return new MessageResponse.Builder().setStatusHttpCode(HttpConstants.HttpStatus.GONE).setContentTypeJson()
-                .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, API_VERSION_DEPRECATED)).build();
+            .setResponseBody(new JsonObject().put(Constants.Message.MSG_MESSAGE, API_VERSION_DEPRECATED)).build();
     }
 
     public static MessageResponse createCreatedResponse(String location) {

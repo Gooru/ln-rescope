@@ -9,6 +9,7 @@ import io.vertx.core.json.JsonObject;
  * @author ashish.
  */
 public final class HttpResponseWrapperException extends RuntimeException {
+
     private static final long serialVersionUID = 1898021518233298246L;
     private final HttpConstants.HttpStatus status;
     private final JsonObject payload;

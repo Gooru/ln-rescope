@@ -30,6 +30,7 @@ import io.vertx.core.json.JsonObject;
  * @author ashish on 15/5/18.
  */
 public class AppRunner {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AppRunner.class);
     private static JsonObject conf;
     private Vertx vertx;
@@ -151,7 +152,7 @@ public class AppRunner {
             futures.add(future);
 
             this.vertx.deployVerticle(verticle.getKey(),
-                    new DeploymentOptions(verticles.getJsonObject(verticle.getKey())), future.completer());
+                new DeploymentOptions(verticles.getJsonObject(verticle.getKey())), future.completer());
         }
 
         CompositeFuture.all(eraseTypeList(futures)).setHandler(result -> {

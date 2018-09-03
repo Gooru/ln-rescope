@@ -54,6 +54,7 @@ public final class Constants {
     }
 
     public static final class Params {
+
         public static final String PARAM_MEMBER_ID = "member_id";
         public static final String PARAM_CLASS_ID = "class_id";
 

@@ -7,6 +7,7 @@ import java.util.List;
  * @author ashish on 21/5/18.
  */
 class SkippedItemsResponseBuilder {
+
     private List<String> units;
     private List<String> lessons;
     private List<String> assessments;
@@ -15,7 +16,7 @@ class SkippedItemsResponseBuilder {
     private List<String> collectionsExternal;
 
     SkippedItemsResponseBuilder(List<String> units, List<String> lessons, List<String> assessments,
-            List<String> collections, List<String> assessmentsExternal, List<String> collectionsExternal) {
+        List<String> collections, List<String> assessmentsExternal, List<String> collectionsExternal) {
         this.units = initializeWithEmptyListIfNull(units);
         this.lessons = initializeWithEmptyListIfNull(lessons);
         this.assessments = initializeWithEmptyListIfNull(assessments);

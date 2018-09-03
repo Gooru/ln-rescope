@@ -22,7 +22,7 @@ class SkippedItemsCalculator {
     private boolean calculated = false;
 
     SkippedItemsCalculator(List<ItemModel> allNonDeletedItemsInCourse, List<ItemModel> allNonSkippedItems,
-            List<ItemModel> allSkippedItems) {
+        List<ItemModel> allSkippedItems) {
         this.allNonDeletedItemsInCourse = allNonDeletedItemsInCourse;
         this.allNonSkippedItems = allNonSkippedItems;
         this.allSkippedItems = allSkippedItems;
@@ -76,10 +76,10 @@ class SkippedItemsCalculator {
     SkippedItemsResponse getSkippedItemsResponse() {
         if (!calculated) {
             throw new IllegalStateException(
-                    "Trying to get SkippedItemsResponse from calculator with doing calculation");
+                "Trying to get SkippedItemsResponse from calculator with doing calculation");
         }
         SkippedItemsResponseBuilder builder = new SkippedItemsResponseBuilder(skippedUnits, skippedLessons,
-                skippedAssessments, skippedCollections, skippedAssessmentsExternal, skippedCollectionsExternal);
+            skippedAssessments, skippedCollections, skippedAssessmentsExternal, skippedCollectionsExternal);
         return builder.build();
     }
 

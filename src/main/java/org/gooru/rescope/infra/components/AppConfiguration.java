@@ -10,6 +10,7 @@ import io.vertx.core.json.JsonObject;
  * @author ashish.
  */
 public final class AppConfiguration implements Initializer {
+
     private static final String APP_CONFIG_KEY = "app.configuration";
     private JsonObject configuration;
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConfiguration.class);
@@ -66,6 +67,7 @@ public final class AppConfiguration implements Initializer {
     }
 
     private static final class Holder {
+
         private static final AppConfiguration INSTANCE = new AppConfiguration();
     }
 

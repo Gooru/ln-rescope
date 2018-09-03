@@ -130,7 +130,7 @@ public class AuthVerticle extends AbstractVerticle {
 
     private int getTokenExpiry(JsonObject redisPacket) {
         return redisPacket.getInteger(Constants.Message.ACCESS_TOKEN_VALIDITY,
-                config().getInteger("sessionTimeoutInSeconds"));
+            config().getInteger("sessionTimeoutInSeconds"));
     }
 
 }

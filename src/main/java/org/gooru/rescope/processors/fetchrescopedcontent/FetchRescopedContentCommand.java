@@ -15,6 +15,7 @@ import io.vertx.core.json.JsonObject;
  * @author ashish on 17/5/18.
  */
 class FetchRescopedContentCommand {
+
     private UUID classId;
     private UUID courseId;
     private UUID userId;
@@ -55,11 +56,11 @@ class FetchRescopedContentCommand {
         FetchRescopedContentCommand command = new FetchRescopedContentCommand();
         try {
             command.classId = validateSingleValuedListAndGetFirstItem(
-                    UuidUtils.convertToUUIDListIgnoreInvalidItems(request.getJsonArray(CommandAttributes.CLASS_ID)));
+                UuidUtils.convertToUUIDListIgnoreInvalidItems(request.getJsonArray(CommandAttributes.CLASS_ID)));
             command.courseId = validateSingleValuedListAndGetFirstItem(
-                    UuidUtils.convertToUUIDList(request.getJsonArray(CommandAttributes.COURSE_ID)));
+                UuidUtils.convertToUUIDList(request.getJsonArray(CommandAttributes.COURSE_ID)));
             UUID userInRequestBody = validateSingleValuedListAndGetFirstItem(
-                    UuidUtils.convertToUUIDList(request.getJsonArray(CommandAttributes.USER_ID)));
+                UuidUtils.convertToUUIDList(request.getJsonArray(CommandAttributes.USER_ID)));
             if (userInRequestBody != null) {
                 command.userId = userInRequestBody;
                 command.teacherId = userId;
@@ -99,6 +100,7 @@ class FetchRescopedContentCommand {
     }
 
     public static final class FetchRescopedContentCommandBean {
+
         private UUID classId;
         private UUID courseId;
         private UUID userId;

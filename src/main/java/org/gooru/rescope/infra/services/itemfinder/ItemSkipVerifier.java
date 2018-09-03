@@ -29,7 +29,7 @@ class ItemSkipVerifier {
         SkippedItemsFinderDao dao = dbi.onDemand(SkippedItemsFinderDao.class);
 
         List<String> completedCompetenciesByUser = dao.findCompletedOrMasteredCompetenciesForUserInGivenList(userId,
-                CollectionUtils.convertToSqlArrayOfString(competencyList));
+            CollectionUtils.convertToSqlArrayOfString(competencyList));
         competencyList.removeAll(completedCompetenciesByUser);
         return competencyList.isEmpty();
 

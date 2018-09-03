@@ -28,8 +28,8 @@ public class RescopeQueueModel {
 
     public String toJson() {
         return new JsonObject().put("id", id).put("userId", UuidUtils.uuidToString(userId))
-                .put("courseId", UuidUtils.uuidToString(courseId)).put("classId", UuidUtils.uuidToString(classId))
-                .put("priority", priority).put("status", status).toString();
+            .put("courseId", UuidUtils.uuidToString(courseId)).put("classId", UuidUtils.uuidToString(classId))
+            .put("priority", priority).put("status", status).toString();
     }
 
     public static RescopeQueueModel fromJson(String input) {
@@ -113,7 +113,7 @@ public class RescopeQueueModel {
 
         @Override
         public RescopeQueueModel map(final int index, final ResultSet resultSet,
-                final StatementContext statementContext) throws SQLException {
+            final StatementContext statementContext) throws SQLException {
             RescopeQueueModel model = new RescopeQueueModel();
             model.setId(resultSet.getLong("id"));
             model.setPriority(resultSet.getInt("priority"));
