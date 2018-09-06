@@ -33,7 +33,7 @@ class RescopeProcessingServiceImpl implements RescopeProcessingService {
             LOGGER.debug("Record is not found to be in dispatched state");
             return;
         }
-        if (rescopeWasAlreadyDone()) {
+        if (wasRescopeAlreadyDone()) {
             LOGGER.debug("Rescope was already done");
             dequeueRecord();
             return;
@@ -66,7 +66,7 @@ class RescopeProcessingServiceImpl implements RescopeProcessingService {
         }
     }
 
-    private boolean rescopeWasAlreadyDone() {
+    private boolean wasRescopeAlreadyDone() {
         if (model.getClassId() == null) {
             return dao.rescopeDoneForUserInIL(model);
         }

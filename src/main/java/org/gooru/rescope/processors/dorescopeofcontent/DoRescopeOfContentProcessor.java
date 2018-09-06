@@ -1,16 +1,16 @@
 package org.gooru.rescope.processors.dorescopeofcontent;
 
+import io.vertx.core.Future;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 import org.gooru.rescope.infra.data.EventBusMessage;
+import org.gooru.rescope.infra.jdbi.DBICreator;
 import org.gooru.rescope.processors.AsyncMessageProcessor;
 import org.gooru.rescope.responses.MessageResponse;
 import org.gooru.rescope.responses.MessageResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.vertx.core.Future;
-import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.Message;
-import io.vertx.core.json.JsonObject;
 
 /**
  * @author ashish on 17/5/18.
@@ -24,7 +24,8 @@ public class DoRescopeOfContentProcessor implements AsyncMessageProcessor {
     private final Future<MessageResponse> result;
     private EventBusMessage eventBusMessage;
 
-    private final DoRescopeOfContentService doRescopeOfContentService = new DoRescopeOfContentService();
+    private final DoRescopeOfContentService doRescopeOfContentService =
+        new DoRescopeOfContentService(DBICreator.getDbiForDefaultDS());
 
     public DoRescopeOfContentProcessor(Vertx vertx, Message<JsonObject> message) {
         this.vertx = vertx;

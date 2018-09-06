@@ -92,6 +92,7 @@ To run the binary which would be fat jar from the project base directory:
 ### Task list V2
 For the Rescope V2, the tasks that are identified are :
 
+- Make sure that course in question is associated with subject before triggering any processing
 - Update module to check the rescope being applicable
 - Create a module to fetch Course's Competency Route
 - Create a module which can look up class and provide Floor and Ceil for that class

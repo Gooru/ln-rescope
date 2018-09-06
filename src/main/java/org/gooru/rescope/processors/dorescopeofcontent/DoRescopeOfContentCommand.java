@@ -20,6 +20,7 @@ class DoRescopeOfContentCommand {
         result.source = RescopeSourceType.builder(requestBody.getString(CommandAttributes.SOURCE));
         result.memberIds = UuidUtils.convertToUUIDList(requestBody.getJsonArray(CommandAttributes.MEMBER_IDS));
         result.courseId = UuidUtils.convertStringToUuid(requestBody.getString(CommandAttributes.COURSE_ID));
+        result.override = requestBody.getBoolean(CommandAttributes.OVERRIDE, false);
         result.validate();
         return result;
     }
@@ -28,28 +29,42 @@ class DoRescopeOfContentCommand {
     private UUID classId;
     private List<UUID> memberIds;
     private UUID courseId;
+    private boolean override;
 
     private DoRescopeOfContentCommand() {
 
     }
 
-    public UUID getCourseId() {
+    UUID getCourseId() {
         return courseId;
     }
 
-    public RescopeSourceType getSource() {
+    RescopeSourceType getSource() {
         return source;
     }
 
-    public UUID getClassId() {
+    UUID getClassId() {
         return classId;
     }
 
-    public List<UUID> getMemberIds() {
+    List<UUID> getMemberIds() {
         return memberIds;
     }
 
-    public RescopeContext asRescopeContext() {
+    boolean isOverride() {
+        return override;
+    }
+
+    boolean hasMembershipInfo() {
+        return (source == RescopeSourceType.OOB) || (source == RescopeSourceType.ClassJoinByMembers);
+    }
+
+    boolean applyToAllMembers() {
+        return (source == RescopeSourceType.CourseAssignmentToClass) ||
+                   (source == RescopeSourceType.RescopeSettingChanged);
+    }
+
+    RescopeContext asRescopeContext() {
         switch (source) {
         case ClassJoinByMembers:
             return RescopeContext.buildForClassJoin(classId, memberIds);
@@ -81,7 +96,8 @@ class DoRescopeOfContentCommand {
 
     final class CommandAttributes {
 
-        public static final String COURSE_ID = "courseId";
+        static final String COURSE_ID = "courseId";
+        static final String OVERRIDE = "override";
         static final String SOURCE = "source";
         static final String CLASS_ID = "classId";
         static final String MEMBER_IDS = "memberIds";
