@@ -1,7 +1,8 @@
-package org.gooru.rescope.infra.services;
+package org.gooru.rescope.infra.services.queueoperators;
 
 import org.gooru.rescope.infra.data.RescopeQueueModel;
 import org.gooru.rescope.infra.jdbi.DBICreator;
+import org.skife.jdbi.v2.DBI;
 
 /**
  * This service is responsible to read the record from the queue and return to caller. Caller needs to decides as to
@@ -17,4 +18,9 @@ public interface RescopeQueueRecordDispatcherService {
     static RescopeQueueRecordDispatcherService build() {
         return new RescopeQueueRecordDispatcherServiceImpl(DBICreator.getDbiForDefaultDS());
     }
+
+    static RescopeQueueRecordDispatcherService build(DBI dbi) {
+        return new RescopeQueueRecordDispatcherServiceImpl(dbi);
+    }
+
 }

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import org.gooru.rescope.infra.data.RescopeQueueModel;
 import org.gooru.rescope.infra.data.RescopeSourceType;
-import org.gooru.rescope.infra.services.itemfinder.SkippedItemsResponse;
+import org.gooru.rescope.infra.services.itemfilter.SkippedItemsResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,8 +1,8 @@
 package org.gooru.rescope.infra.services;
 
 import org.gooru.rescope.infra.data.RescopeQueueModel;
-import org.gooru.rescope.infra.services.itemfinder.SkippedItemsFinder;
-import org.gooru.rescope.infra.services.itemfinder.SkippedItemsResponse;
+import org.gooru.rescope.infra.services.itemfilter.SkippedItemsFinder;
+import org.gooru.rescope.infra.services.itemfilter.SkippedItemsResponse;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ class RescopeProcessingServiceImpl implements RescopeProcessingService {
 
     private final DBI dbi;
     private RescopeQueueModel model;
-    private RescopeRequestQueueDao dao;
+    private RescopeProcessingDao dao;
 
     RescopeProcessingServiceImpl(DBI dbi) {
         this.dbi = dbi;
@@ -28,7 +28,7 @@ class RescopeProcessingServiceImpl implements RescopeProcessingService {
     @Override
     public void doRescope(RescopeQueueModel model) {
         this.model = model;
-        this.dao = dbi.onDemand(RescopeRequestQueueDao.class);
+        this.dao = dbi.onDemand(RescopeProcessingDao.class);
         if (!recordIsStillInDispatchedState()) {
             LOGGER.debug("Record is not found to be in dispatched state");
             return;

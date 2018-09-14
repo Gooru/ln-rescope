@@ -2,7 +2,7 @@ package org.gooru.rescope.processors.fetchrescopedcontent;
 
 import org.gooru.rescope.infra.constants.HttpConstants;
 import org.gooru.rescope.infra.exceptions.HttpResponseWrapperException;
-import org.gooru.rescope.infra.services.RescopeApplicableService;
+import org.gooru.rescope.infra.services.rescopeapplicable.RescopeApplicableService;
 import org.skife.jdbi.v2.DBI;
 
 /**

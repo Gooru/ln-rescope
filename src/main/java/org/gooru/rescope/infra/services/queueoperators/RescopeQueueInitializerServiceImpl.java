@@ -1,4 +1,4 @@
-package org.gooru.rescope.infra.services;
+package org.gooru.rescope.infra.services.queueoperators;
 
 import org.skife.jdbi.v2.DBI;
 
@@ -15,7 +15,7 @@ class RescopeQueueInitializerServiceImpl implements RescopeQueueInitializerServi
 
     @Override
     public void initializeQueue() {
-        RescopeRequestQueueDao dao = dbi.onDemand(RescopeRequestQueueDao.class);
+        RescopeQueueOperatorDao dao = dbi.onDemand(RescopeQueueOperatorDao.class);
         dao.initializeQueueStatus();
     }
 }

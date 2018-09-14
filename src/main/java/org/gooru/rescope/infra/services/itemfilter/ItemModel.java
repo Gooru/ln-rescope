@@ -1,4 +1,4 @@
-package org.gooru.rescope.infra.services.itemfinder;
+package org.gooru.rescope.infra.services.itemfilter;
 
 import java.sql.Array;
 import java.sql.ResultSet;

@@ -1,4 +1,4 @@
-package org.gooru.rescope.infra.services.itemfinder;
+package org.gooru.rescope.infra.services.itemfilter;
 
 import java.util.List;
 import java.util.UUID;

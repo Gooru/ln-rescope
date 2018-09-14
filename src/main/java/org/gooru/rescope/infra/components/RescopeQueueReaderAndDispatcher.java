@@ -3,8 +3,8 @@ package org.gooru.rescope.infra.components;
 import static org.gooru.rescope.infra.constants.Constants.EventBus.MBEP_RESCOPE_QUEUE_PROCESSOR;
 
 import org.gooru.rescope.infra.data.RescopeQueueModel;
-import org.gooru.rescope.infra.services.RescopeQueueInitializerService;
-import org.gooru.rescope.infra.services.RescopeQueueRecordDispatcherService;
+import org.gooru.rescope.infra.services.queueoperators.RescopeQueueInitializerService;
+import org.gooru.rescope.infra.services.queueoperators.RescopeQueueRecordDispatcherService;
 import org.gooru.rescope.routes.utils.DeliveryOptionsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

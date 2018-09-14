@@ -1,6 +1,7 @@
-package org.gooru.rescope.infra.services;
+package org.gooru.rescope.infra.services.queueoperators;
 
 import org.gooru.rescope.infra.jdbi.DBICreator;
+import org.skife.jdbi.v2.DBI;
 
 /**
  * This service will be used once at the start of application. This service will mark all the record in DB queue which
@@ -16,4 +17,9 @@ public interface RescopeQueueInitializerService {
     static RescopeQueueInitializerService build() {
         return new RescopeQueueInitializerServiceImpl(DBICreator.getDbiForDefaultDS());
     }
+
+    static RescopeQueueInitializerService build(DBI dbi) {
+        return new RescopeQueueInitializerServiceImpl(dbi);
+    }
+
 }

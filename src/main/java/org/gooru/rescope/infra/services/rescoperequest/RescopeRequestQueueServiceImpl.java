@@ -1,4 +1,4 @@
-package org.gooru.rescope.infra.services;
+package org.gooru.rescope.infra.services.rescoperequest;
 
 import java.util.List;
 import java.util.UUID;

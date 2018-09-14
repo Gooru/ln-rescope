@@ -1,7 +1,7 @@
 package org.gooru.rescope.processors.dorescopeofcontent;
 
-import org.gooru.rescope.infra.services.RescopeApplicableService;
-import org.gooru.rescope.infra.services.RescopeRequestQueueService;
+import org.gooru.rescope.infra.services.rescopeapplicable.RescopeApplicableService;
+import org.gooru.rescope.infra.services.rescoperequest.RescopeRequestQueueService;
 import org.gooru.rescope.infra.utils.CollectionUtils;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
