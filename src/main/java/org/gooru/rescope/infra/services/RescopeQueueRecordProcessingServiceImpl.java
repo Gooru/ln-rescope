@@ -13,22 +13,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @author ashish on 20/5/18.
  */
-class RescopeProcessingServiceImpl implements RescopeProcessingService {
+class RescopeQueueRecordProcessingServiceImpl implements RescopeQueueRecordProcessingService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RescopeProcessingService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RescopeQueueRecordProcessingService.class);
 
     private final DBI dbi;
     private RescopeQueueModel model;
-    private RescopeProcessingDao dao;
+    private RescopeQueueRecordProcessingServiceDao dao;
 
-    RescopeProcessingServiceImpl(DBI dbi) {
+    RescopeQueueRecordProcessingServiceImpl(DBI dbi) {
         this.dbi = dbi;
     }
 
     @Override
     public void doRescope(RescopeQueueModel model) {
         this.model = model;
-        this.dao = dbi.onDemand(RescopeProcessingDao.class);
+        this.dao = dbi.onDemand(RescopeQueueRecordProcessingServiceDao.class);
         if (!recordIsStillInDispatchedState()) {
             LOGGER.debug("Record is not found to be in dispatched state");
             return;

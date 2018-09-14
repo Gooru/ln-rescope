@@ -3,7 +3,7 @@ package org.gooru.rescope.bootstrap.verticles;
 import org.gooru.rescope.infra.components.AppConfiguration;
 import org.gooru.rescope.infra.constants.Constants;
 import org.gooru.rescope.infra.data.RescopeQueueModel;
-import org.gooru.rescope.infra.services.RescopeProcessingService;
+import org.gooru.rescope.infra.services.RescopeQueueRecordProcessingService;
 import org.gooru.rescope.processors.learnerprofilebaselineprocessor.LearnerProfileBaselinePayloadConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public class RescopeProcessingVerticle extends AbstractVerticle {
         vertx.executeBlocking(future -> {
             try {
                 RescopeQueueModel model = RescopeQueueModel.fromJson(message.body());
-                RescopeProcessingService.build().doRescope(model);
+                RescopeQueueRecordProcessingService.build().doRescope(model);
                 sendMessageToPostProcessor(model);
                 future.complete();
             } catch (Exception e) {
