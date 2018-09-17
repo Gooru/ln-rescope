@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
@@ -16,86 +15,87 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
  */
 class ItemModel {
 
-    private final String courseId;
-    private final String unitId;
-    private final String lessonId;
-    private final String collectionId;
-    private final String format;
-    private final List<String> gutCodes;
+  private final String courseId;
+  private final String unitId;
+  private final String lessonId;
+  private final String collectionId;
+  private final String format;
+  private final List<String> gutCodes;
 
-    ItemModel(String courseId, String unitId, String lessonId, String collectionId, String format,
-        List<String> gutCodes) {
-        this.courseId = courseId;
-        this.unitId = unitId;
-        this.lessonId = lessonId;
-        this.collectionId = collectionId;
-        this.format = format;
-        this.gutCodes = gutCodes;
+  ItemModel(String courseId, String unitId, String lessonId, String collectionId, String format,
+      List<String> gutCodes) {
+    this.courseId = courseId;
+    this.unitId = unitId;
+    this.lessonId = lessonId;
+    this.collectionId = collectionId;
+    this.format = format;
+    this.gutCodes = gutCodes;
+  }
+
+  public boolean isItemCollection() {
+    return "collection".equals(format);
+  }
+
+  public boolean isItemAssessment() {
+    return "assessment".equals(format);
+  }
+
+  public boolean isItemCollectionExternal() {
+    return "collection-external".equals(format);
+  }
+
+  public boolean isItemAssessmentExternal() {
+    return "assessment-external".equals(format);
+  }
+
+  public String getCourseId() {
+    return courseId;
+  }
+
+  public String getUnitId() {
+    return unitId;
+  }
+
+  public String getLessonId() {
+    return lessonId;
+  }
+
+  public String getCollectionId() {
+    return collectionId;
+  }
+
+  public String getFormat() {
+    return format;
+  }
+
+  public List<String> getGutCodes() {
+    return Collections.unmodifiableList(gutCodes);
+  }
+
+  public static class ItemModelMapper implements ResultSetMapper<ItemModel> {
+
+    @Override
+    public ItemModel map(final int index, final ResultSet resultSet,
+        final StatementContext statementContext)
+        throws SQLException {
+      String courseId = resultSet.getString("course_id");
+      String unitId = resultSet.getString("unit_id");
+      String lessonId = resultSet.getString("lesson_id");
+      String collectionId = resultSet.getString("id");
+      String format = resultSet.getString("format");
+      List<String> gutCodes;
+
+      Array gutCodesArray = resultSet.getArray("gut_codes");
+      if (gutCodesArray != null) {
+        List<String> originalList = Arrays.asList((String[]) gutCodesArray.getArray());
+        gutCodes = new ArrayList<>(originalList);
+      } else {
+        gutCodes = Collections.emptyList();
+      }
+
+      return new ItemModel(courseId, unitId, lessonId, collectionId, format, gutCodes);
     }
 
-    public boolean isItemCollection() {
-        return "collection".equals(format);
-    }
-
-    public boolean isItemAssessment() {
-        return "assessment".equals(format);
-    }
-
-    public boolean isItemCollectionExternal() {
-        return "collection-external".equals(format);
-    }
-
-    public boolean isItemAssessmentExternal() {
-        return "assessment-external".equals(format);
-    }
-
-    public String getCourseId() {
-        return courseId;
-    }
-
-    public String getUnitId() {
-        return unitId;
-    }
-
-    public String getLessonId() {
-        return lessonId;
-    }
-
-    public String getCollectionId() {
-        return collectionId;
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public List<String> getGutCodes() {
-        return Collections.unmodifiableList(gutCodes);
-    }
-
-    public static class ItemModelMapper implements ResultSetMapper<ItemModel> {
-
-        @Override
-        public ItemModel map(final int index, final ResultSet resultSet, final StatementContext statementContext)
-            throws SQLException {
-            String courseId = resultSet.getString("course_id");
-            String unitId = resultSet.getString("unit_id");
-            String lessonId = resultSet.getString("lesson_id");
-            String collectionId = resultSet.getString("id");
-            String format = resultSet.getString("format");
-            List<String> gutCodes;
-
-            Array gutCodesArray = resultSet.getArray("gut_codes");
-            if (gutCodesArray != null) {
-                List<String> originalList = Arrays.asList((String[]) gutCodesArray.getArray());
-                gutCodes = new ArrayList<>(originalList);
-            } else {
-                gutCodes = Collections.emptyList();
-            }
-
-            return new ItemModel(courseId, unitId, lessonId, collectionId, format, gutCodes);
-        }
-
-    }
+  }
 
 }

@@ -7,15 +7,15 @@ import org.skife.jdbi.v2.DBI;
  */
 class RescopeQueueInitializerServiceImpl implements RescopeQueueInitializerService {
 
-    private final DBI dbi;
+  private final DBI dbi;
 
-    RescopeQueueInitializerServiceImpl(DBI dbi) {
-        this.dbi = dbi;
-    }
+  RescopeQueueInitializerServiceImpl(DBI dbi) {
+    this.dbi = dbi;
+  }
 
-    @Override
-    public void initializeQueue() {
-        RescopeQueueOperatorDao dao = dbi.onDemand(RescopeQueueOperatorDao.class);
-        dao.initializeQueueStatus();
-    }
+  @Override
+  public void initializeQueue() {
+    RescopeQueueOperatorDao dao = dbi.onDemand(RescopeQueueOperatorDao.class);
+    dao.initializeQueueStatus();
+  }
 }

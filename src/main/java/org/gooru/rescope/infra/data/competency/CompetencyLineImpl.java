@@ -12,49 +12,50 @@ import java.util.Objects;
  */
 class CompetencyLineImpl implements CompetencyLine {
 
-    private final List<DomainCode> domains;
-    private final Map<DomainCode, Competency> domainCodeCompetencyMap;
+  private final List<DomainCode> domains;
+  private final Map<DomainCode, Competency> domainCodeCompetencyMap;
 
-    CompetencyLineImpl(CompetencyMap competencyMap, boolean ceiling) {
-        Objects.requireNonNull(competencyMap);
+  CompetencyLineImpl(CompetencyMap competencyMap, boolean ceiling) {
+    Objects.requireNonNull(competencyMap);
 
-        domains = Collections.unmodifiableList(new ArrayList<>(competencyMap.getDomains()));
-        domainCodeCompetencyMap = new HashMap<>();
+    domains = Collections.unmodifiableList(new ArrayList<>(competencyMap.getDomains()));
+    domainCodeCompetencyMap = new HashMap<>();
 
-        for (DomainCode domainCode : domains) {
-            List<Competency> competencies = competencyMap.getCompetenciesForDomain(domainCode);
-            if (ceiling) {
-                domainCodeCompetencyMap.put(domainCode, competencies.get(competencies.size() - 1));
-            } else {
-                domainCodeCompetencyMap.put(domainCode, competencies.get(0));
-            }
-        }
-
+    for (DomainCode domainCode : domains) {
+      List<Competency> competencies = competencyMap.getCompetenciesForDomain(domainCode);
+      if (ceiling) {
+        domainCodeCompetencyMap.put(domainCode, competencies.get(competencies.size() - 1));
+      } else {
+        domainCodeCompetencyMap.put(domainCode, competencies.get(0));
+      }
     }
 
-    @Override
-    public List<DomainCode> getDomains() {
-        return Collections.unmodifiableList(domains);
-    }
+  }
 
-    @Override
-    public Competency getCompetencyForDomain(DomainCode domainCode) {
-        if (domainCode != null) {
-            return domainCodeCompetencyMap.get(domainCode);
-        }
-        return null;
-    }
+  @Override
+  public List<DomainCode> getDomains() {
+    return Collections.unmodifiableList(domains);
+  }
 
-    @Override
-    public CompetencyRoute getRouteToCompetencyLine(CompetencyLine competencyLine) {
-        if (competencyLine != null) {
-            return CompetencyRoute.build(this, competencyLine);
-        }
-        return null;
+  @Override
+  public Competency getCompetencyForDomain(DomainCode domainCode) {
+    if (domainCode != null) {
+      return domainCodeCompetencyMap.get(domainCode);
     }
+    return null;
+  }
 
-    @Override
-    public String toString() {
-        return "CompetencyLine{" + "domains=" + domains + ", domainCodeCompetencyMap=" + domainCodeCompetencyMap + '}';
+  @Override
+  public CompetencyRoute getRouteToCompetencyLine(CompetencyLine competencyLine) {
+    if (competencyLine != null) {
+      return CompetencyRoute.build(this, competencyLine);
     }
+    return null;
+  }
+
+  @Override
+  public String toString() {
+    return "CompetencyLine{" + "domains=" + domains + ", domainCodeCompetencyMap="
+        + domainCodeCompetencyMap + '}';
+  }
 }

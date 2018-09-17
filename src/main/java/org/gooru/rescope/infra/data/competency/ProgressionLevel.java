@@ -5,18 +5,18 @@ package org.gooru.rescope.infra.data.competency;
  */
 public class ProgressionLevel {
 
-    private final int progressionLevel;
+  private final int progressionLevel;
 
-    public ProgressionLevel(int progressionLevel) {
-        this.progressionLevel = progressionLevel;
-    }
+  public ProgressionLevel(int progressionLevel) {
+    this.progressionLevel = progressionLevel;
+  }
 
-    public int getProgressionLevel() {
-        return progressionLevel;
-    }
+  public int getProgressionLevel() {
+    return progressionLevel;
+  }
 
-    @Override
-    public String toString() {
-        return "ProgressionLevel{" + "progressionLevel=" + progressionLevel + '}';
-    }
+  @Override
+  public String toString() {
+    return "ProgressionLevel{" + "progressionLevel=" + progressionLevel + '}';
+  }
 }

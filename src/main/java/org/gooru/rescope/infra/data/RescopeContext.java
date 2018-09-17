@@ -11,85 +11,89 @@ import java.util.stream.Collectors;
  */
 public class RescopeContext {
 
-    public static RescopeContext buildForClassJoin(UUID classId, List<UUID> members) {
-        return new RescopeContext(RescopeSourceType.ClassJoinByMembers, classId, members, null);
-    }
+  public static RescopeContext buildForClassJoin(UUID classId, List<UUID> members) {
+    return new RescopeContext(RescopeSourceType.ClassJoinByMembers, classId, members, null);
+  }
 
-    public static RescopeContext buildForOOB(UUID classId, UUID courseId, UUID memberId) {
-        List<UUID> members = new ArrayList<>();
-        members.add(memberId);
-        return new RescopeContext(RescopeSourceType.OOB, classId, members, courseId);
-    }
+  public static RescopeContext buildForOOB(UUID classId, UUID courseId, UUID memberId) {
+    List<UUID> members = new ArrayList<>();
+    members.add(memberId);
+    return new RescopeContext(RescopeSourceType.OOB, classId, members, courseId);
+  }
 
-    public static RescopeContext buildForOOB(UUID classId, UUID courseId, List<UUID> members) {
-        return new RescopeContext(RescopeSourceType.OOB, classId, members, courseId);
-    }
+  public static RescopeContext buildForOOB(UUID classId, UUID courseId, List<UUID> members) {
+    return new RescopeContext(RescopeSourceType.OOB, classId, members, courseId);
+  }
 
-    public static RescopeContext buildForRescopeSetting(UUID classId) {
-        return new RescopeContext(RescopeSourceType.RescopeSettingChanged, classId, Collections.emptyList(), null);
-    }
+  public static RescopeContext buildForRescopeSetting(UUID classId) {
+    return new RescopeContext(RescopeSourceType.RescopeSettingChanged, classId,
+        Collections.emptyList(), null);
+  }
 
-    public static RescopeContext buildForCourseAssignedToClass(UUID classId, UUID courseId) {
-        return new RescopeContext(RescopeSourceType.CourseAssignmentToClass, classId, Collections.emptyList(),
-            courseId);
-    }
+  public static RescopeContext buildForCourseAssignedToClass(UUID classId, UUID courseId) {
+    return new RescopeContext(RescopeSourceType.CourseAssignmentToClass, classId,
+        Collections.emptyList(),
+        courseId);
+  }
 
-    private final RescopeSourceType source;
-    private final UUID classId;
-    private final List<UUID> memberIds;
-    private final UUID courseId;
+  private final RescopeSourceType source;
+  private final UUID classId;
+  private final List<UUID> memberIds;
+  private final UUID courseId;
 
-    private RescopeContext(RescopeSourceType source, UUID classId, List<UUID> memberIds, UUID courseId) {
-        this.source = source;
-        this.classId = classId;
-        this.memberIds = memberIds;
-        this.courseId = courseId;
-    }
+  private RescopeContext(RescopeSourceType source, UUID classId, List<UUID> memberIds,
+      UUID courseId) {
+    this.source = source;
+    this.classId = classId;
+    this.memberIds = memberIds;
+    this.courseId = courseId;
+  }
 
-    public RescopeSourceType getSource() {
-        return source;
-    }
+  public RescopeSourceType getSource() {
+    return source;
+  }
 
-    public UUID getClassId() {
-        return classId;
-    }
+  public UUID getClassId() {
+    return classId;
+  }
 
-    public List<UUID> getMemberIds() {
-        return Collections.unmodifiableList(memberIds);
-    }
+  public List<UUID> getMemberIds() {
+    return Collections.unmodifiableList(memberIds);
+  }
 
-    public UUID getCourseId() {
-        return courseId;
-    }
+  public UUID getCourseId() {
+    return courseId;
+  }
 
-    @Override
-    public String toString() {
-        String members = memberIds.stream().map(UUID::toString).collect(Collectors.joining(","));
-        return "RescopeContext{" + "source=" + source.getName() + ", classId=" + classId + ", memberIds=" + members
-            + ", courseId=" + courseId + '}';
-    }
+  @Override
+  public String toString() {
+    String members = memberIds.stream().map(UUID::toString).collect(Collectors.joining(","));
+    return "RescopeContext{" + "source=" + source.getName() + ", classId=" + classId
+        + ", memberIds=" + members
+        + ", courseId=" + courseId + '}';
+  }
 
-    public RescopeContext createNewContext(List<UUID> members) {
-        return new RescopeContext(source, classId, members, courseId);
-    }
+  public RescopeContext createNewContext(List<UUID> members) {
+    return new RescopeContext(source, classId, members, courseId);
+  }
 
-    public RescopeContext createNewContext(List<UUID> members, UUID courseId) {
-        return new RescopeContext(source, classId, members, courseId);
-    }
+  public RescopeContext createNewContext(List<UUID> members, UUID courseId) {
+    return new RescopeContext(source, classId, members, courseId);
+  }
 
-    public boolean areUsersJoiningClass() {
-        return source == RescopeSourceType.ClassJoinByMembers;
-    }
+  public boolean areUsersJoiningClass() {
+    return source == RescopeSourceType.ClassJoinByMembers;
+  }
 
-    public boolean hasClassSettingForRescopeBeenTurnedOn() {
-        return source == RescopeSourceType.RescopeSettingChanged;
-    }
+  public boolean hasClassSettingForRescopeBeenTurnedOn() {
+    return source == RescopeSourceType.RescopeSettingChanged;
+  }
 
-    public boolean hasCourseBeenAssignedToClass() {
-        return source == RescopeSourceType.CourseAssignmentToClass;
-    }
+  public boolean hasCourseBeenAssignedToClass() {
+    return source == RescopeSourceType.CourseAssignmentToClass;
+  }
 
-    public boolean isOOBRequestForRescope() {
-        return source == RescopeSourceType.OOB;
-    }
+  public boolean isOOBRequestForRescope() {
+    return source == RescopeSourceType.OOB;
+  }
 }

@@ -10,55 +10,55 @@ import org.skife.jdbi.v2.DBI;
  */
 class FetchRescopedContentService {
 
-    private final DBI dbi;
-    private FetchRescopedContentCommand command;
+  private final DBI dbi;
+  private FetchRescopedContentCommand command;
 
-    FetchRescopedContentService(DBI dbi) {
-        this.dbi = dbi;
+  FetchRescopedContentService(DBI dbi) {
+    this.dbi = dbi;
+  }
+
+  private void validateUserIsReallyTeacher() {
+    if (!getDao().isUserTeacherOrCollaboratorForClass(command.asBean())) {
+      throw new HttpResponseWrapperException(HttpConstants.HttpStatus.FORBIDDEN,
+          "You need to be teacher or co-teacher for this class");
+    }
+  }
+
+  private String fetchRescopedContentForIL() {
+    if (RescopeApplicableService.isRescopeApplicableToCourseInIL(command.getCourseId())) {
+      return getDao().fetchRescopedContentForUserInIL(command.asBean());
+    } else {
+      throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST,
+          "Rescope not applicable to specified course/class");
     }
 
-    private void validateUserIsReallyTeacher() {
-        if (!getDao().isUserTeacherOrCollaboratorForClass(command.asBean())) {
-            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.FORBIDDEN,
-                "You need to be teacher or co-teacher for this class");
-        }
+  }
+
+  private String fetchRescopedContentForClass() {
+    if (RescopeApplicableService.isRescopeApplicableToClass(command.getClassId())) {
+      return getDao().fetchRescopedContentForUserInClass(command.asBean());
+    } else {
+      throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST,
+          "Rescope not applicable to specified course/class");
     }
+  }
 
-    private String fetchRescopedContentForIL() {
-        if (RescopeApplicableService.isRescopeApplicableToCourseInIL(command.getCourseId())) {
-            return getDao().fetchRescopedContentForUserInIL(command.asBean());
-        } else {
-            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST,
-                "Rescope not applicable to specified course/class");
-        }
+  private FetchRescopedContentDao getDao() {
+    return dbi.onDemand(FetchRescopedContentDao.class);
+  }
 
+  String fetchRescopedContent(FetchRescopedContentCommand command) {
+    this.command = command;
+    String result;
+
+    if (command.getClassId() != null) {
+      if (command.isTeacherContext()) {
+        validateUserIsReallyTeacher();
+      }
+      result = fetchRescopedContentForClass();
+    } else {
+      result = fetchRescopedContentForIL();
     }
-
-    private String fetchRescopedContentForClass() {
-        if (RescopeApplicableService.isRescopeApplicableToClass(command.getClassId())) {
-            return getDao().fetchRescopedContentForUserInClass(command.asBean());
-        } else {
-            throw new HttpResponseWrapperException(HttpConstants.HttpStatus.BAD_REQUEST,
-                "Rescope not applicable to specified course/class");
-        }
-    }
-
-    private FetchRescopedContentDao getDao() {
-        return dbi.onDemand(FetchRescopedContentDao.class);
-    }
-
-    String fetchRescopedContent(FetchRescopedContentCommand command) {
-        this.command = command;
-        String result;
-
-        if (command.getClassId() != null) {
-            if (command.isTeacherContext()) {
-                validateUserIsReallyTeacher();
-            }
-            result = fetchRescopedContentForClass();
-        } else {
-            result = fetchRescopedContentForIL();
-        }
-        return result;
-    }
+    return result;
+  }
 }

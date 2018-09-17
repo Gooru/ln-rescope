@@ -9,14 +9,14 @@ import org.skife.jdbi.v2.DBI;
  */
 public interface RescopeQueueRecordProcessingService {
 
-    void doRescope(RescopeQueueModel model);
+  void doRescope(RescopeQueueModel model);
 
-    static RescopeQueueRecordProcessingService build() {
-        return new RescopeQueueRecordProcessingServiceImpl(DBICreator.getDbiForDefaultDS());
-    }
+  static RescopeQueueRecordProcessingService build() {
+    return new RescopeQueueRecordProcessingServiceImpl(DBICreator.getDbiForDefaultDS());
+  }
 
-    static RescopeQueueRecordProcessingService build(DBI dbi) {
-        return new RescopeQueueRecordProcessingServiceImpl(dbi);
-    }
+  static RescopeQueueRecordProcessingService build(DBI dbi) {
+    return new RescopeQueueRecordProcessingServiceImpl(dbi);
+  }
 
 }

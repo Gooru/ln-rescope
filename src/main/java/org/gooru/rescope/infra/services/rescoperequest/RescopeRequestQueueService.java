@@ -9,14 +9,14 @@ import org.skife.jdbi.v2.DBI;
  */
 public interface RescopeRequestQueueService {
 
-    void enqueue(RescopeContext context);
+  void enqueue(RescopeContext context);
 
-    static RescopeRequestQueueService build() {
-        return new RescopeRequestQueueServiceImpl(DBICreator.getDbiForDefaultDS());
-    }
+  static RescopeRequestQueueService build() {
+    return new RescopeRequestQueueServiceImpl(DBICreator.getDbiForDefaultDS());
+  }
 
-    static RescopeRequestQueueService build(DBI dbi) {
-        return new RescopeRequestQueueServiceImpl(dbi);
-    }
+  static RescopeRequestQueueService build(DBI dbi) {
+    return new RescopeRequestQueueServiceImpl(dbi);
+  }
 
 }

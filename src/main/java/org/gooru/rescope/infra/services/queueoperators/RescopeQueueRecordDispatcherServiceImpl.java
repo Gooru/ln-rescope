@@ -10,22 +10,23 @@ import org.slf4j.LoggerFactory;
  */
 class RescopeQueueRecordDispatcherServiceImpl implements RescopeQueueRecordDispatcherService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RescopeQueueRecordDispatcherService.class);
-    private final DBI dbi;
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(RescopeQueueRecordDispatcherService.class);
+  private final DBI dbi;
 
-    RescopeQueueRecordDispatcherServiceImpl(DBI dbi) {
-        this.dbi = dbi;
-    }
+  RescopeQueueRecordDispatcherServiceImpl(DBI dbi) {
+    this.dbi = dbi;
+  }
 
-    @Override
-    public RescopeQueueModel getNextRecordToDispatch() {
-        RescopeQueueOperatorDao dao = dbi.onDemand(RescopeQueueOperatorDao.class);
-        RescopeQueueModel model = dao.getNextDispatchableModel();
-        if (model == null) {
-            model = RescopeQueueModel.createNonPersistedEmptyModel();
-        } else {
-            dao.setQueuedRecordStatusAsDispatched(model.getId());
-        }
-        return model;
+  @Override
+  public RescopeQueueModel getNextRecordToDispatch() {
+    RescopeQueueOperatorDao dao = dbi.onDemand(RescopeQueueOperatorDao.class);
+    RescopeQueueModel model = dao.getNextDispatchableModel();
+    if (model == null) {
+      model = RescopeQueueModel.createNonPersistedEmptyModel();
+    } else {
+      dao.setQueuedRecordStatusAsDispatched(model.getId());
     }
+    return model;
+  }
 }

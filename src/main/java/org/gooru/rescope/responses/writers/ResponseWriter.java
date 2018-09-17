@@ -5,5 +5,5 @@ package org.gooru.rescope.responses.writers;
  */
 public interface ResponseWriter {
 
-    void writeResponse();
+  void writeResponse();
 }

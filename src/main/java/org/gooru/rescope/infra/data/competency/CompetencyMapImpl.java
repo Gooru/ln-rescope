@@ -13,66 +13,68 @@ import java.util.Set;
  */
 class CompetencyMapImpl implements CompetencyMap {
 
-    private final List<DomainCode> domains;
-    private final Map<DomainCode, List<Competency>> domainCodeCompetencyListMap;
-    private CompetencyLine ceilingLine, floorLine;
+  private final List<DomainCode> domains;
+  private final Map<DomainCode, List<Competency>> domainCodeCompetencyListMap;
+  private CompetencyLine ceilingLine, floorLine;
 
-    CompetencyMapImpl(List<Competency> competencies) {
-        domainCodeCompetencyListMap = new HashMap<>(competencies.size());
+  CompetencyMapImpl(List<Competency> competencies) {
+    domainCodeCompetencyListMap = new HashMap<>(competencies.size());
 
-        for (Competency competency : competencies) {
-            List<Competency> competenciesForDomain = domainCodeCompetencyListMap.get(competency.getDomain());
-            if (competenciesForDomain == null) {
-                competenciesForDomain = new ArrayList<>();
-                competenciesForDomain.add(competency);
-                domainCodeCompetencyListMap.put(competency.getDomain(), competenciesForDomain);
-            } else {
-                competenciesForDomain.add(competency);
-            }
-        }
-        domains = Collections.unmodifiableList(new ArrayList<>(domainCodeCompetencyListMap.keySet()));
-        processDomainCompetencyMap();
+    for (Competency competency : competencies) {
+      List<Competency> competenciesForDomain = domainCodeCompetencyListMap
+          .get(competency.getDomain());
+      if (competenciesForDomain == null) {
+        competenciesForDomain = new ArrayList<>();
+        competenciesForDomain.add(competency);
+        domainCodeCompetencyListMap.put(competency.getDomain(), competenciesForDomain);
+      } else {
+        competenciesForDomain.add(competency);
+      }
     }
+    domains = Collections.unmodifiableList(new ArrayList<>(domainCodeCompetencyListMap.keySet()));
+    processDomainCompetencyMap();
+  }
 
-    @Override
-    public List<DomainCode> getDomains() {
-        return Collections.unmodifiableList(domains);
-    }
+  @Override
+  public List<DomainCode> getDomains() {
+    return Collections.unmodifiableList(domains);
+  }
 
-    @Override
-    public List<Competency> getCompetenciesForDomain(DomainCode domainCode) {
-        return Collections.unmodifiableList(domainCodeCompetencyListMap.get(domainCode));
-    }
+  @Override
+  public List<Competency> getCompetenciesForDomain(DomainCode domainCode) {
+    return Collections.unmodifiableList(domainCodeCompetencyListMap.get(domainCode));
+  }
 
-    @Override
-    public CompetencyLine getCeilingLine() {
-        if (ceilingLine == null) {
-            ceilingLine = CompetencyLine.build(this, true);
-        }
-        return ceilingLine;
+  @Override
+  public CompetencyLine getCeilingLine() {
+    if (ceilingLine == null) {
+      ceilingLine = CompetencyLine.build(this, true);
     }
+    return ceilingLine;
+  }
 
-    @Override
-    public CompetencyLine getFloorLine() {
-        if (floorLine == null) {
-            floorLine = CompetencyLine.build(this, false);
-        }
-        return floorLine;
+  @Override
+  public CompetencyLine getFloorLine() {
+    if (floorLine == null) {
+      floorLine = CompetencyLine.build(this, false);
     }
+    return floorLine;
+  }
 
-    @Override
-    public String toString() {
-        return "CompetencyMap{" + "domains=" + domains + ", domainCodeCompetencyListMap=" + domainCodeCompetencyListMap
-            + ", ceilingLine=" + ceilingLine + ", floorLine=" + floorLine + '}';
-    }
+  @Override
+  public String toString() {
+    return "CompetencyMap{" + "domains=" + domains + ", domainCodeCompetencyListMap="
+        + domainCodeCompetencyListMap
+        + ", ceilingLine=" + ceilingLine + ", floorLine=" + floorLine + '}';
+  }
 
-    private void processDomainCompetencyMap() {
-        for (DomainCode domainCode : domains) {
-            List<Competency> competencies = domainCodeCompetencyListMap.get(domainCode);
-            Set<Competency> competencySet = new HashSet<>(competencies);
-            competencies = new ArrayList<>(competencySet);
-            competencies.sort(new CompetencySorterByProgression());
-            domainCodeCompetencyListMap.put(domainCode, competencies);
-        }
+  private void processDomainCompetencyMap() {
+    for (DomainCode domainCode : domains) {
+      List<Competency> competencies = domainCodeCompetencyListMap.get(domainCode);
+      Set<Competency> competencySet = new HashSet<>(competencies);
+      competencies = new ArrayList<>(competencySet);
+      competencies.sort(new CompetencySorterByProgression());
+      domainCodeCompetencyListMap.put(domainCode, competencies);
     }
+  }
 }

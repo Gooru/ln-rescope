@@ -2,9 +2,9 @@ package org.gooru.rescope.responses.auth;
 
 public interface AuthResponseHolder {
 
-    boolean isAuthorized();
+  boolean isAuthorized();
 
-    boolean isAnonymous();
+  boolean isAnonymous();
 
-    String getUser();
+  String getUser();
 }

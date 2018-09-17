@@ -2,7 +2,6 @@ package org.gooru.rescope.infra.services.rescoperequest;
 
 import java.util.List;
 import java.util.UUID;
-
 import org.gooru.rescope.infra.data.RescopeContext;
 import org.gooru.rescope.infra.data.RescopeQueueModel;
 import org.gooru.rescope.infra.utils.CollectionUtils;
@@ -15,77 +14,81 @@ import org.slf4j.LoggerFactory;
  */
 class RescopeRequestQueueServiceImpl implements RescopeRequestQueueService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RescopeRequestQueueService.class);
-    private final DBI dbi;
-    private RescopeContext context;
-    private RescopeRequestQueueDao queueDao;
+  private static final Logger LOGGER = LoggerFactory.getLogger(RescopeRequestQueueService.class);
+  private final DBI dbi;
+  private RescopeContext context;
+  private RescopeRequestQueueDao queueDao;
 
-    RescopeRequestQueueServiceImpl(DBI dbi) {
-        this.dbi = dbi;
+  RescopeRequestQueueServiceImpl(DBI dbi) {
+    this.dbi = dbi;
+  }
+
+  @Override
+  public void enqueue(RescopeContext context) {
+    this.context = context;
+    queueDao = dbi.onDemand(RescopeRequestQueueDao.class);
+    if (context.getClassId() != null) {
+      doQueueingForClass();
+    } else {
+      doQueueingForIL();
     }
 
-    @Override
-    public void enqueue(RescopeContext context) {
-        this.context = context;
-        queueDao = dbi.onDemand(RescopeRequestQueueDao.class);
-        if (context.getClassId() != null) {
-            doQueueingForClass();
-        } else {
-            doQueueingForIL();
-        }
+  }
 
+  private void doQueueingForIL() {
+    if (context.getCourseId() == null) {
+      LOGGER.warn("Rescope fired for IL without courseId. Abort.");
+      return;
+    }
+    if (!queueDao.isCourseNotDeleted(context.getCourseId())) {
+      LOGGER.warn("Rescope fired for deleted or not existing course: '{}'. Abort.",
+          context.getCourseId());
+      return;
+    }
+    queueInDb();
+  }
+
+  private void doQueueingForClass() {
+    if (!queueDao.isClassNotDeletedAndNotArchived(context.getClassId())) {
+      LOGGER.warn("Rescope fired for archived or deleted class: '{}'", context.getClassId());
+      return;
+    }
+    UUID courseId = queueDao.fetchCourseForClass(context.getClassId());
+    if (courseId == null) {
+      LOGGER.warn("No course associated with class: '{}'. Will not rescope", context.getClassId());
+      return;
     }
 
-    private void doQueueingForIL() {
-        if (context.getCourseId() == null) {
-            LOGGER.warn("Rescope fired for IL without courseId. Abort.");
-            return;
-        }
-        if (!queueDao.isCourseNotDeleted(context.getCourseId())) {
-            LOGGER.warn("Rescope fired for deleted or not existing course: '{}'. Abort.", context.getCourseId());
-            return;
-        }
-        queueInDb();
+    if (context.getCourseId() != null && !context.getCourseId().equals(courseId)) {
+      LOGGER.warn(
+          "Course specified in request '{}' does not match course associated with class '{}'. Will use "
+              + "the one associated with class", context.getCourseId(), courseId);
     }
 
-    private void doQueueingForClass() {
-        if (!queueDao.isClassNotDeletedAndNotArchived(context.getClassId())) {
-            LOGGER.warn("Rescope fired for archived or deleted class: '{}'", context.getClassId());
-            return;
-        }
-        UUID courseId = queueDao.fetchCourseForClass(context.getClassId());
-        if (courseId == null) {
-            LOGGER.warn("No course associated with class: '{}'. Will not rescope", context.getClassId());
-            return;
-        }
+    populateMemberships(courseId);
+    queueInDb();
+  }
 
-        if (context.getCourseId() != null && !context.getCourseId().equals(courseId)) {
-            LOGGER.warn("Course specified in request '{}' does not match course associated with class '{}'. Will use "
-                + "the one associated with class", context.getCourseId(), courseId);
-        }
+  private void populateMemberships(UUID courseId) {
+    if (context.isOOBRequestForRescope() || context.areUsersJoiningClass()) {
+      // Validate membership of provided users
+      List<UUID> existingMembersOfClassFromSpecifiedList = queueDao.fetchSpecifiedMembersOfClass(
+          context.getClassId(),
+          CollectionUtils.convertFromListUUIDToSqlArrayOfUUID(context.getMemberIds()));
 
-        populateMemberships(courseId);
-        queueInDb();
+      if (existingMembersOfClassFromSpecifiedList.size() < context.getMemberIds().size()) {
+        LOGGER.warn("Not all specified users are members of class. Will process only members");
+      }
+      context = context.createNewContext(existingMembersOfClassFromSpecifiedList, courseId);
+    } else {
+      List<UUID> members = queueDao.fetchMembersOfClass(context.getClassId());
+      context = context.createNewContext(members, courseId);
     }
+  }
 
-    private void populateMemberships(UUID courseId) {
-        if (context.isOOBRequestForRescope() || context.areUsersJoiningClass()) {
-            // Validate membership of provided users
-            List<UUID> existingMembersOfClassFromSpecifiedList = queueDao.fetchSpecifiedMembersOfClass(
-                context.getClassId(), CollectionUtils.convertFromListUUIDToSqlArrayOfUUID(context.getMemberIds()));
-
-            if (existingMembersOfClassFromSpecifiedList.size() < context.getMemberIds().size()) {
-                LOGGER.warn("Not all specified users are members of class. Will process only members");
-            }
-            context = context.createNewContext(existingMembersOfClassFromSpecifiedList, courseId);
-        } else {
-            List<UUID> members = queueDao.fetchMembersOfClass(context.getClassId());
-            context = context.createNewContext(members, courseId);
-        }
-    }
-
-    private void queueInDb() {
-        queueDao.queueRequests(context.getMemberIds(), RescopeQueueModel.fromRescopeContextNoMembers(context));
-    }
+  private void queueInDb() {
+    queueDao.queueRequests(context.getMemberIds(),
+        RescopeQueueModel.fromRescopeContextNoMembers(context));
+  }
 
 }

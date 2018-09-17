@@ -7,38 +7,38 @@ import java.util.Objects;
  */
 public class DomainCode {
 
-    private final String code;
+  private final String code;
 
-    public DomainCode(String code) {
-        Objects.requireNonNull(code);
-        this.code = code;
+  public DomainCode(String code) {
+    Objects.requireNonNull(code);
+    this.code = code;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
 
-    public String getCode() {
-        return code;
-    }
+    DomainCode that = (DomainCode) o;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+    return code.equals(that.code);
+  }
 
-        DomainCode that = (DomainCode) o;
+  @Override
+  public int hashCode() {
+    return code.hashCode();
+  }
 
-        return code.equals(that.code);
-    }
-
-    @Override
-    public int hashCode() {
-        return code.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "DomainCode{" + "code='" + code + '\'' + '}';
-    }
+  @Override
+  public String toString() {
+    return "DomainCode{" + "code='" + code + '\'' + '}';
+  }
 }
