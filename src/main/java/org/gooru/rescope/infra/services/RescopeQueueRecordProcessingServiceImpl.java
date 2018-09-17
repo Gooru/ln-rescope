@@ -1,6 +1,9 @@
 package org.gooru.rescope.infra.services;
 
+import org.gooru.rescope.infra.data.RescopeContext;
 import org.gooru.rescope.infra.data.RescopeQueueModel;
+import org.gooru.rescope.infra.services.core.RescopeProcessor;
+import org.gooru.rescope.infra.services.core.RescopeProcessorContext;
 import org.gooru.rescope.infra.services.itemfilter.SkippedItemsFinder;
 import org.gooru.rescope.infra.services.itemfilter.SkippedItemsResponse;
 import org.skife.jdbi.v2.DBI;
@@ -49,8 +52,7 @@ class RescopeQueueRecordProcessingServiceImpl implements RescopeQueueRecordProce
     private void processRecord() {
         LOGGER.debug("Doing real processing");
         try {
-            SkippedItemsResponse items = SkippedItemsFinder.buildSkippedItemsFinderForCourse()
-                .findItemsThatWillBeSkipped(model.getUserId(), model.getCourseId());
+            SkippedItemsResponse items = RescopeProcessor.buildRescopeProcessor().rescopedItems(RescopeProcessorContext.buildFromRescopeQueueModel(model));
             ObjectMapper mapper = new ObjectMapper();
             try {
                 String skippedItemsString = mapper.writeValueAsString(items);
