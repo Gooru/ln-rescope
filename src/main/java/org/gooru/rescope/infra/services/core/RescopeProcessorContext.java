@@ -1,5 +1,6 @@
 package org.gooru.rescope.infra.services.core;
 
+import java.util.Objects;
 import java.util.UUID;
 import org.gooru.rescope.infra.data.RescopeQueueModel;
 
@@ -20,6 +21,12 @@ public class RescopeProcessorContext {
     return new RescopeProcessorContext(model.getUserId(), model.getCourseId(), model.getClassId());
   }
 
+  public static RescopeProcessorContext build(UUID userId, UUID courseId, UUID classId) {
+    Objects.requireNonNull(userId, "User id should not be null");
+    Objects.requireNonNull(courseId, "Course id should not be null");
+    return new RescopeProcessorContext(userId, courseId, classId);
+  }
+
   public UUID getUserId() {
     return userId;
   }
@@ -30,6 +37,14 @@ public class RescopeProcessorContext {
 
   public UUID getClassId() {
     return classId;
+  }
+
+  public boolean isInClassExperience() {
+    return classId != null;
+  }
+
+  public boolean isILExperience() {
+    return classId == null;
   }
 
   @Override
