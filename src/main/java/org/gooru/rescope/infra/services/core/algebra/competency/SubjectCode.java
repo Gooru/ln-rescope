@@ -1,15 +1,15 @@
-package org.gooru.rescope.infra.data.competency;
+package org.gooru.rescope.infra.services.core.algebra.competency;
 
 import java.util.Objects;
 
 /**
  * @author ashish.
  */
-public class DomainCode {
+public class SubjectCode {
 
   private final String code;
 
-  public DomainCode(String code) {
+  public SubjectCode(String code) {
     Objects.requireNonNull(code);
     this.code = code;
   }
@@ -27,7 +27,7 @@ public class DomainCode {
       return false;
     }
 
-    DomainCode that = (DomainCode) o;
+    SubjectCode that = (SubjectCode) o;
 
     return code.equals(that.code);
   }
@@ -39,6 +39,6 @@ public class DomainCode {
 
   @Override
   public String toString() {
-    return "DomainCode{" + "code='" + code + '\'' + '}';
+    return "SubjectCode{" + "code='" + code + '\'' + '}';
   }
 }

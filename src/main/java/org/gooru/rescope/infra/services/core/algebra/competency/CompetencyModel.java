@@ -1,4 +1,4 @@
-package org.gooru.rescope.infra.data.competency;
+package org.gooru.rescope.infra.services.core.algebra.competency;
 
 /**
  * DB representation of Competency

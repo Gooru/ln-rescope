@@ -1,15 +1,15 @@
-package org.gooru.rescope.infra.data.competency;
+package org.gooru.rescope.infra.services.core.algebra.competency;
 
 import java.util.Objects;
 
 /**
  * @author ashish.
  */
-public class SubjectCode {
+public class CompetencyCode {
 
   private final String code;
 
-  public SubjectCode(String code) {
+  public CompetencyCode(String code) {
     Objects.requireNonNull(code);
     this.code = code;
   }
@@ -27,7 +27,7 @@ public class SubjectCode {
       return false;
     }
 
-    SubjectCode that = (SubjectCode) o;
+    CompetencyCode that = (CompetencyCode) o;
 
     return code.equals(that.code);
   }
@@ -39,6 +39,6 @@ public class SubjectCode {
 
   @Override
   public String toString() {
-    return "SubjectCode{" + "code='" + code + '\'' + '}';
+    return "CompetencyCode{" + "code='" + code + '\'' + '}';
   }
 }
