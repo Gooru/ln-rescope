@@ -89,17 +89,41 @@ To run the binary which would be fat jar from the project base directory:
     - For the first run of timer thread, it should clean up all statuses in DB queue so that they are picked up for processing downstream
     - The number of records that are read from DB/queue and dumped on to message bus for processing, needs to be configurable
 
-### Task list V2
-For the Rescope V2, the tasks that are identified are :
+### Task list V2 (Complete infrastructure)
+- Modify Rescope with new Algorithm (progression aware, API changes, no queueing on fetch etc)
+- Modify Route0 with new Algorithm (read from baseline table, API changes, remove queueing of request on fetch etc)
+- Modify baseline LP to have Union of LP and class Floor line
+- Modify baseline LP to trigger Route0/Rescope if applicable
+- Modify baseline LP to cater to new table structures (may have impact on read API for baseline LP)
+- Modify Navigate Next to consider the rescoped content
+- Modify class API to expose relevant settings
 
-- Make sure that course in question is associated with subject before triggering any processing
-- Update module to check the rescope being applicable
-- Create a module to fetch Course's Competency Route
-- Create a module which can look up class and provide Floor and Ceil for that class
-- Create a module to fetch the base line user profile for that class/course
-- Create a module which can take floor, ceil, LP, Course CR and then create context object with all these params.
-    Note that it needs to handle the default values in case one or more of them are null or not present
-- Integrate the competency algebra related pieces
-- Define entry point which should be able to take context and calculate rescope
-- Define how and where do we store rescoped content? Same DB same format or we change the format?
-- Navigate map should honor the Rescope definition
+### New Rescope flow
+- Validate if rescope is already done
+    - if done, and if there is a flag which says to override, then delete the current rescope
+    - if done, and there is no flag, DONE
+    - if not done, continue
+- Verify if rescope is applicable. If yes, continue else DONE
+- Validate class/course/user (class exists, course exists and is assigned to that class, and user belongs to that class)
+- Verify if the course has subject bucket set up. If yes, continue else DONE
+- Verify if the baseline LP for the specified class/course/user exists. If yes, continue else DONE
+- STATUS MARKER >>> CURRENT IMPLEMENTATION IS HERE
+- Find floor and ceil for the class
+- Find the Baseline LP for user for that class
+- Find the course's competency route
+- BoundedContext = baselineProfile, classCeiling
+- create Competency Map for subject
+- CompetencyMap = CompetencyMap.trimAboveCompetencyLine(classCeiling)
+- CompetencyMap = CompetencyMap.trimBelowCompetencyLine(baselineProfile)
+- fetch all collections/assessments from db with their course, unit, lesson ids, gut_codes, order by course, unit, lesson, collection sequence which are non deleted
+- Lookup domain competency matrix for that subject and create a lookup of gut code to domain
+- iterate over units
+    - iterate over lessons
+        - iterate over collections
+            - for a collection, get the gut codes
+                - Look up domain for that gut code
+                - if any gut code/domain is present in the adjustedStudyRouteForUser, keep it
+                - if all are absent, skip it
+        - if there are any collections, in this lesson, stash collections in lesson
+    - if there are any lesson in this unit, keep the unit. Else skip unit as well
+- once done store the output
