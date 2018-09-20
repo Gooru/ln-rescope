@@ -42,6 +42,29 @@ public interface CompetencyMap {
    */
   CompetencyLine getFloorLine();
 
+  /**
+   * Trim the provided competency map above the provided competency line
+   *
+   * Note that if a domain is absent in competency line, that domain is represented as is from
+   * source competency map into result competency map. The competency line is non inclusive in
+   * trimming
+   *
+   * @return New competency map which is result of trim
+   */
+  CompetencyMap trimAboveCompetencyLine(CompetencyLine competencyLine);
+
+  /**
+   * Trim the provided competency map below the provided competency line
+   *
+   * Note that if a domain is absent in competency line, that domain is is represented as is from
+   * source competency map into result competency map. The competency line is non inclusive in
+   * trimming
+   *
+   * @return New competency map which is result of trim
+   */
+  CompetencyMap trimBelowCompetencyLine(CompetencyLine competencyLine);
+
+
   static CompetencyMap build(List<Competency> competencies) {
     return new CompetencyMapImpl(competencies);
   }
