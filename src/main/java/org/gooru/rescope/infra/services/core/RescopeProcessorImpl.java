@@ -20,6 +20,9 @@ class RescopeProcessorImpl implements RescopeProcessor {
   private final DBI dbi4core;
   private final DBI dbi4ds;
   private RescopeProcessorContext context;
+  private CompetencyLine ceilingCompetencyLine;
+  private CompetencyLine floorCompetencyLine;
+  private CompetencyMap competencyMapForSubject;
 
   RescopeProcessorImpl(DBI dbi4core, DBI dbi4ds) {
 
@@ -41,22 +44,47 @@ class RescopeProcessorImpl implements RescopeProcessor {
   }
 
   private SkippedItemsResponse findItemsThatWillBeSkipped() {
-    CompetencyLine ceilingCompetencyLine = CompetencyLineFinder
+    ceilingCompetencyLine = CompetencyLineFinder
         .buildCeilingLineFinder(dbi4core, dbi4ds).findCompetencyLineForRescope(context);
-    CompetencyLine floorCompetencyLine = CompetencyLineFinder.buildFloorLineFinder(dbi4core, dbi4ds)
+    floorCompetencyLine = CompetencyLineFinder.buildFloorLineFinder(dbi4core, dbi4ds)
         .findCompetencyLineForRescope(context);
-    CompetencyMap competencyMapForSubject = CompetencyMapCreator
+    competencyMapForSubject = CompetencyMapCreator
         .buildSubjectCompetencyMapCreator(dbi4ds)
         .create(context);
-    CompetencyMap trimmedCompetencyMapAboveCeiling = competencyMapForSubject
-        .trimAboveCompetencyLine(ceilingCompetencyLine);
-    CompetencyMap adjustedStudyRouteForUser = trimmedCompetencyMapAboveCeiling
-        .trimBelowCompetencyLine(floorCompetencyLine);
+
+    CompetencyMap trimmedCompetencyMapAboveCeiling = calculateTrimmedCompetencyMapAboveCeiling();
+
+    CompetencyMap adjustedStudyRouteForUser = calculateAdjustedStudyRouteForUser(
+        trimmedCompetencyMapAboveCeiling);
+
     CompetencyPresenceChecker competencyPresenceChecker = CompetencyPresenceChecker
         .buildCompetencyPresenceCheckerFromCompetencyMap(adjustedStudyRouteForUser);
     return SkippedItemsFinder.buildSkippedItemsFinderForCourse(dbi4core, competencyPresenceChecker)
         .findItemsThatWillBeSkipped(context.getUserId(), context.getCourseId());
 
+  }
+
+  private CompetencyMap calculateAdjustedStudyRouteForUser(
+      CompetencyMap trimmedCompetencyMapAboveCeiling) {
+    CompetencyMap adjustedStudyRouteForUser;
+    if (floorCompetencyLine.isEmpty()) {
+      adjustedStudyRouteForUser = trimmedCompetencyMapAboveCeiling;
+    } else {
+      adjustedStudyRouteForUser = trimmedCompetencyMapAboveCeiling
+          .trimBelowCompetencyLine(floorCompetencyLine);
+    }
+    return adjustedStudyRouteForUser;
+  }
+
+  private CompetencyMap calculateTrimmedCompetencyMapAboveCeiling() {
+    CompetencyMap trimmedCompetencyMapAboveCeiling;
+    if (ceilingCompetencyLine.isEmpty()) {
+      trimmedCompetencyMapAboveCeiling = competencyMapForSubject;
+    } else {
+      trimmedCompetencyMapAboveCeiling = competencyMapForSubject
+          .trimAboveCompetencyLine(ceilingCompetencyLine);
+    }
+    return trimmedCompetencyMapAboveCeiling;
   }
 
   private void initializeSubject() {

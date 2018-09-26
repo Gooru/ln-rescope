@@ -37,6 +37,13 @@ public interface CompetencyLine {
    */
   CompetencyRoute getRouteToCompetencyLine(CompetencyLine competencyLine);
 
+  /**
+   * Is this competency line empty, i.e. it has no domains and ergo no competencies
+   *
+   * @return true if it is empty
+   */
+  boolean isEmpty();
+
   static CompetencyLine build(CompetencyMap competencyMap, boolean ceiling) {
     return new CompetencyLineImpl(competencyMap, ceiling);
   }

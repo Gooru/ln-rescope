@@ -12,3 +12,5 @@ CREATE UNIQUE INDEX blpm_ucsc_unique_idx ON baseline_learner_profile_master USIN
 
 CREATE UNIQUE INDEX blpm_ucs_unique_idx ON baseline_learner_profile_master USING btree (user_id, course_id, tx_subject_code) WHERE (class_id IS NULL);
 
+alter table class add column grade_lower_bound bigint;
+alter table class add column grade_upper_bound bigint;

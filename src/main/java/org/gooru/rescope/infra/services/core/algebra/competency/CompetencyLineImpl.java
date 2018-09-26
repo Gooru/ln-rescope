@@ -54,6 +54,11 @@ class CompetencyLineImpl implements CompetencyLine {
   }
 
   @Override
+  public boolean isEmpty() {
+    return domains == null || domains.isEmpty();
+  }
+
+  @Override
   public String toString() {
     return "CompetencyLine{" + "domains=" + domains + ", domainCodeCompetencyMap="
         + domainCodeCompetencyMap + '}';

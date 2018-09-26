@@ -6,7 +6,8 @@ import org.skife.jdbi.v2.DBI;
 
 /**
  * Entry point for rescope processing.
- * <p>Note that this only does the calculation of rescope contents. It does not take responsibility to persist it.</p>
+ * <p>Note that this only does the calculation of rescope contents. It does not take responsibility
+ * to persist it.</p>
  *
  * @author ashish.
  */

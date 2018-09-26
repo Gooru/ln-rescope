@@ -26,9 +26,8 @@ class SkippedItemsFinderInCourseImpl implements SkippedItemsFinder {
 
   @Override
   public SkippedItemsResponse findItemsThatWillBeSkipped(UUID userId, UUID courseId) {
-    // TODO: Provide implementation considering the competency presence checker
     SkippedItemsFinderDao dao = dbi.onDemand(SkippedItemsFinderDao.class);
-    skipVerifier = new ItemSkipVerifier(dbi, userId);
+    skipVerifier = new ItemSkipVerifier(competencyPresenceChecker);
 
     allNonDeletedItemsInCourse = dao.fetchAllItemsFromCourseWithGutCodes(courseId);
 
