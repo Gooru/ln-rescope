@@ -1,6 +1,13 @@
 package org.gooru.rescope.infra.services.core;
 
+import org.gooru.rescope.infra.services.core.algebra.competency.CompetencyLine;
+import org.gooru.rescope.infra.services.core.algebra.competency.CompetencyMap;
+import org.gooru.rescope.infra.services.core.competencylinefinder.CompetencyLineFinder;
+import org.gooru.rescope.infra.services.core.competencymapcreator.CompetencyMapCreator;
+import org.gooru.rescope.infra.services.core.competencypresencechecker.CompetencyPresenceChecker;
+import org.gooru.rescope.infra.services.core.subjectinferer.SubjectInferer;
 import org.gooru.rescope.infra.services.core.validators.RescopeProcessorContextValidator;
+import org.gooru.rescope.infra.services.itemfilter.SkippedItemsFinder;
 import org.gooru.rescope.infra.services.itemfilter.SkippedItemsResponse;
 import org.skife.jdbi.v2.DBI;
 
@@ -25,11 +32,36 @@ class RescopeProcessorImpl implements RescopeProcessor {
     this.context = context;
 
     validate();
-    // TODO: Implement this
-    return null;
+    initializeSubject();
+    return findItemsThatWillBeSkipped();
   }
 
   private void validate() {
     RescopeProcessorContextValidator.build(dbi4core, dbi4ds).validate(context);
   }
+
+  private SkippedItemsResponse findItemsThatWillBeSkipped() {
+    CompetencyLine ceilingCompetencyLine = CompetencyLineFinder
+        .buildCeilingLineFinder(dbi4core, dbi4ds).findCompetencyLineForRescope(context);
+    CompetencyLine floorCompetencyLine = CompetencyLineFinder.buildFloorLineFinder(dbi4core, dbi4ds)
+        .findCompetencyLineForRescope(context);
+    CompetencyMap competencyMapForSubject = CompetencyMapCreator
+        .buildSubjectCompetencyMapCreator(dbi4ds)
+        .create(context);
+    CompetencyMap trimmedCompetencyMapAboveCeiling = competencyMapForSubject
+        .trimAboveCompetencyLine(ceilingCompetencyLine);
+    CompetencyMap adjustedStudyRouteForUser = trimmedCompetencyMapAboveCeiling
+        .trimBelowCompetencyLine(floorCompetencyLine);
+    CompetencyPresenceChecker competencyPresenceChecker = CompetencyPresenceChecker
+        .buildCompetencyPresenceCheckerFromCompetencyMap(adjustedStudyRouteForUser);
+    return SkippedItemsFinder.buildSkippedItemsFinderForCourse(dbi4core, competencyPresenceChecker)
+        .findItemsThatWillBeSkipped(context.getUserId(), context.getCourseId());
+
+  }
+
+  private void initializeSubject() {
+    String subject = SubjectInferer.build(dbi4core).inferSubjectForCourse(context.getCourseId());
+    context.setSubject(subject);
+  }
+
 }

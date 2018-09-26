@@ -3,6 +3,7 @@ package org.gooru.rescope.infra.services.itemfilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.gooru.rescope.infra.services.core.competencypresencechecker.CompetencyPresenceChecker;
 import org.skife.jdbi.v2.DBI;
 
 /**
@@ -11,17 +12,21 @@ import org.skife.jdbi.v2.DBI;
 class SkippedItemsFinderInCourseImpl implements SkippedItemsFinder {
 
   private final DBI dbi;
+  private final CompetencyPresenceChecker competencyPresenceChecker;
   private final List<ItemModel> allSkippedItems = new ArrayList<>();
   private final List<ItemModel> allNonSkippedItems = new ArrayList<>();
   private ItemSkipVerifier skipVerifier;
   private List<ItemModel> allNonDeletedItemsInCourse;
 
-  SkippedItemsFinderInCourseImpl(DBI dbi) {
+  SkippedItemsFinderInCourseImpl(DBI dbi,
+      CompetencyPresenceChecker competencyPresenceChecker) {
     this.dbi = dbi;
+    this.competencyPresenceChecker = competencyPresenceChecker;
   }
 
   @Override
   public SkippedItemsResponse findItemsThatWillBeSkipped(UUID userId, UUID courseId) {
+    // TODO: Provide implementation considering the competency presence checker
     SkippedItemsFinderDao dao = dbi.onDemand(SkippedItemsFinderDao.class);
     skipVerifier = new ItemSkipVerifier(dbi, userId);
 
