@@ -10,6 +10,8 @@ import org.gooru.rescope.infra.services.core.validators.RescopeProcessorContextV
 import org.gooru.rescope.infra.services.itemfilter.SkippedItemsFinder;
 import org.gooru.rescope.infra.services.itemfilter.SkippedItemsResponse;
 import org.skife.jdbi.v2.DBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ashish.
@@ -23,6 +25,7 @@ class RescopeProcessorImpl implements RescopeProcessor {
   private CompetencyLine ceilingCompetencyLine;
   private CompetencyLine floorCompetencyLine;
   private CompetencyMap competencyMapForSubject;
+  private static final Logger LOGGER = LoggerFactory.getLogger(RescopeProcessorImpl.class);
 
   RescopeProcessorImpl(DBI dbi4core, DBI dbi4ds) {
 
@@ -46,8 +49,10 @@ class RescopeProcessorImpl implements RescopeProcessor {
   private SkippedItemsResponse findItemsThatWillBeSkipped() {
     ceilingCompetencyLine = CompetencyLineFinder
         .buildCeilingLineFinder(dbi4core, dbi4ds).findCompetencyLineForRescope(context);
+    LOGGER.debug("Calculated ceiling line: '{}'", ceilingCompetencyLine.toString());
     floorCompetencyLine = CompetencyLineFinder.buildFloorLineFinder(dbi4core, dbi4ds)
         .findCompetencyLineForRescope(context);
+    LOGGER.debug("Calculated floor line: '{}'", floorCompetencyLine.toString());
     competencyMapForSubject = CompetencyMapCreator
         .buildSubjectCompetencyMapCreator(dbi4ds)
         .create(context);
