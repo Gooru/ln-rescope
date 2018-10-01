@@ -1,51 +1,51 @@
 package org.gooru.rescope.infra.data;
 
-import java.util.UUID;
-
-import org.gooru.rescope.infra.constants.Constants;
-
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
+import java.util.UUID;
+import org.gooru.rescope.infra.constants.Constants;
 
 /**
  * @author ashish
  */
 public final class EventBusMessage {
 
-    private final String sessionToken;
-    private final JsonObject requestBody;
-    private final UUID userId;
-    private final JsonObject session;
+  public static EventBusMessage eventBusMessageBuilder(Message<JsonObject> message) {
+    String sessionToken = message.body().getString(Constants.Message.MSG_SESSION_TOKEN);
+    String userId = message.body().getString(Constants.Message.MSG_USER_ID);
+    JsonObject requestBody = message.body().getJsonObject(Constants.Message.MSG_HTTP_BODY);
+    JsonObject session = message.body().getJsonObject(Constants.Message.MSG_KEY_SESSION);
 
-    public String getSessionToken() {
-        return sessionToken;
-    }
+    return new EventBusMessage(sessionToken, requestBody, UUID.fromString(userId), session);
+  }
 
-    public JsonObject getRequestBody() {
-        return requestBody;
-    }
+  private final String sessionToken;
+  private final JsonObject requestBody;
+  private final UUID userId;
+  private final JsonObject session;
 
-    public UUID getUserId() {
-        return userId;
-    }
+  private EventBusMessage(String sessionToken, JsonObject requestBody, UUID userId,
+      JsonObject session) {
+    this.sessionToken = sessionToken;
+    this.requestBody = requestBody;
+    this.userId = userId;
+    this.session = session;
+  }
 
-    public JsonObject getSession() {
-        return session;
-    }
+  public String getSessionToken() {
+    return sessionToken;
+  }
 
-    private EventBusMessage(String sessionToken, JsonObject requestBody, UUID userId, JsonObject session) {
-        this.sessionToken = sessionToken;
-        this.requestBody = requestBody;
-        this.userId = userId;
-        this.session = session;
-    }
+  public JsonObject getRequestBody() {
+    return requestBody;
+  }
 
-    public static EventBusMessage eventBusMessageBuilder(Message<JsonObject> message) {
-        String sessionToken = message.body().getString(Constants.Message.MSG_SESSION_TOKEN);
-        String userId = message.body().getString(Constants.Message.MSG_USER_ID);
-        JsonObject requestBody = message.body().getJsonObject(Constants.Message.MSG_HTTP_BODY);
-        JsonObject session = message.body().getJsonObject(Constants.Message.MSG_KEY_SESSION);
+  public UUID getUserId() {
+    return userId;
+  }
 
-        return new EventBusMessage(sessionToken, requestBody, UUID.fromString(userId), session);
-    }
+  public JsonObject getSession() {
+    return session;
+  }
+
 }

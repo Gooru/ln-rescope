@@ -48,14 +48,14 @@
 			"data": [],
 			"dataMode": "raw",
 			"auth": null,
-			"time": 1526736118095,
+			"time": 1536244508792,
 			"name": "Rescope Do scope - Members joining class - Internal",
 			"description": "",
 			"collectionId": "97f13cf2-3228-d977-bb23-948d14eb3a9b",
 			"responses": [],
 			"currentHelper": null,
 			"helperAttributes": null,
-			"rawModeData": "{\n\t\"source\": \"join.class\",\n\t\"classId\": \"0baefeb6-4f72-49b4-85fd-a20aa4f17100\",\n\t\"memberIds\": [\"53ced540-f27f-41c3-ad1e-618c8177f3d5\", \"7202486c-feeb-4fdc-978c-7c61a930dfad\"]\n}\n"
+			"rawModeData": "{\n\t\"source\": \"join.class\",\n\t\"override\": true,\n\t\"classId\": \"0baefeb6-4f72-49b4-85fd-a20aa4f17100\",\n\t\"courseId\": \"c3c5a610-0c97-4ecc-852c-8586a7ba3b52\",\n\t\"memberIds\": [\"53ced540-f27f-41c3-ad1e-618c8177f3d5\", \"68492039-3713-42de-90ad-94d5945cd482\"]\n}\n"
 		},
 		{
 			"id": "1a2844e7-3d66-fac6-61e9-c2fdf0ba6a6b",
@@ -247,14 +247,14 @@
 			"data": [],
 			"dataMode": "raw",
 			"auth": null,
-			"time": 1526641062644,
+			"time": 1536244439730,
 			"name": "Rescope Do scope - Course Assigned to Class - Internal",
 			"description": "",
 			"collectionId": "97f13cf2-3228-d977-bb23-948d14eb3a9b",
 			"responses": [],
 			"currentHelper": null,
 			"helperAttributes": null,
-			"rawModeData": "{\n\t\"source\": \"assign.course.to.class\",\n\t\"classId\": \"0baefeb6-4f72-49b4-85fd-a20aa4f17100\"\n}\n"
+			"rawModeData": "{\n\t\"override\": true,\n\t\"source\": \"assign.course.to.class\",\n\t\"courseId\": \"c3c5a610-0c97-4ecc-852c-8586a7ba3b52\",\n\t\"classId\": \"0baefeb6-4f72-49b4-85fd-a20aa4f17100\"\n}\n"
 		},
 		{
 			"id": "7282c7fb-da39-7782-3cc0-de2440cab1a6",
@@ -282,14 +282,14 @@
 			"data": [],
 			"dataMode": "raw",
 			"auth": null,
-			"time": 1526641092660,
+			"time": 1536244313493,
 			"name": "Rescope Do scope - Rescope setting changed - Internal",
 			"description": "",
 			"collectionId": "97f13cf2-3228-d977-bb23-948d14eb3a9b",
 			"responses": [],
 			"currentHelper": null,
 			"helperAttributes": null,
-			"rawModeData": "{\n\t\"source\": \"rescope\",\n\t\"classId\": \"0baefeb6-4f72-49b4-85fd-a20aa4f17100\"\n}\n"
+			"rawModeData": "{\n\t\"override\": true,\n\t\"source\": \"rescope\",\n\t\"courseId\": \"c3c5a610-0c97-4ecc-852c-8586a7ba3b52\",\n\t\"classId\": \"0baefeb6-4f72-49b4-85fd-a20aa4f17100\"\n}\n"
 		},
 		{
 			"id": "8b07d8d1-1c97-94ec-14e5-b8d6579017c4",
@@ -317,14 +317,14 @@
 			"data": [],
 			"dataMode": "raw",
 			"auth": null,
-			"time": 1526640794590,
+			"time": 1536244591623,
 			"name": "Rescope Do scope - OOB in Class - Internal",
 			"description": "",
 			"collectionId": "97f13cf2-3228-d977-bb23-948d14eb3a9b",
 			"responses": [],
 			"currentHelper": null,
 			"helperAttributes": null,
-			"rawModeData": "{\n\t\"source\": \"oob\",\n\t\"classId\": \"0baefeb6-4f72-49b4-85fd-a20aa4f17100\",\n\t\"courseId\": \"c3c5a610-0c97-4ecc-852c-8586a7ba3b52\",\n\t\"memberIds\": [\"68492039-3713-42de-90ad-94d5945cd482\"]\n}\n"
+			"rawModeData": "{\n\t\"source\": \"oob\",\n\t\"override\": true,\n\t\"classId\": \"0baefeb6-4f72-49b4-85fd-a20aa4f17100\",\n\t\"courseId\": \"c3c5a610-0c97-4ecc-852c-8586a7ba3b52\",\n\t\"memberIds\": [\"68492039-3713-42de-90ad-94d5945cd482\"]\n}\n"
 		},
 		{
 			"id": "b7846df7-7165-bc26-d19a-55e52d8bd8c4",
@@ -352,14 +352,14 @@
 			"data": [],
 			"dataMode": "raw",
 			"auth": null,
-			"time": 1526640817005,
+			"time": 1536244558484,
 			"name": "Rescope Do scope - OOB IL - Internal",
 			"description": "",
 			"collectionId": "97f13cf2-3228-d977-bb23-948d14eb3a9b",
 			"responses": [],
 			"currentHelper": null,
 			"helperAttributes": null,
-			"rawModeData": "{\n\t\"source\": \"oob\",\n\t\"classId\": null,\n\t\"courseId\": \"c3c5a610-0c97-4ecc-852c-8586a7ba3b52\",\n\t\"memberIds\": [\"68492039-3713-42de-90ad-94d5945cd482\"]\n}\n"
+			"rawModeData": "{\n\t\"source\": \"oob\",\n\t\"override\": true,\n\t\"classId\": null,\n\t\"courseId\": \"c3c5a610-0c97-4ecc-852c-8586a7ba3b52\",\n\t\"memberIds\": [\"68492039-3713-42de-90ad-94d5945cd482\"]\n}\n"
 		},
 		{
 			"id": "eaea2902-84e3-bf69-9193-c7235ee1df77",

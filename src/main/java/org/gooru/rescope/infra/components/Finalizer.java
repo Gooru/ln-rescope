@@ -5,6 +5,6 @@ package org.gooru.rescope.infra.components;
  */
 public interface Finalizer {
 
-    void finalizeComponent();
+  void finalizeComponent();
 
 }
