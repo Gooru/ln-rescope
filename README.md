@@ -107,7 +107,6 @@ To run the binary which would be fat jar from the project base directory:
 - Validate class/course/user (class exists, course exists and is assigned to that class, and user belongs to that class)
 - Verify if the course has subject bucket set up. If yes, continue else DONE
 - Verify if the baseline LP for the specified class/course/user exists. If yes, continue else DONE
-- STATUS MARKER >>> CURRENT IMPLEMENTATION IS HERE
 - Find floor and ceil for the class
 - Find the Baseline LP for user for that class
 - Find the course's competency route
@@ -127,3 +126,4 @@ To run the binary which would be fat jar from the project base directory:
         - if there are any collections, in this lesson, stash collections in lesson
     - if there are any lesson in this unit, keep the unit. Else skip unit as well
 - once done store the output
+
