@@ -41,7 +41,7 @@ class DoRescopeOfContentService {
   private void doRescopeForIL() {
     if (RescopeApplicableService.isRescopeApplicableToCourseInIL(command.getCourseId())) {
       if (command.isOverride()) {
-        resetRescopeForSpecifiedMemersForIL();
+        resetRescopeForSpecifiedMembersForIL();
       }
       queueRescope();
     }
@@ -60,7 +60,7 @@ class DoRescopeOfContentService {
     }
   }
 
-  private void resetRescopeForSpecifiedMemersForIL() {
+  private void resetRescopeForSpecifiedMembersForIL() {
     fetchDao().resetRescopeInfoForILForSpecifiedUsers(
         CollectionUtils.convertFromListUUIDToSqlArrayOfUUID(command.getMemberIds()),
         command.getCourseId());
