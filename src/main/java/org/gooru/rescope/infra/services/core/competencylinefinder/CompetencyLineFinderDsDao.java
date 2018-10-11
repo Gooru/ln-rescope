@@ -31,7 +31,7 @@ interface CompetencyLineFinderDsDao {
   @SqlQuery(
       "SELECT dcmt.tx_subject_code, dcmt.tx_domain_code, dcmt.tx_comp_code, dcmt.tx_comp_seq FROM   "
           + " domain_competency_matrix dcmt WHERE  dcmt.tx_subject_code = :subjectCode AND "
-          + " dcmt.tx_comp_code = any(select gut_code from baseline_learner_profile where "
+          + " dcmt.tx_comp_code = any(select unnest(gut_codes) from learner_profile_baselined where "
           + " tx_subject_code = :subjectCode and class_id = :classId and course_id = :courseId "
           + " and user_id = :userId)")
   List<Competency> fetchCompetenciesForUserBaselineLPInClass(
@@ -45,7 +45,7 @@ interface CompetencyLineFinderDsDao {
   @SqlQuery(
       "SELECT dcmt.tx_subject_code, dcmt.tx_domain_code, dcmt.tx_comp_code, dcmt.tx_comp_seq FROM   "
           + " domain_competency_matrix dcmt WHERE  dcmt.tx_subject_code = :subjectCode AND "
-          + " dcmt.tx_comp_code = any(select gut_code from baseline_learner_profile where "
+          + " dcmt.tx_comp_code = any(select unnest(gut_codes) from learner_profile_baselined where "
           + " tx_subject_code = :subjectCode and class_id is null and course_id = :courseId "
           + " and user_id = :userId)")
   List<Competency> fetchCompetenciesForUserBaselineLPInIL(
