@@ -39,18 +39,14 @@ class DoRescopeOfContentService {
 
   private void doRescopeForIL() {
     if (RescopeApplicableService.isRescopeApplicableToCourseInIL(command.getCourseId())) {
-      if (command.isOverride()) {
-        resetRescopeForSpecifiedMemberForIL();
-      }
+      resetRescopeForSpecifiedMemberForIL();
       queueRescope();
     }
   }
 
   private void doRescopeInClass() {
     if (RescopeApplicableService.isRescopeApplicableToClass(command.getClassId())) {
-      if (command.isOverride()) {
-        resetRescopeForSpecifiedMemberInClass();
-      }
+      resetRescopeForSpecifiedMemberInClass();
       queueRescope();
     }
   }

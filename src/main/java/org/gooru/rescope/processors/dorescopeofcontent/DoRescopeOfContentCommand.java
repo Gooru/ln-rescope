@@ -20,7 +20,6 @@ class DoRescopeOfContentCommand {
         .convertStringToUuid(requestBody.getString(CommandAttributes.USER_ID));
     result.courseId = UuidUtils
         .convertStringToUuid(requestBody.getString(CommandAttributes.COURSE_ID));
-    result.override = requestBody.getBoolean(CommandAttributes.OVERRIDE, false);
     result.validate();
     return result;
   }
@@ -28,7 +27,6 @@ class DoRescopeOfContentCommand {
   private UUID classId;
   private UUID userId;
   private UUID courseId;
-  private boolean override;
 
   private DoRescopeOfContentCommand() {
 
@@ -44,10 +42,6 @@ class DoRescopeOfContentCommand {
 
   public UUID getUserId() {
     return userId;
-  }
-
-  boolean isOverride() {
-    return override;
   }
 
   RescopeContext asRescopeContext() {
@@ -66,7 +60,6 @@ class DoRescopeOfContentCommand {
   final class CommandAttributes {
 
     static final String COURSE_ID = "courseId";
-    static final String OVERRIDE = "override";
     static final String CLASS_ID = "classId";
     static final String USER_ID = "userId";
 
