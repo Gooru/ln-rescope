@@ -98,7 +98,7 @@ class FetchRescopedContentCommand {
   }
 
   RescopeContext asRescopeContext() {
-    return RescopeContext.buildForOOB(classId, courseId, userId);
+    return RescopeContext.build(classId, courseId, userId);
   }
 
   public static final class FetchRescopedContentCommandBean {

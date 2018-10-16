@@ -1,10 +1,8 @@
 package org.gooru.rescope.infra.services.rescoperequest;
 
-import java.util.List;
 import java.util.UUID;
 import org.gooru.rescope.infra.data.RescopeContext;
 import org.gooru.rescope.infra.data.RescopeQueueModel;
-import org.gooru.rescope.infra.utils.CollectionUtils;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,30 +63,16 @@ class RescopeRequestQueueServiceImpl implements RescopeRequestQueueService {
               + "the one associated with class", context.getCourseId(), courseId);
     }
 
-    populateMemberships(courseId);
+    if (!queueDao.isValidMemberOfClass(context.getClassId(), context.getUserId())) {
+      LOGGER.warn("User '{}' is not valid member of class '{}'", context.getUserId(),
+          context.getClassId());
+    }
     queueInDb();
   }
 
-  private void populateMemberships(UUID courseId) {
-    if (context.isOOBRequestForRescope() || context.areUsersJoiningClass()) {
-      // Validate membership of provided users
-      List<UUID> existingMembersOfClassFromSpecifiedList = queueDao.fetchSpecifiedMembersOfClass(
-          context.getClassId(),
-          CollectionUtils.convertFromListUUIDToSqlArrayOfUUID(context.getMemberIds()));
-
-      if (existingMembersOfClassFromSpecifiedList.size() < context.getMemberIds().size()) {
-        LOGGER.warn("Not all specified users are members of class. Will process only members");
-      }
-      context = context.createNewContext(existingMembersOfClassFromSpecifiedList, courseId);
-    } else {
-      List<UUID> members = queueDao.fetchMembersOfClass(context.getClassId());
-      context = context.createNewContext(members, courseId);
-    }
-  }
-
   private void queueInDb() {
-    queueDao.queueRequests(context.getMemberIds(),
-        RescopeQueueModel.fromRescopeContextNoMembers(context));
+    queueDao
+        .queueRequest(context.getUserId(), RescopeQueueModel.fromRescopeContextNoMembers(context));
   }
 
 }

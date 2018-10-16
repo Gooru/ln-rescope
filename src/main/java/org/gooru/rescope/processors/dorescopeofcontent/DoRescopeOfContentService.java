@@ -2,7 +2,6 @@ package org.gooru.rescope.processors.dorescopeofcontent;
 
 import org.gooru.rescope.infra.services.rescopeapplicable.RescopeApplicableService;
 import org.gooru.rescope.infra.services.rescoperequest.RescopeRequestQueueService;
-import org.gooru.rescope.infra.utils.CollectionUtils;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,7 @@ class DoRescopeOfContentService {
   private void doRescopeForIL() {
     if (RescopeApplicableService.isRescopeApplicableToCourseInIL(command.getCourseId())) {
       if (command.isOverride()) {
-        resetRescopeForSpecifiedMembersForIL();
+        resetRescopeForSpecifiedMemberForIL();
       }
       queueRescope();
     }
@@ -50,31 +49,23 @@ class DoRescopeOfContentService {
   private void doRescopeInClass() {
     if (RescopeApplicableService.isRescopeApplicableToClass(command.getClassId())) {
       if (command.isOverride()) {
-        if (command.applyToAllMembers()) {
-          resetRescopeForWholeClass();
-        } else if (command.hasMembershipInfo()) {
-          resetRescopeForSpecifiedMembersInClass();
-        }
+        resetRescopeForSpecifiedMemberInClass();
       }
       queueRescope();
     }
   }
 
-  private void resetRescopeForSpecifiedMembersForIL() {
-    fetchDao().resetRescopeInfoForILForSpecifiedUsers(
-        CollectionUtils.convertFromListUUIDToSqlArrayOfUUID(command.getMemberIds()),
+  private void resetRescopeForSpecifiedMemberForIL() {
+    fetchDao().resetRescopeInfoForILForSpecifiedUser(
+        command.getUserId(),
         command.getCourseId());
   }
 
-  private void resetRescopeForSpecifiedMembersInClass() {
-    fetchDao().resetRescopeInfoInClassForSpecifiedUsers(
-        CollectionUtils.convertFromListUUIDToSqlArrayOfUUID(command.getMemberIds()),
+  private void resetRescopeForSpecifiedMemberInClass() {
+    fetchDao().resetRescopeInfoInClassForSpecifiedUser(
+        command.getUserId(),
         command.getCourseId(),
         command.getClassId());
-  }
-
-  private void resetRescopeForWholeClass() {
-    fetchDao().resetRescopeInfoInClassForAllUsers(command.getCourseId(), command.getClassId());
   }
 
 
