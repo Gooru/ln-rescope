@@ -61,9 +61,6 @@ public final class Constants {
 
   public static final class Params {
 
-    public static final String PARAM_MEMBER_ID = "member_id";
-    public static final String PARAM_CLASS_ID = "class_id";
-
     private Params() {
       throw new AssertionError();
     }
@@ -72,11 +69,9 @@ public final class Constants {
   public static final class Route {
 
     public static final String API_AUTH_ROUTE = "/api/rescope/*";
-    public static final String API_INTERNAL_BANNER = "/api/internal/banner";
-    public static final String API_INTERNAL_METRICS = "/api/internal/metrics";
     private static final String API_BASE_ROUTE = "/api/rescope/:version/";
     public static final String API_RESCOPE_FETCH = API_BASE_ROUTE + "scope/skipped";
-    public static final String API_RESCOPE_CALCULATE = API_BASE_ROUTE + "scope/skipped";
+    public static final String API_INTERNAL_RESCOPE_CALCULATE = "/api/internal/rescope";
 
     private Route() {
       throw new AssertionError();

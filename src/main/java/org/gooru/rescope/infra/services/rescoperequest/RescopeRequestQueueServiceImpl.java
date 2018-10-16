@@ -71,8 +71,7 @@ class RescopeRequestQueueServiceImpl implements RescopeRequestQueueService {
   }
 
   private void queueInDb() {
-    queueDao
-        .queueRequest(context.getUserId(), RescopeQueueModel.fromRescopeContextNoMembers(context));
+    queueDao.queueRequest(RescopeQueueModel.fromRescopeContext(context));
   }
 
 }

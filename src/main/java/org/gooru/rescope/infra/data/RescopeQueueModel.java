@@ -16,7 +16,7 @@ public class RescopeQueueModel {
   public static final int RQ_STATUS_QUEUED = 0;
   public static final int RQ_STATUS_DISPATCHED = 1;
   public static final int RQ_STATUS_INPROCESS = 2;
-  public static final int PRIORITY_DEFAULT = 0;
+  public static final int PRIORITY_DEFAULT = 1;
 
   public static RescopeQueueModel fromJson(String input) {
     JsonObject json = new JsonObject(input);
@@ -30,12 +30,13 @@ public class RescopeQueueModel {
     return model;
   }
 
-  public static RescopeQueueModel fromRescopeContextNoMembers(RescopeContext context) {
+  public static RescopeQueueModel fromRescopeContext(RescopeContext context) {
     RescopeQueueModel result = new RescopeQueueModel();
     result.courseId = context.getCourseId();
     result.classId = context.getClassId();
     result.status = RQ_STATUS_QUEUED;
     result.priority = PRIORITY_DEFAULT;
+    result.userId = context.getUserId();
     return result;
   }
 

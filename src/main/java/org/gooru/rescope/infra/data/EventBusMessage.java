@@ -6,6 +6,12 @@ import java.util.UUID;
 import org.gooru.rescope.infra.constants.Constants;
 
 /**
+ * This class encapsulates the Event Bus message and is useful only if the request has come via
+ * Authenticated handlers.
+ *
+ * This is because, values like session/session token/user id context will be present only in cases
+ * where request is authenticated. It may not make sense to use this for non authenticated API.
+ *
  * @author ashish
  */
 public final class EventBusMessage {

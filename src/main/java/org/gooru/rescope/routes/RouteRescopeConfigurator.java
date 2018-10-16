@@ -7,7 +7,6 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import org.gooru.rescope.infra.constants.Constants;
-import org.gooru.rescope.infra.constants.HttpConstants;
 import org.gooru.rescope.routes.utils.DeliveryOptionsBuilder;
 import org.gooru.rescope.routes.utils.RouteRequestUtility;
 import org.gooru.rescope.routes.utils.RouteResponseUtility;
@@ -28,7 +27,6 @@ public class RouteRescopeConfigurator implements RouteConfigurator {
     eb = vertx.eventBus();
     mbusTimeout = config.getLong(Constants.EventBus.MBUS_TIMEOUT, 30L) * 1_000;
     router.get(Constants.Route.API_RESCOPE_FETCH).handler(this::fetchRescopedContent);
-    router.post(Constants.Route.API_RESCOPE_CALCULATE).handler(this::doRescopeOfContent);
   }
 
   private void fetchRescopedContent(RoutingContext routingContext) {
@@ -40,13 +38,5 @@ public class RouteRescopeConfigurator implements RouteConfigurator {
         options, reply -> RouteResponseUtility.responseHandler(routingContext, reply, LOGGER));
   }
 
-  private void doRescopeOfContent(RoutingContext routingContext) {
-    DeliveryOptions options = DeliveryOptionsBuilder.buildWithApiVersion(routingContext)
-        .setSendTimeout(mbusTimeout)
-        .addHeader(Constants.Message.MSG_OP, Constants.Message.MSG_OP_RESCOPE_SET);
-    eb.send(Constants.EventBus.MBEP_RESCOPE, RouteRequestUtility.getBodyForMessage(routingContext),
-        options);
-    RouteResponseUtility
-        .responseHandlerStatusOnlyNoBodyOrHeaders(routingContext, HttpConstants.HttpStatus.SUCCESS);
-  }
+
 }

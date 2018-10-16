@@ -4,7 +4,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
-import org.gooru.rescope.infra.data.EventBusMessage;
 import org.gooru.rescope.infra.jdbi.DBICreator;
 import org.gooru.rescope.processors.AsyncMessageProcessor;
 import org.gooru.rescope.responses.MessageResponse;
@@ -22,7 +21,6 @@ public class DoRescopeOfContentProcessor implements AsyncMessageProcessor {
   private final Message<JsonObject> message;
   private final Vertx vertx;
   private final Future<MessageResponse> result;
-  private EventBusMessage eventBusMessage;
 
   private final DoRescopeOfContentService doRescopeOfContentService =
       new DoRescopeOfContentService(DBICreator.getDbiForDefaultDS());
@@ -37,9 +35,8 @@ public class DoRescopeOfContentProcessor implements AsyncMessageProcessor {
   public Future<MessageResponse> process() {
     vertx.<MessageResponse>executeBlocking(future -> {
       try {
-        this.eventBusMessage = EventBusMessage.eventBusMessageBuilder(message);
         DoRescopeOfContentCommand command = DoRescopeOfContentCommand
-            .builder(eventBusMessage.getRequestBody());
+            .builder(message.body());
         doRescopeOfContentService.doRescope(command);
         future.complete(createResponse());
       } catch (Throwable throwable) {

@@ -1,8 +1,8 @@
 package org.gooru.rescope.processors.dorescopeofcontent;
 
 import io.vertx.core.json.JsonObject;
-import java.util.List;
 import java.util.UUID;
+import org.gooru.rescope.infra.constants.Constants.Message;
 import org.gooru.rescope.infra.data.RescopeContext;
 import org.gooru.rescope.infra.utils.UuidUtils;
 
@@ -11,7 +11,8 @@ import org.gooru.rescope.infra.utils.UuidUtils;
  */
 class DoRescopeOfContentCommand {
 
-  static DoRescopeOfContentCommand builder(JsonObject requestBody) {
+  static DoRescopeOfContentCommand builder(JsonObject messageBody) {
+    JsonObject requestBody = messageBody.getJsonObject(Message.MSG_HTTP_BODY);
     DoRescopeOfContentCommand result = new DoRescopeOfContentCommand();
     result.classId = UuidUtils
         .convertStringToUuid(requestBody.getString(CommandAttributes.CLASS_ID));

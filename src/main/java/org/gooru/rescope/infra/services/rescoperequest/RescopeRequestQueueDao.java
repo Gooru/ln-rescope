@@ -5,8 +5,8 @@ import org.gooru.rescope.infra.data.RescopeQueueModel;
 import org.gooru.rescope.infra.jdbi.UUIDMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
-import org.skife.jdbi.v2.sqlobject.SqlBatch;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
+import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 
 /**
@@ -24,11 +24,11 @@ interface RescopeRequestQueueDao {
   @SqlQuery("select exists(select 1 from course where id = :courseId and is_deleted = false)")
   boolean isCourseNotDeleted(@Bind("courseId") UUID courseId);
 
-  @SqlBatch(
+  @SqlUpdate(
       "insert into rescope_queue(user_id, course_id, class_id, priority, status) values (:userId, :courseId,"
           + " :classId, :priority, :status)")
-  void queueRequest(@Bind("userId") UUID userId, @BindBean RescopeQueueModel rescopeQueueModel);
+  void queueRequest(@BindBean RescopeQueueModel rescopeQueueModel);
 
-  @SqlQuery("select exists (select 1 from class_member where id = :classId and user_id = :userId)")
+  @SqlQuery("select exists (select 1 from class_member where class_id = :classId and user_id = :userId)")
   boolean isValidMemberOfClass(@Bind("classId") UUID classId, @Bind("userId") UUID userId);
 }
