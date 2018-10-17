@@ -17,7 +17,6 @@ public final class Constants {
     public static final String MBEP_RESCOPE = "org.gooru.rescope.eventbus.rescope";
 
     public static final String MBEP_RESCOPE_QUEUE_PROCESSOR = "org.gooru.rescope.eventbus.queueprocessor";
-    public static final String MBEP_RESCOPE_POST_PROCESSOR = "org.gooru.rescope.eventbus.postprocessor";
     public static final String MBUS_TIMEOUT = "event.bus.send.timeout.seconds";
 
     private EventBus() {
@@ -43,7 +42,6 @@ public final class Constants {
 
     public static final String MSG_OP_RESCOPE_GET = "rescope.get";
     public static final String MSG_OP_RESCOPE_SET = "rescope.set";
-    public static final String MSG_OP_RESCOPE_LP_BASELINE = "rescope.lpbaseline";
     public static final String MSG_MESSAGE = "message";
     public static final String ACCESS_TOKEN_VALIDITY = "access_token_validity";
 
