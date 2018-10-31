@@ -60,7 +60,8 @@ class RescopeQueueRecordProcessingServiceImpl implements RescopeQueueRecordProce
         LOGGER.warn("Not able to convert skipped items to JSON for model '{}'", model.toJson(), e);
       }
     } catch (Exception e) {
-      LOGGER.warn("Not able to do rescope for model: '{}'. Will dequeue record.", e);
+      LOGGER
+          .warn("Not able to do rescope for model: '{}'. Will dequeue record.", model.toJson(), e);
       throw e;
     } finally {
       dequeueRecord();
