@@ -9,5 +9,9 @@ interface CompetencyLineFinderCoreDao {
   @SqlQuery("select grade_upper_bound from class where id = :classId and is_deleted = false")
   Long fetchGradeUpperBoundForClass(@Bind("classId") UUID classId);
 
+  @SqlQuery("select grade_upper_bound from class_member where class_id = :classId and user_id = :userId")
+  Long fetchGradeUpperBoundForClassMember(@Bind("classId") UUID classId,
+      @Bind("userId") UUID userId);
+
 
 }
