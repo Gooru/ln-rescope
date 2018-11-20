@@ -36,7 +36,7 @@ class RescopeCeilingCompetencyLineFinder implements CompetencyLineFinder {
     this.context = context;
     CompetencyLine resultLine = null;
     if (context.isInClassExperience()) {
-      resultLine = fetchCompetencyCeilingLineFromClass();
+      resultLine = fetchCompetencyCeilingLineFromClassForUser();
     }
     if (resultLine == null || resultLine.isEmpty()) {
       // This is also fallback for IL case
@@ -67,11 +67,11 @@ class RescopeCeilingCompetencyLineFinder implements CompetencyLineFinder {
         "No aggregated competencies found for course: " + context.getCourseId());
   }
 
-  private CompetencyLine fetchCompetencyCeilingLineFromClass() {
-    Long highGradeForClass = fetchCoreDao().fetchGradeUpperBoundForClass(context.getClassId());
-    if (highGradeForClass != null) {
+  private CompetencyLine fetchCompetencyCeilingLineFromClassForUser() {
+    Long highGradeForClassMember = fetchHighGradeForClassMember();
+    if (highGradeForClassMember != null) {
       List<Competency> competenciesForGradeAndSubject = fetchDsDao()
-          .fetchCompetenciesForGradeHighLine(context.getSubject(), highGradeForClass);
+          .fetchCompetenciesForGradeHighLine(context.getSubject(), highGradeForClassMember);
       if (!competenciesForGradeAndSubject.isEmpty()) {
         CompetencyLine resultLine = CompetencyMap.build(competenciesForGradeAndSubject)
             .getCeilingLine();
@@ -81,6 +81,15 @@ class RescopeCeilingCompetencyLineFinder implements CompetencyLineFinder {
       }
     }
     return CompetencyAlgebraDefaultBuilder.getEmptyCompetencyLine();
+  }
+
+  private Long fetchHighGradeForClassMember() {
+    Long highGradeForClassMember = fetchCoreDao()
+        .fetchGradeUpperBoundForClassMember(context.getClassId(), context.getUserId());
+    if (highGradeForClassMember == null) {
+      highGradeForClassMember = fetchCoreDao().fetchGradeUpperBoundForClass(context.getClassId());
+    }
+    return highGradeForClassMember;
   }
 
   private CompetencyLineFinderCoreDao fetchCoreDao() {
