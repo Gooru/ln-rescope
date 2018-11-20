@@ -70,12 +70,12 @@ class CompetencyMapImpl implements CompetencyMap {
 
   @Override
   public CompetencyMap trimAboveCompetencyLine(CompetencyLine competencyLine) {
-    return trimWithRespectToCompetencyLine(competencyLine, true);
+    return trimWithRespectToCompetencyLine(competencyLine, true, true);
   }
 
   @Override
   public CompetencyMap trimBelowCompetencyLine(CompetencyLine competencyLine) {
-    return trimWithRespectToCompetencyLine(competencyLine, false);
+    return trimWithRespectToCompetencyLine(competencyLine, false, false);
   }
 
   @Override
@@ -96,7 +96,7 @@ class CompetencyMapImpl implements CompetencyMap {
    * are additional domains present in competency line.
    */
   private CompetencyMap trimWithRespectToCompetencyLine(CompetencyLine competencyLine,
-      boolean trimAbove) {
+      boolean trimAbove, boolean skipDomainsNotInCompetencyLine) {
     List<DomainCode> resultDomains = new ArrayList<>(domains.size());
     Map<DomainCode, List<Competency>> resultDomainCodeCompetencyListMap = new HashMap<>(
         domains.size());
@@ -117,8 +117,10 @@ class CompetencyMapImpl implements CompetencyMap {
         resultDomains.add(domainCode);
         resultDomainCodeCompetencyListMap.put(domainCode, trimmedCompetencies);
       } else {
-        resultDomains.add(domainCode);
-        resultDomainCodeCompetencyListMap.put(domainCode, competenciesForDomainInCompetencyMap);
+        if (!skipDomainsNotInCompetencyLine) {
+          resultDomains.add(domainCode);
+          resultDomainCodeCompetencyListMap.put(domainCode, competenciesForDomainInCompetencyMap);
+        }
       }
     }
 
