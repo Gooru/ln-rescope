@@ -1,94 +1,49 @@
 package org.gooru.rescope.infra.data;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * @author ashish on 18/5/18.
  */
 public class RescopeContext {
-    private RescopeSourceType source;
-    private UUID classId;
-    private List<UUID> memberIds;
-    private UUID courseId;
 
-    private RescopeContext(RescopeSourceType source, UUID classId, List<UUID> memberIds, UUID courseId) {
-        this.source = source;
-        this.classId = classId;
-        this.memberIds = memberIds;
-        this.courseId = courseId;
-    }
+  public static RescopeContext build(UUID classId, UUID courseId, UUID userId) {
+    Objects.requireNonNull(courseId);
+    Objects.requireNonNull(userId);
+    return new RescopeContext(classId, courseId, userId);
+  }
 
-    public RescopeSourceType getSource() {
-        return source;
-    }
 
-    public UUID getClassId() {
-        return classId;
-    }
+  private final UUID classId;
+  private final UUID userId;
+  private final UUID courseId;
 
-    public List<UUID> getMemberIds() {
-        return memberIds;
-    }
+  private RescopeContext(UUID classId, UUID courseId, UUID userId) {
+    this.classId = classId;
+    this.userId = userId;
+    this.courseId = courseId;
+  }
 
-    public UUID getCourseId() {
-        return courseId;
-    }
 
-    @Override
-    public String toString() {
-        String members = memberIds.stream().map(UUID::toString).collect(Collectors.joining(","));
-        return "RescopeContext{" + "source=" + source.getName() + ", classId=" + classId + ", memberIds=" + members
-            + ", courseId=" + courseId + '}';
-    }
+  public UUID getClassId() {
+    return classId;
+  }
 
-    public static RescopeContext buildForClassJoin(UUID classId, List<UUID> members) {
-        return new RescopeContext(RescopeSourceType.ClassJoinByMembers, classId, members, null);
-    }
+  public UUID getUserId() {
+    return userId;
+  }
 
-    public static RescopeContext buildForOOB(UUID classId, UUID courseId, UUID memberId) {
-        List<UUID> members = new ArrayList<>();
-        members.add(memberId);
-        return new RescopeContext(RescopeSourceType.OOB, classId, members, courseId);
-    }
+  public UUID getCourseId() {
+    return courseId;
+  }
 
-    public static RescopeContext buildForOOB(UUID classId, UUID courseId, List<UUID> members) {
-        return new RescopeContext(RescopeSourceType.OOB, classId, members, courseId);
-    }
-
-    public static RescopeContext buildForRescopeSetting(UUID classId) {
-        return new RescopeContext(RescopeSourceType.RescopeSettingChanged, classId, Collections.emptyList(), null);
-    }
-
-    public static RescopeContext buildForCourseAssignedToClass(UUID classId, UUID courseId) {
-        return new RescopeContext(RescopeSourceType.CourseAssignmentToClass, classId, Collections.emptyList(),
-            courseId);
-    }
-
-    public RescopeContext createNewContext(List<UUID> members) {
-        return new RescopeContext(source, classId, members, courseId);
-    }
-
-    public RescopeContext createNewContext(List<UUID> members, UUID courseId) {
-        return new RescopeContext(source, classId, members, courseId);
-    }
-
-    public boolean areUsersJoiningClass() {
-        return source == RescopeSourceType.ClassJoinByMembers;
-    }
-
-    public boolean hasClassSettingForRescopeBeenTurnedOn() {
-        return source == RescopeSourceType.RescopeSettingChanged;
-    }
-
-    public boolean hasCourseBeenAssignedToClass() {
-        return source == RescopeSourceType.CourseAssignmentToClass;
-    }
-
-    public boolean isOOBRequestForRescope() {
-        return source == RescopeSourceType.OOB;
-    }
+  @Override
+  public String toString() {
+    return "RescopeContext{" +
+        "classId=" + classId +
+        ", userId=" + userId +
+        ", courseId=" + courseId +
+        '}';
+  }
 }

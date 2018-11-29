@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.gooru.rescope.infra.data.RescopeQueueModel;
-import org.gooru.rescope.infra.data.RescopeSourceType;
-import org.gooru.rescope.infra.services.itemfinder.SkippedItemsResponse;
+import org.gooru.rescope.infra.services.itemfilter.SkippedItemsResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,7 +55,7 @@ public class MiscTest {
         model.setCourseId(UUID.randomUUID());
         model.setUserId(UUID.randomUUID());
         model.setStatus(RescopeQueueModel.RQ_STATUS_DISPATCHED);
-        model.setPriority(RescopeSourceType.ClassJoinByMembers.getOrder());
+        model.setPriority(0);
         return model;
     }
 

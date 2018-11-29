@@ -3,5 +3,11 @@
 /bin/
 .idea
 *.iml
-
+.classpath
+.project
+*.log
+.nb-gradle-properties
+out/
+/.nb-gradle/
+.settings
 

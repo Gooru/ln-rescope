@@ -1,14 +1,13 @@
 package org.gooru.rescope.processors;
 
-import org.gooru.rescope.responses.MessageResponse;
-
 import io.vertx.core.Future;
+import org.gooru.rescope.responses.MessageResponse;
 
 /**
  * @author ashish.
  */
 public interface AsyncMessageProcessor {
 
-    Future<MessageResponse> process();
+  Future<MessageResponse> process();
 
 }

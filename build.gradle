@@ -84,3 +84,9 @@ defaultTasks 'shadowJar'
 task wrapper(type: Wrapper) {
     gradleVersion = '4.4'
 }
+
+task run(type: JavaExec) {
+    main = "org.gooru.rescope.bootstrap.AppRunner"
+    classpath = sourceSets.main.runtimeClasspath
+    args = ["src/main/resources/rescope.json"]
+}
