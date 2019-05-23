@@ -43,7 +43,7 @@ class ProgressionAwareCompetencyTrimmer {
     List<Competency> result = new ArrayList<>(sourceCompetencyList.size());
 
     for (Competency competency : sourceCompetencyList) {
-      if (competency.getProgressionLevel().getProgressionLevel() >= progressionLevelPivot) {
+      if (competency.getProgressionLevel().getProgressionLevel() > progressionLevelPivot) {
         result.add(competency);
       }
     }
