@@ -48,6 +48,10 @@ class ItemModel {
     return "assessment-external".equals(format);
   }
 
+  public boolean isItemOfflineActivity() {
+    return "offline-activity".equals(format);
+  }
+
   public String getCourseId() {
     return courseId;
   }

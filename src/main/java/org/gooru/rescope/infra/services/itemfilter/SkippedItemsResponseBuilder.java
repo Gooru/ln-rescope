@@ -8,6 +8,7 @@ import java.util.List;
  */
 class SkippedItemsResponseBuilder {
 
+
   private static List<String> initializeWithEmptyListIfNull(List<String> input) {
     if (input == null) {
       return new ArrayList<>();
@@ -21,6 +22,7 @@ class SkippedItemsResponseBuilder {
   private final List<String> collections;
   private final List<String> assessmentsExternal;
   private final List<String> collectionsExternal;
+  private final List<String> offlineActivities;
 
   SkippedItemsResponseBuilder() {
     this.units = new ArrayList<>();
@@ -29,17 +31,19 @@ class SkippedItemsResponseBuilder {
     this.collections = new ArrayList<>();
     this.assessmentsExternal = new ArrayList<>();
     this.collectionsExternal = new ArrayList<>();
+    this.offlineActivities = new ArrayList<>();
   }
 
   SkippedItemsResponseBuilder(List<String> units, List<String> lessons, List<String> assessments,
-      List<String> collections, List<String> assessmentsExternal,
-      List<String> collectionsExternal) {
+      List<String> collections, List<String> assessmentsExternal, List<String> collectionsExternal,
+      List<String> offlineActivities) {
     this.units = initializeWithEmptyListIfNull(units);
     this.lessons = initializeWithEmptyListIfNull(lessons);
     this.assessments = initializeWithEmptyListIfNull(assessments);
     this.collections = initializeWithEmptyListIfNull(collections);
     this.assessmentsExternal = initializeWithEmptyListIfNull(assessmentsExternal);
     this.collectionsExternal = initializeWithEmptyListIfNull(collectionsExternal);
+    this.offlineActivities = initializeWithEmptyListIfNull(offlineActivities);
   }
 
   public SkippedItemsResponse build() {
@@ -50,6 +54,7 @@ class SkippedItemsResponseBuilder {
     result.setAssessments(assessments);
     result.setAssessmentsExternal(assessmentsExternal);
     result.setCollectionsExternal(collectionsExternal);
+    result.setOfflineActivities(offlineActivities);
     return result;
   }
 

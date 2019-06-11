@@ -13,6 +13,7 @@ public class SkippedItemsResponse {
   private List<String> collections;
   private List<String> assessmentsExternal;
   private List<String> collectionsExternal;
+  private List<String> offlineActivities;
 
   public List<String> getUnits() {
     return units;
@@ -60,5 +61,13 @@ public class SkippedItemsResponse {
 
   public void setCollectionsExternal(List<String> collectionsExternal) {
     this.collectionsExternal = collectionsExternal;
+  }
+
+  public void setOfflineActivities(List<String> offlineActivities) {
+    this.offlineActivities = offlineActivities;
+  }
+
+  public List<String> getOfflineActivities() {
+    return offlineActivities;
   }
 }

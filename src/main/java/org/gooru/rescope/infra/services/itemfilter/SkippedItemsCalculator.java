@@ -19,6 +19,7 @@ class SkippedItemsCalculator {
   private final List<String> skippedAssessments = new ArrayList<>();
   private final List<String> skippedAssessmentsExternal = new ArrayList<>();
   private final List<String> skippedCollectionsExternal = new ArrayList<>();
+  private final List<String> skippedOfflineActivities = new ArrayList<>();
   private boolean calculated = false;
 
   SkippedItemsCalculator(List<ItemModel> allNonDeletedItemsInCourse,
@@ -51,6 +52,10 @@ class SkippedItemsCalculator {
 
   public List<String> getSkippedCollectionsExternal() {
     return skippedCollectionsExternal;
+  }
+
+  public List<String> getSkippedOfflineActivities() {
+    return skippedOfflineActivities;
   }
 
   private void calculateULLevelSkippedItems() {
@@ -87,6 +92,8 @@ class SkippedItemsCalculator {
         skippedAssessmentsExternal.add(item.getCollectionId());
       } else if (item.isItemCollectionExternal()) {
         skippedCollectionsExternal.add(item.getCollectionId());
+      } else if (item.isItemOfflineActivity()) {
+        skippedOfflineActivities.add(item.getCollectionId());
       }
     }
   }
@@ -104,9 +111,8 @@ class SkippedItemsCalculator {
           "Trying to get SkippedItemsResponse from calculator with doing calculation");
     }
     SkippedItemsResponseBuilder builder = new SkippedItemsResponseBuilder(skippedUnits,
-        skippedLessons,
-        skippedAssessments, skippedCollections, skippedAssessmentsExternal,
-        skippedCollectionsExternal);
+        skippedLessons, skippedAssessments, skippedCollections, skippedAssessmentsExternal,
+        skippedCollectionsExternal, skippedOfflineActivities);
     return builder.build();
   }
 
