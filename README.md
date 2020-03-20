@@ -234,5 +234,11 @@ The processing handlers for API backend to catch request for doing rescope of co
 ### o.g.r.processors.fetchrescopedcontent
 The processing handlers for API backend to fetch rescoped content for a specified user/class context.
 
+### o.g.s.responses.*
+Package to handler http response writing and passing it on
+
+### o.g.s.routes.*
+Utilities for the route registration for http handling and payload creation to be passes on to downstream processors.
+
 
 
