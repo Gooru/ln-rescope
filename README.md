@@ -127,3 +127,112 @@ To run the binary which would be fat jar from the project base directory:
     - if there are any lesson in this unit, keep the unit. Else skip unit as well
 - once done store the output
 
+## Technical drilldown: Package structure and functions
+
+Following is the list of packages and its contents. Note that abbreviated package names are used.
+
+### o.g.r.bootstrap 
+Contains the main runner class which has the main method.
+
+### o.g.r.bootstrap.verticles
+Housing for the verticles. There are four verticles as of now
+
+### o.g.r.bootstrap.verticles.AuthVerticle
+Authenticates session token with Redis
+
+### o.g.r.bootstrap.verticles.HttpVerticle
+Responsible for starting up HTTP server and registering routes
+
+### o.g.r.bootstrap.verticles.RescopeVerticle
+The verticle which is main listener for API requests which is forwarded from Http server post authentication. 
+
+### o.g.r.bootstrap.verticles.RescopeProcessingVerticle
+This verticles receives a message for the queue record of rescope for processing. It takes that record and does the processing. Other components (even outside the process scope) can queue the records to get it processed.
+
+### o.g.r.infra.components
+This contains various components like config handler, data source registry etc. This also has mechanism to initialize components at the startup. Components are generally singleton.
+
+### o.g.r.infra.components.RescopeQueueReaderAndDispatcher
+This is the timer based runner class which is responsible to read the Persisted queued requests and send them to Event bus so that they can be processed by listeners. It does wait for reply, so that we do increase the backpressure on TCP bus too much, however what is replied is does not matter as we do schedule another one shot timer to do the similar stuff. For the first run, it re-initializes the status in the DB so that any tasks that were under processing when the application shut down happened would be picked up again.
+
+### o.g.r.infra.constants
+Housing for different constants used across the application.
+
+### o.g.r.infra.data
+This contains general POJO which are reusable across different modules in this application. 
+
+### o.g.r.infra.exceptions
+This contains exception classes which are reusable across different modules in this application. 
+
+### o.g.r.infra.jdbi
+This is JDBI specific package which contains helper entities like reusable mappers, argument factories, creators etc. This does not contain module specific DAO though. They are hosted with individual modules.
+
+### o.g.r.infra.services
+This houses infra structure services. These are different from domain services. 
+
+### o.g.r.infra.services.core
+Entry point for rescope processing. Here processing is just about calculating and not about persisting
+
+### o.g.r.infra.services.core.algebra.competency 
+This package houses the whole algebra aspects of competency. This includes, but not limited to:
+- Competency model
+- Domain model
+- Competency line 
+- Competency Path
+- Competency Route
+- Progression Level (sequence id of competency)
+- Subject model
+
+This is base package responsible for doing algebra and unless there is a need to change the way algebra functions, this should be pretty constant.
+
+### o.g.r.infra.services.core.algebra.competency.mappers
+Houses JDBI mappers for entities contributing to competency algebra
+
+### o.g.r.infra.services.core.competencylinefinder
+Module to fetch different competency lines (ceiling line/floor line) based on context (either from class high/low setting or course)
+
+### o.g.r.infra.services.core.competencymapcreator
+Module to create competency map which is entry point to competency algebra
+
+### o.g.r.infra.services.core.competencypresencechecker
+Module to check if the competency is present in specified domain competency map. 
+
+### o.g.r.infra.services.core.coursecompetencyfetcher
+Module to fetch competencies from specified course. The competencies are read from aggregated_gut_codes column in db.
+
+### o.g.r.infra.services.core.subjectinferer
+Module used to infer subject either from class/course based on context
+
+### o.g.r.infra.services.core.validators
+Module to validate different aspects of context for class/user
+
+### o.g.r.infra.services.itemfilter
+This is the entry point for the flow to obtain the skipped items in given context. The context could be course, unit or lesson. Right now we only support context of course. When other contexts are needed, we need to provide extensions in form of alternate implementations of this interface.
+
+### o.g.r.infra.services.queueoperators
+This module houses operations on queue record like
+- checking eligibility of processing based on class settings
+- initializing the queue once the application starts
+- mechanism to dispatch the records to processing verticle
+- mechanism to queue and/or dequeue the request
+
+### o.g.r.infra.services.rescopeapplicable
+ The module to determine whether the diagnostic is applicable or not in specified context.
+ 
+### o.g.r.infra.services.rescoperequest
+This module is responsible for queueing the request
+
+### o.g.r.infra.utils
+Different utility classes
+
+### o.g.r.processors
+The processors which are used as handlers for APIs
+
+### o.g.r.processors.dorescopeofcontent
+The processing handlers for API backend to catch request for doing rescope of content. This results in queue of request.
+
+### o.g.r.processors.fetchrescopedcontent
+The processing handlers for API backend to fetch rescoped content for a specified user/class context.
+
+
+
